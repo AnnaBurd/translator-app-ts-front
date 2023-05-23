@@ -3,20 +3,17 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   --color-primary: #a1aed9;
   --color-secondary: #eff6ff;
   --color-dark: #718398;
   --color-light: #deeeff;
-  --color-background: #ffffff;
+  --color-white: #ffffff;
   --color-accent: #ec6357;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  color-scheme: light dark;
+  background-color: var(--color-secondary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

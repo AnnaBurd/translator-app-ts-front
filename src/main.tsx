@@ -1,10 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+import Signup from "./pages/Signup.tsx";
+import Signin from "./pages/Signin.tsx";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+    <Signup />
+    <Signin />
+  </React.StrictMode>
+);
