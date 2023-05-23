@@ -11,6 +11,13 @@
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
+  --color-primary: #a1aed9;
+  --color-secondary: #eff6ff;
+  --color-dark: #718398;
+  --color-light: #deeeff;
+  --color-background: #ffffff;
+  --color-accent: #ec6357;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
