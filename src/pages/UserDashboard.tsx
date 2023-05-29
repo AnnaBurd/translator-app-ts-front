@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Dashboard() {
   return (
     <>
@@ -115,9 +117,9 @@ export default function Dashboard() {
               </button>
             </div>
             <div className="h-44 w-64 rounded-2xl bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400 p-[3px] hover:shadow-xl ">
-              <a
+              <Link
                 className="relative block h-full w-full rounded-xl bg-white p-2"
-                href=""
+                to=""
               >
                 <div className="flex h-full w-full flex-col items-center justify-center text-slate-400">
                   <svg
@@ -135,12 +137,12 @@ export default function Dashboard() {
                     />
                   </svg>
                 </div>
-              </a>
+              </Link>
             </div>
             <div className="h-44 w-64 rounded-2xl border-[1px] border-slate-200 shadow-md hover:shadow-xl ">
-              <a
+              <Link
                 className="relative block h-full w-full rounded-xl bg-white p-6"
-                href=""
+                to="/editor/doc1"
               >
                 <span className="absolute right-4 top-4 rounded-full bg-green-100 px-3 py-1.5 text-xs font-medium text-green-600">
                   Ru-Vn
@@ -154,12 +156,12 @@ export default function Dashboard() {
                 <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
                   Tieng viet la gi ...
                 </p>
-              </a>
+              </Link>
             </div>
             <div className="h-44 w-64 rounded-2xl border-[1px] border-slate-200 shadow-md hover:shadow-xl ">
-              <a
+              <Link
                 className="relative block h-full w-full rounded-xl bg-white p-6"
-                href=""
+                to="/editor/my-doc"
               >
                 <span className="absolute right-4 top-4 rounded-full bg-green-100 px-3 py-1.5 text-xs font-medium text-green-600">
                   En-Vn
@@ -173,18 +175,18 @@ export default function Dashboard() {
                 <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
                   Tieng viet la gi ...
                 </p>
-              </a>
+              </Link>
             </div>
             <div className="h-44 w-64 rounded-2xl border-[1px] border-slate-200 shadow-md hover:shadow-xl ">
-              <a
+              <Link
                 className="relative block h-full w-full rounded-xl bg-white p-6"
-                href=""
+                to="/editor/doc-2"
               >
                 <span className="absolute right-4 top-4 rounded-full bg-green-100 px-3 py-1.5 text-xs font-medium text-green-600">
                   Ru-Vn
                 </span>
                 <h3 className="mt-4 text-lg font-semibold text-slate-700">
-                  Document 1 :)
+                  Document 2 :)
                 </h3>
                 <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
                   Here is the first lines from the document text ...
@@ -192,7 +194,7 @@ export default function Dashboard() {
                 <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
                   Tieng viet la gi ...
                 </p>
-              </a>
+              </Link>
             </div>
           </div>
           <aside className="flex-auto bg-slate-500">
