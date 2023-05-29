@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* If the user prefers dark mode, 
+we of course apply color-scheme: dark, as usual
+But not now, because it is not ready yet.  */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light !important;
+  }
+}
+
 :root {
   --color-primary: #a1aed9;
   --color-secondary: #eff6ff;
