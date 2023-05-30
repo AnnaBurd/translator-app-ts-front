@@ -1,5 +1,10 @@
-// export type AuthContextType = {
-//   user: string;
-//   signin: (user: string) => void;
-//   signout: () => void;
-// };
+export interface UserCredentials {
+  email: string;
+  password: string;
+}
+
+export interface AuthContext {
+  user: User;
+  signin: (user: UserCredentials) => Promise<boolean>;
+  signout: () => void;
+}

@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { AppAuthContext } from "../context/AuthProvider";
+
 export default function Dashboard() {
+  const { user } = useContext(AppAuthContext);
+
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-4">
       <h2 className="pb-4 text-2xl font-bold text-slate-700">Users</h2>

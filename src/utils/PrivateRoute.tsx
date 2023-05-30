@@ -1,8 +1,12 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { AppAuthContext } from "../context/AuthProvider";
+import { useContext } from "react";
 
 const PrivateRoutes = () => {
-  let auth = { token: true };
-  return auth.token ? <Outlet /> : <Navigate to="/signin" />;
+  const { user } = useContext(AppAuthContext);
+  console.log("Private route - currently logged in user is: ", user);
+
+  return user ? <Outlet /> : <Navigate to="/signin" />;
 };
 
 export default PrivateRoutes;

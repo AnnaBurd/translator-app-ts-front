@@ -1,6 +1,30 @@
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { AppAuthContext } from "../context/AuthProvider";
 import OAuth from "../components/OAuth";
 
 export default function Signin() {
+  const navigate = useNavigate();
+  const { signin } = useContext(AppAuthContext);
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
+    const formData = e.target as typeof e.target & {
+      email: { value: "string" };
+      password: { value: "string" };
+    };
+
+    const email = formData.email.value;
+    const password = formData.password.value;
+    console.log(`Submitted credentials: ${email}, password: ${password}`);
+
+    const success = await signin({ email, password });
+
+    if (success) navigate("/");
+  };
+
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg">
@@ -16,6 +40,7 @@ export default function Signin() {
         <form
           action=""
           className="mb-0 mt-4 space-y-4 rounded-lg border border-slate-200 p-4 shadow-lg sm:p-6 lg:p-8"
+          onSubmit={handleSubmit}
         >
           <div>
             <label htmlFor="email" className="sr-only">
@@ -27,6 +52,7 @@ export default function Signin() {
                 type="email"
                 className="w-full rounded-lg border-slate-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Enter email"
+                id="email"
               />
 
               <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
@@ -58,6 +84,7 @@ export default function Signin() {
                 type="password"
                 className="w-full rounded-lg border-slate-200 p-4 pe-12 text-sm shadow-sm"
                 placeholder="Enter password"
+                id="password"
               />
 
               <span className="absolute inset-y-0 end-0 grid place-content-center px-4">

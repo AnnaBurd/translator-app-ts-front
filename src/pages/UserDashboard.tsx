@@ -1,13 +1,19 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AppAuthContext } from "../context/AuthProvider";
 
 export default function Dashboard() {
+  const { user } = useContext(AppAuthContext);
+
+  console.log("Dashboard gets user", user);
+
   return (
     <>
       <header aria-label="Page Header" className="">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-8 sm:px-6 lg:px-4">
           <div className="">
             <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-              Welcome Back, Besique!
+              Welcome Back, {user.name}!
               {/* TODO: show "Back" only for old users */}
             </h1>
 
@@ -59,7 +65,7 @@ export default function Dashboard() {
               <p className="ms-2 hidden text-left text-xs sm:block">
                 <strong className="block font-medium">Besique Monroe</strong>
 
-                <span className="text-slate-500">user@email.com</span>
+                <span className="text-slate-500">{user.email}</span>
               </p>
 
               <svg
