@@ -18,9 +18,11 @@ export default function Signin() {
 
     const email = formData.email.value;
     const password = formData.password.value;
-    console.log(`Submitted credentials: ${email}, password: ${password}`);
+    // console.log(`Submitted credentials: ${email}, password: ${password}`);
+    console.log(`Submitted credentials: TEST HARDCODED VALUES`);
 
-    const success = await signin({ email, password });
+    // const success = await signin({ email, password });
+    const success = await signin({ email: "test2@mail.com", password: "123" });
 
     if (success) navigate("/");
   };

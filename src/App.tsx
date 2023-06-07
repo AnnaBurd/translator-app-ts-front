@@ -4,7 +4,7 @@ import Signup from "./pages/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
 import Editor from "./pages/Editor";
 import UserDashboard from "./pages/UserDashboard";
-import PrivateRoutes from "./utils/PrivateRoute";
+import PrivateRoutes from "./components/PrivateRoute";
 import { NoMatch } from "./pages/NoMatch";
 import { AuthProvider } from "./context/AuthProvider";
 

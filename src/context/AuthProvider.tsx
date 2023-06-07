@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useState } from "react";
+import Config from "../../config.json";
 
 import { AuthContext, UserCredentials } from "../@types/auth";
 import { User } from "../@types/user";
@@ -27,25 +28,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
   const [user, setUser] = useState(getUserFromLocalStorage);
 
-  const login = async (userInput: UserCredentials) => {
-    console.log("Logging in user with credentials", userInput);
+  const signin = async (userInput: UserCredentials) => {
+    console.log("Logging in user with credentials", userInput, Config.API_URL);
 
-    // TODO: replace fake request and error handling
-    const fakeEmail = "eve.holt@reqres.in";
-    const fakePassword = "cityslicka";
-
-    const res = await fetch("https://reqres.in/api/login", {
+    const res = await fetch(`${Config.API_URL}users/signin`, {
       method: "POST",
-      body: JSON.stringify({ email: fakeEmail, password: fakePassword }),
+      credentials: "include",
+      body: JSON.stringify({
+        email: userInput.email,
+        password: userInput.password,
+      }),
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
     });
     const data = await res.json();
-    console.log(res, data.token);
+    console.log(res, data);
 
     // Login successful - confirmed by backend
+    // Now user token is stored by the browser (in http only cookie -> inaccessible programmatically from frontend js)
+    // Browser will automatically attach this cookie to next requests.
+
+    // Try to fetch user profile
+    const res2 = await fetch(`${Config.API_URL}users/profile`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const data2 = await res2.json();
+    console.log(res2, data2);
+
     if (data.token) {
       setUser({ name: data.token, email: userInput.email });
 
@@ -60,6 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
+  // TODO:
   const logout = async function () {
     setUser(null);
     localStorage.removeItem("user");
@@ -67,7 +84,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <AppAuthContext.Provider value={{ user, signin: login, signout: logout }}>
+      <AppAuthContext.Provider
+        value={{ user, signin: signin, signout: logout }}
+      >
         {children}
       </AppAuthContext.Provider>
     </>
