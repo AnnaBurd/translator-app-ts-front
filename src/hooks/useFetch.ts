@@ -1,14 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import Config from "../../config.json";
+import { AppAuthContext } from "../auth/AuthProvider";
 
 const useFetchData = (url: string) => {
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useContext(AppAuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        setIsLoading(true);
+        const response = await fetch(`${Config.API_URL}${url}`, {
+          credentials: "include",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -17,15 +23,22 @@ const useFetchData = (url: string) => {
         setData(jsonData);
         setIsLoading(false);
       } catch (error) {
-        setError(error.message);
+        setError((error as Error).message);
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [url]);
+    setIsLoading(false);
 
-  return { data, isLoading, error };
+    return () => {
+      console.log(
+        "fetch cleanup (before component dismounts -> should cansel ongoing requests"
+      );
+    };
+  }, [url, user]);
+
+  return [data, isLoading, error];
 };
 
 export default useFetchData;

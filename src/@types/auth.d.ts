@@ -7,7 +7,7 @@ export interface UserCredentials {
 
 export interface AuthContext {
   user: User;
-  signup: (user: UserCredentials) => Promise<boolean>;
-  signin: (user: UserCredentials) => Promise<boolean>;
+  signup: (user: UserCredentials) => void;
+  signin: (user: UserCredentials) => void;
   signout: () => void;
 }

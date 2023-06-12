@@ -10,8 +10,8 @@ Auth Context is accessible to all React Components with hook "useContext(AppAuth
 Thus, the styles and displayed data can be adjusted depending on the currently logged in user, and there is no need to pass user as prop to each component */
 const authContextDefaults: AuthContext = {
   user: null,
-  signup: async () => false,
-  signin: async () => false,
+  signup: async () => null,
+  signin: async () => null,
   signout: async () => null,
 };
 export const AppAuthContext = createContext<AuthContext>(authContextDefaults);
@@ -40,6 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await fetch(`${Config.API_URL}users/signup`, {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify(userInput),
         headers: {
           "Content-Type": "application/json",
@@ -92,27 +93,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Browser will automatically attach this cookie to next requests.
 
     // Try to fetch user profile
-    const res2 = await fetch(`${Config.API_URL}users/profile`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
-    const data2 = await res2.json();
-    console.log(res2, data2);
+    // const res2 = await fetch(`${Config.API_URL}users/profile`, {
+    //   method: "GET",
+    //   credentials: "include",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Accept: "application/json",
+    //   },
+    // });
+    // const data2 = await res2.json();
+    // console.log(res2, data2);
 
-    if (data.token) {
-      setUser({ name: data.token, email: userInput.email });
+    // if (data.token) {
+    //   setUser({ name: data.token, email: userInput.email });
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ name: data.token, email: userInput.email })
-      );
+    //   localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({ name: data.token, email: userInput.email })
+    //   );
 
-      return true;
-    }
+    //   return true;
+    // }
 
     return false;
   };

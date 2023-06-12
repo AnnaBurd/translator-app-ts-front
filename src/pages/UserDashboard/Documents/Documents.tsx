@@ -5,6 +5,7 @@ import Search from "./Search";
 import Document from "./Document";
 import NewDocument from "./NewDocument";
 import { DocumentPreviewData } from "../../../@types/doc";
+import useFetchData from "../../../hooks/useFetch";
 
 const DUMMY_DOCS: DocumentPreviewData[] = [
   {
@@ -25,30 +26,25 @@ const DUMMY_DOCS: DocumentPreviewData[] = [
 
 const Documents = () => {
   const { user } = useContext(AppAuthContext);
-  const [documents, setDocuments] = useState(DUMMY_DOCS);
-
   console.log("rendering user docs", user);
+  const [docs, isLoading, error] = useFetchData(`docs`);
 
-  const fetchDocuments = useCallback(async () => {}, []);
-
-  useEffect(() => {
-    console.log("fetching user docs");
-
-    return () => {
-      console.log(
-        "fetch cleanup (before component dismounts -> should cansel ongoing requests"
-      );
-    };
-  }, []);
+  console.log(docs, isLoading, error);
 
   return (
     <div className="grid w-2/3 grid-cols-3 gap-y-4">
       <Search></Search>
-      <NewDocument />
-      <Document docdata={DUMMY_DOCS[0]} />
+      {isLoading && <div>Loading</div>}
+
+      {error && <div>Error: {error}</div>}
+
+      {!isLoading && !error && <NewDocument />}
+      {!isLoading && !error && <Document docdata={DUMMY_DOCS[0]} />}
+
+      {/* <Document docdata={DUMMY_DOCS[0]} />
       <Document docdata={DUMMY_DOCS[1]} />
       <Document docdata={DUMMY_DOCS[0]} />
-      <Document docdata={DUMMY_DOCS[1]} />
+      <Document docdata={DUMMY_DOCS[1]} /> */}
     </div>
   );
 };
