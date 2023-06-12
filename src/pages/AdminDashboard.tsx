@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppAuthContext } from "../context/AuthProvider";
+import { AppAuthContext } from "../auth/AuthProvider";
 
 export default function Dashboard() {
   const { user } = useContext(AppAuthContext);

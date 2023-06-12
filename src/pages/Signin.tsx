@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AppAuthContext } from "../context/AuthProvider";
-import OAuth from "../components/OAuth";
+import { AppAuthContext } from "../auth/AuthProvider";
+import OAuth from "../auth/OAuth";
 
 export default function Signin() {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import "../components/google-auth-btn.scss";
+import "./google-auth-btn.scss";
 
 export default function OAuth() {
   return (
