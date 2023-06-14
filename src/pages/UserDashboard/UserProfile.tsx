@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { AppAuthContext } from "../../auth/AuthProvider";
+import AuthContext from "../../auth/AuthContext";
 
 const UserProfile = () => {
-  const { user } = useContext(AppAuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <button

@@ -1,30 +1,15 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 
-import { AppAuthContext } from "../auth/AuthProvider";
-import OAuth from "../auth/OAuth";
+import AuthContext from "../../auth/AuthContext";
+import OAuth from "../../auth/OAuth";
 
 export default function Signin() {
-  const navigate = useNavigate();
-  const { signin } = useContext(AppAuthContext);
+  const { signin } = useContext(AuthContext);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    // const formData = e.target as typeof e.target & {
-    //   email: { value: "string" };
-    //   password: { value: "string" };
-    // };
-
-    // const email = formData.email.value;
-    // const password = formData.password.value;
-    // // console.log(`Submitted credentials: ${email}, password: ${password}`);
-    // console.log(`Submitted credentials: TEST HARDCODED VALUES`);
-
-    // // const success = await signin({ email, password });
-    // const success = await signin({ email: "test2@mail.com", password: "123" });
-
-    // if (success) navigate("/");
+    signin({ email: "test2dfgfdg@mail.com", password: "123" });
   };
 
   return (

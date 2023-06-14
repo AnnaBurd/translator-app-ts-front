@@ -1,6 +1,6 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { AppAuthContext } from "../../../auth/AuthProvider";
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../../../auth/AuthContext";
+
 import Search from "./Search";
 import Document from "./Document";
 import NewDocument from "./NewDocument";
@@ -25,7 +25,7 @@ const DUMMY_DOCS: DocumentPreviewData[] = [
 ];
 
 const Documents = () => {
-  const { user } = useContext(AppAuthContext);
+  const { user } = useContext(AuthContext);
   console.log("rendering user docs", user);
   const [docs, isLoading, error] = useFetchData(`docs`);
 

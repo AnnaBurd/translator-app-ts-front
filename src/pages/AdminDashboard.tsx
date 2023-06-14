@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { AppAuthContext } from "../auth/AuthProvider";
+// import { AppAuthContext } from "../auth/AuthProvider";
 
 export default function Dashboard() {
-  const { user } = useContext(AppAuthContext);
+  // const { user } = useContext(AppAuthContext);
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-4">

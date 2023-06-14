@@ -1,19 +1,23 @@
 import { useState, useEffect, useContext } from "react";
 import Config from "../../config.json";
-import { AppAuthContext } from "../auth/AuthProvider";
+import AuthContext from "../auth/AuthContext";
 
 const useFetchData = (url: string) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useContext(AppAuthContext);
+  const { user } = useContext(AuthContext);
 
+  // TODO: cancel pending requests when component unmounts!
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         const response = await fetch(`${Config.API_URL}${url}`, {
-          credentials: "include",
+          // credentials: "include",
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
         });
         if (!response.ok) {
           throw new Error("Failed to fetch data");

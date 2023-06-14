@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppAuthContext } from "../../auth/AuthProvider";
+import AuthContext from "../../auth/AuthContext";
 
 import Welcome from "./Welcome";
 import UserProfile from "./UserProfile";
@@ -7,11 +7,9 @@ import Documents from "./Documents/Documents";
 import Charts from "./Charts";
 
 export default function Dashboard() {
-  const { user } = useContext(AppAuthContext);
+  const { user } = useContext(AuthContext);
 
-  // Fetch User Data For Dashboard:
-
-  console.log("Dashboard gets user", user);
+  console.log("Opening Dashboard for signed in user: ", user);
 
   return (
     <>
