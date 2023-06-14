@@ -16,7 +16,7 @@ const useFetchData = (url: string) => {
         const response = await fetch(`${Config.API_URL}${url}`, {
           // credentials: "include",
           headers: {
-            Authorization: `Bearer ${user.accessToken}`,
+            Authorization: `Bearer ${user?.accessToken}`,
           },
         });
         if (!response.ok) {

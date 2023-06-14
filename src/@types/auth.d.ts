@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface UserCredentials {
   firstName?: string;
   lastName?: string;
@@ -5,9 +7,15 @@ export interface UserCredentials {
   password: string;
 }
 
+export interface AuthenticatedUser extends User {
+  accessToken?: string;
+  name?: string;
+}
+
 export interface AuthContext {
-  user: User;
+  user: AuthenticatedUser | null;
   signup: (user: UserCredentials) => void;
   signin: (user: UserCredentials) => void;
   signout: () => void;
+  refresh: () => void;
 }
