@@ -9,6 +9,7 @@ const authContextDefaults: AuthContext = {
   signup: async () => null,
   signin: async () => null,
   signout: async () => null,
+  refreshAccessToken: async () => null,
 };
 const authContext = createContext<AuthContext>(authContextDefaults);
 

@@ -7,6 +7,8 @@ import UserDashboard from "./pages/UserDashboard/UserDashboard";
 import PrivateRoutes from "./auth/PrivateRoute";
 import { NoMatch } from "./pages/NoMatch";
 import { AuthProvider } from "./auth/AuthProvider";
+import AuthContext from "./auth/AuthContext";
+import { useContext, useEffect } from "react";
 
 export default function App() {
   return (

@@ -12,10 +12,16 @@ export interface AuthenticatedUser extends User {
   name?: string;
 }
 
+export interface OnRefreshCallback {
+  (accessToken: string): string | void;
+}
+
 export interface AuthContext {
   user: AuthenticatedUser | null;
   signup: (user: UserCredentials) => void;
   signin: (user: UserCredentials) => void;
   signout: () => void;
-  refresh: () => void;
+  refreshAccessToken: (
+    callbackAfrerRefresh?: OnRefreshCallback
+  ) => Promise<void | null | string> | void;
 }

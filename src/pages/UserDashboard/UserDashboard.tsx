@@ -7,19 +7,12 @@ import Documents from "./Documents/Documents";
 import Charts from "./Charts";
 
 export default function Dashboard() {
-  const { user, refresh } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
-  console.log("Opening Dashboard for signed in user: ", user);
+  console.log("Rendering user dashboard component", user?.email);
 
   return (
     <>
-      <button
-        onClick={() => {
-          refresh();
-        }}
-      >
-        REFRESH ACCESS
-      </button>
       <header aria-label="Page Header" className="">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-8 sm:px-6 lg:px-4">
           <Welcome></Welcome>

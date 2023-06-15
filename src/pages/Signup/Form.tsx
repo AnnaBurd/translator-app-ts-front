@@ -3,6 +3,7 @@ import Input from "../../components/UI/Input";
 import Button from "../../components/UI/Button";
 import AuthContext from "../../auth/AuthContext";
 import OAuth from "../../auth/OAuth";
+import { Link } from "react-router-dom";
 
 const Form = () => {
   const { signup } = useContext(AuthContext);
@@ -115,9 +116,9 @@ const Form = () => {
 
             <p className="mt-4 text-sm text-slate-500 sm:mt-0">
               Already have an account?&nbsp;
-              <a href="#" className="text-slate-700 underline">
+              <Link to="/signin" className="text-slate-700 underline">
                 Log in
-              </a>
+              </Link>
               .
             </p>
           </div>

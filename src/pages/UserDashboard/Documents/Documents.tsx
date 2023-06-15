@@ -5,7 +5,7 @@ import Search from "./Search";
 import Document from "./Document";
 import NewDocument from "./NewDocument";
 import { DocumentPreviewData } from "../../../@types/doc";
-import useFetchData from "../../../hooks/useFetch";
+import useData from "../../../hooks/useData";
 
 const DUMMY_DOCS: DocumentPreviewData[] = [
   {
@@ -26,25 +26,22 @@ const DUMMY_DOCS: DocumentPreviewData[] = [
 
 const Documents = () => {
   const { user } = useContext(AuthContext);
-  console.log("rendering user docs", user);
-  const [docs, isLoading, error] = useFetchData(`docs`);
+  const [docs, isLoading, error] = useData(`docs`);
 
-  console.log(docs, isLoading, error);
+  console.log("Rendering user documents component, documents=", docs);
 
   return (
     <div className="grid w-2/3 grid-cols-3 gap-y-4">
       <Search></Search>
-      {isLoading && <div>Loading</div>}
+      {isLoading && (
+        <div>TODO: wait a little bit, your documents are loading</div>
+      )}
 
-      {error && <div>Error: {error}</div>}
+      {!isLoading && error && <div>Error: {error}</div>}
 
       {!isLoading && !error && <NewDocument />}
       {!isLoading && !error && <Document docdata={DUMMY_DOCS[0]} />}
-
-      {/* <Document docdata={DUMMY_DOCS[0]} />
-      <Document docdata={DUMMY_DOCS[1]} />
-      <Document docdata={DUMMY_DOCS[0]} />
-      <Document docdata={DUMMY_DOCS[1]} /> */}
+      {!isLoading && !error && <div>OK DOCS LOADED</div>}
     </div>
   );
 };
