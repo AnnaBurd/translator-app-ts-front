@@ -2,6 +2,9 @@ import { ReactNode, useCallback, useRef, useState } from "react";
 import AuthContext from "./AuthContext";
 import { User } from "../@types/user";
 
+/**
+ * Auth Provider is a React component that plays role of a parent that provides common Auth Context to child components.
+ */
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const accessTokenRef = useRef<string | null>(null);

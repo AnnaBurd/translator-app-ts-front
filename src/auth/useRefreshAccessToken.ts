@@ -1,18 +1,16 @@
 import { useContext, useCallback } from "react";
 import AuthContext from "./AuthContext";
-import { useNavigate } from "react-router-dom";
 import Config from "../../config.json";
 
+/**
+ * Update value of expired access jwt token (requires refresh jwt token to be stored as http-only browser cookie).
+ */
 const useRefreshAccessToken = () => {
   const { updateAccessToken, updateUserDetails } = useContext(AuthContext);
 
-  console.log("Refresh access token - hook body");
-
   const refreshAccessToken = useCallback(async () => {
-    console.log("Refresh access token - function in hook");
-
     try {
-      const response = await fetch(`${Config.API_BASE_URL}/refresh2`, {
+      const response = await fetch(`${Config.API_BASE_URL}/refresh`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -22,33 +20,30 @@ const useRefreshAccessToken = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Could not refresh token");
+        throw new Error(
+          "useRefreshAccessToken: refreshAccessToken() - Failed refresh"
+        );
       }
 
       const json = await response.json();
-
-      console.log("GOT RESPONSE DATA FOR REFRESHING TOKEN", json);
-
       const newAccessToken = json.accessToken;
       updateAccessToken(newAccessToken);
 
       return newAccessToken;
     } catch (error) {
-      console.log("😶🫣", error);
+      console.log("Error refreshing access token", error);
 
+      // Skip errors caused by controller.abort() fetch signal api, because either component was dismounted, or a new request is already fired
       if ((error as DOMException)?.name !== "AbortError") {
-        // TODO: setIsRunnigSilentSignin to false if error is not because request is canceled in the cleanup
+        // Clear in-memory signed in user state
         updateAccessToken("");
         updateUserDetails(null);
 
-        console.log("COULD NOT REFRESH TOKEN_> SHOULD NAVIGATE TO RE_SIGNIN");
-
+        // Inform refreshToken caller about error
         throw new Error(
-          "COULD NOT REFRESH TOKEN_> SHOULD NAVIGATE TO RE_SIGNIN"
+          "refreshAccessToken: Fail to refresh expired access token"
         );
       }
-
-      // TODO: require signin in again?
     }
   }, [updateAccessToken, updateUserDetails]);
 

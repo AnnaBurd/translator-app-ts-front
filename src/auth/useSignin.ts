@@ -1,23 +1,22 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "../@types/user";
 import Config from "../../config.json";
 import AuthContext from "./AuthContext";
+
+/**
+ * Sign in user with email address and password
+ */
 const useSignin = () => {
   const { updateUserDetails, updateAccessToken } = useContext(AuthContext);
 
   const navigate = useNavigate();
+
+  // Get address of previous route before signin
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  console.log("Signing user in - hook body");
-  useEffect(() => {
-    console.log("Signing user in - USEEFFECT in hook");
-  }, []);
-
   const signin = async (user: User) => {
-    console.log("Signing user in - function in hook", user);
-
     try {
       const response = await fetch(`${Config.API_BASE_URL}/users/signin`, {
         method: "POST",
@@ -34,8 +33,6 @@ const useSignin = () => {
       }
 
       const json = await response.json();
-
-      console.log("GOT RESPONSE DATA", json);
 
       updateAccessToken(json.accessToken);
       updateUserDetails(json.data);
