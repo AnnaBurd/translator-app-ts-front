@@ -1,6 +1,5 @@
 import { AuthContext } from "../@types/auth";
 import { createContext } from "react";
-import { User } from "../@types/user";
 
 /**
  * Auth Context is accessible to all React components within <AuthProvider> parent, to access it use useContext() hook.
@@ -8,8 +7,8 @@ import { User } from "../@types/user";
 const authContextDefaults: AuthContext = {
   accessToken: null,
   user: null,
-  updateUserDetails: (user: User) => null,
-  updateAccessToken: (token: string) => null,
+  updateUserDetails: () => null,
+  updateAccessToken: () => null,
 };
 const authContext = createContext<AuthContext>(authContextDefaults);
 

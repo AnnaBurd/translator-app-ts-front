@@ -1,6 +1,3 @@
-import { useContext } from "react";
-import AuthContext from "../../../auth/AuthContext";
-
 import Search from "./Search";
 import Document from "./Document";
 import NewDocument from "./NewDocument";

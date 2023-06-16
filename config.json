@@ -1,5 +1,6 @@
 {
-    "API_BASE_URL": "http://192.168.1.6:8000/api",
+    "API_BASE_URL": "https://translator-app-ts-api-production.up.railway.app/api",
+    "API_BASE_URL_4": "http://192.168.1.6:8000/api",
     "API_BASE_URL_3": "http://localhost:8000/api",
     "API_BASE_URL_2": "http://192.168.1.2:8000/api"
 }
