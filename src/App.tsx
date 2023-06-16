@@ -4,11 +4,9 @@ import Signup from "./pages/Signup/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
 import Editor from "./pages/Editor";
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
-import PrivateRoutes from "./auth/PrivateRoute";
 import { NoMatch } from "./pages/NoMatch";
-import { AuthProvider } from "./auth/AuthProvider";
-import AuthContext from "./auth/AuthContext";
-import { useContext, useEffect } from "react";
+import AuthProvider from "./auth/AuthProvider";
+import RequireAuth from "./auth/RequireAuth";
 
 export default function App() {
   return (
@@ -19,7 +17,7 @@ export default function App() {
           <Route index element={<Navigate to="/dash" />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
-          <Route element={<PrivateRoutes />}>
+          <Route element={<RequireAuth />}>
             <Route path="/dash" element={<UserDashboard />} />
             <Route path="/editor/:doc" element={<Editor />} />
             <Route path="/users" element={<AdminDashboard />} />

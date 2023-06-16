@@ -5,14 +5,18 @@ import Welcome from "./Welcome";
 import UserProfile from "./UserProfile";
 import Documents from "./Documents/Documents";
 import Charts from "./Charts";
+import useRefreshAccessToken from "../../auth/useRefreshAccessToken";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
 
   console.log("Rendering user dashboard component", user?.email);
 
+  const refreshAccessToken = useRefreshAccessToken();
+
   return (
     <>
+      <button onClick={refreshAccessToken}> REFRESH ACCESS TOKEN TEST</button>
       <header aria-label="Page Header" className="">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-8 sm:px-6 lg:px-4">
           <Welcome></Welcome>

@@ -5,7 +5,7 @@ import Search from "./Search";
 import Document from "./Document";
 import NewDocument from "./NewDocument";
 import { DocumentPreviewData } from "../../../@types/doc";
-import useData from "../../../hooks/useData";
+import useDataPrivate from "../../../hooks/useDataPrivate";
 
 const DUMMY_DOCS: DocumentPreviewData[] = [
   {
@@ -25,10 +25,9 @@ const DUMMY_DOCS: DocumentPreviewData[] = [
 ];
 
 const Documents = () => {
-  const { user } = useContext(AuthContext);
-  const [docs, isLoading, error] = useData(`docs`);
+  const [docs, isLoading, error] = useDataPrivate(`docs`);
 
-  console.log("Rendering user documents component, documents=", docs);
+  console.log("Documents component body", docs);
 
   return (
     <div className="grid w-2/3 grid-cols-3 gap-y-4">

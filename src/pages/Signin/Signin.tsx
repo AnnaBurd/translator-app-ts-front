@@ -1,10 +1,9 @@
-import { useContext } from "react";
-
-import AuthContext from "../../auth/AuthContext";
-import OAuth from "../../auth/OAuth";
+import { Link } from "react-router-dom";
+// import OAuth from "../../auth/OAuth";
+import useSignin from "../../auth/useSignin";
 
 export default function Signin() {
-  const { signin } = useContext(AuthContext);
+  const signin = useSignin();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -107,11 +106,11 @@ export default function Signin() {
 
           <p className="text-center text-sm text-slate-500">
             No account?{" "}
-            <a className="underline" href="">
+            <Link className="underline" to="/signup">
               Sign up
-            </a>
+            </Link>
           </p>
-          <OAuth></OAuth>
+          {/* <OAuth></OAuth> */}
         </form>
       </div>
     </div>
