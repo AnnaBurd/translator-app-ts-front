@@ -2,11 +2,15 @@ import { useState, useEffect, useContext } from "react";
 import useRefreshAccessToken from "../auth/useRefreshAccessToken";
 import Config from "../../config.json";
 import AuthContext from "../auth/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const useDataPrivate = (url: string) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const { accessToken } = useContext(AuthContext);
   const refreshAccessToken = useRefreshAccessToken();
@@ -57,7 +61,18 @@ const useDataPrivate = (url: string) => {
       } catch (error) {
         // TODO: set error
         // setError("UNHANDLED Error fetching data");
-        console.log("UNHANDLED Error fetching data", error);
+
+        if (
+          (error as Error).message ===
+          "COULD NOT REFRESH TOKEN_> SHOULD NAVIGATE TO RE_SIGNIN"
+        ) {
+          navigate("/signin", { replace: true, state: { from: location } });
+        } else if ((error as DOMException)?.name === "AbortError") {
+          console.log("Aborted fetch because new fetch is running");
+        } else {
+          console.log("UNHANDLED Error fetching data", error);
+          setError("UNHANDLED Error fetching data");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -70,7 +85,7 @@ const useDataPrivate = (url: string) => {
 
       controller.abort();
     };
-  }, [url, accessToken, refreshAccessToken]);
+  }, [url, accessToken, refreshAccessToken, navigate, location]);
 
   return [data, isLoading, error];
 };

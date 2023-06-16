@@ -4,9 +4,10 @@ import Button from "../../components/UI/Button";
 // import AuthContext from "../../auth/AuthContext";
 // import OAuth from "../../auth/OAuth";
 import { Link } from "react-router-dom";
+import useSignup from "../../auth/useSignup";
 
 const Form = () => {
-  // const { signup } = useContext(AuthContext);
+  const signup = useSignup();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -38,7 +39,7 @@ const Form = () => {
     ) {
       console.log(firstName, lastName, email, password);
 
-      // signup({ firstName, lastName, email, password });
+      signup({ firstName, lastName, email, password });
     } else {
       console.log("Invalid input");
       // TODO: Invalid input animation

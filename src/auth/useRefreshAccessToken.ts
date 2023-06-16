@@ -5,7 +5,6 @@ import Config from "../../config.json";
 
 const useRefreshAccessToken = () => {
   const { updateAccessToken, updateUserDetails } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   console.log("Refresh access token - hook body");
 
@@ -13,7 +12,7 @@ const useRefreshAccessToken = () => {
     console.log("Refresh access token - function in hook");
 
     try {
-      const response = await fetch(`${Config.API_BASE_URL}/refresh`, {
+      const response = await fetch(`${Config.API_BASE_URL}/refresh2`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -32,11 +31,23 @@ const useRefreshAccessToken = () => {
 
       const newAccessToken = json.accessToken;
       updateAccessToken(newAccessToken);
-      updateUserDetails(json.data);
 
       return newAccessToken;
     } catch (error) {
       console.log("😶🫣", error);
+
+      if ((error as DOMException)?.name !== "AbortError") {
+        // TODO: setIsRunnigSilentSignin to false if error is not because request is canceled in the cleanup
+        updateAccessToken("");
+        updateUserDetails(null);
+
+        console.log("COULD NOT REFRESH TOKEN_> SHOULD NAVIGATE TO RE_SIGNIN");
+
+        throw new Error(
+          "COULD NOT REFRESH TOKEN_> SHOULD NAVIGATE TO RE_SIGNIN"
+        );
+      }
+
       // TODO: require signin in again?
     }
   }, [updateAccessToken, updateUserDetails]);

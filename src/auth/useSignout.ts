@@ -1,28 +1,25 @@
 import { useContext, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { User } from "../@types/user";
 import Config from "../../config.json";
 import AuthContext from "./AuthContext";
-const useSignin = () => {
+const useSignout = () => {
   const { updateUserDetails, updateAccessToken } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
-  console.log("Signing user in - hook body");
+  console.log("Signing out- hook body");
   useEffect(() => {
-    console.log("Signing user in - USEEFFECT in hook");
+    console.log("Signing out - USEEFFECT in hook");
   }, []);
 
-  const signin = async (user: User) => {
+  const signout = async (user: User) => {
     console.log("Signing user in - function in hook", user);
 
     try {
-      const response = await fetch(`${Config.API_BASE_URL}/users/signin`, {
-        method: "POST",
+      const response = await fetch(`${Config.API_BASE_URL}/users/signout`, {
+        method: "GET",
         credentials: "include",
-        body: JSON.stringify(user),
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -30,24 +27,24 @@ const useSignin = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Could not sign in");
+        throw new Error("Could not sign out?");
       }
 
       const json = await response.json();
 
       console.log("GOT RESPONSE DATA", json);
 
-      updateAccessToken(json.accessToken);
-      updateUserDetails(json.data);
+      updateAccessToken("");
+      updateUserDetails(null);
 
-      // Go to previous location from location state, or to user dash by default
-      navigate(from, { replace: true });
+      // Go to welcome page
+      navigate("/signup");
     } catch (error) {
       console.log("😶‍🌫️", error);
     }
   };
 
-  return signin;
+  return signout;
 };
 
-export default useSignin;
+export default useSignout;

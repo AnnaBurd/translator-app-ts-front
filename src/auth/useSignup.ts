@@ -3,23 +3,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "../@types/user";
 import Config from "../../config.json";
 import AuthContext from "./AuthContext";
-const useSignin = () => {
+const useSignup = () => {
   const { updateUserDetails, updateAccessToken } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
-  console.log("Signing user in - hook body");
+  console.log("Signing user up - hook body");
   useEffect(() => {
-    console.log("Signing user in - USEEFFECT in hook");
+    console.log("Signing user up - USEEFFECT in hook");
   }, []);
 
-  const signin = async (user: User) => {
+  const signup = async (user: User) => {
     console.log("Signing user in - function in hook", user);
 
     try {
-      const response = await fetch(`${Config.API_BASE_URL}/users/signin`, {
+      const response = await fetch(`${Config.API_BASE_URL}/users/signup`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(user),
@@ -40,14 +38,14 @@ const useSignin = () => {
       updateAccessToken(json.accessToken);
       updateUserDetails(json.data);
 
-      // Go to previous location from location state, or to user dash by default
-      navigate(from, { replace: true });
+      // Go to welcome page
+      navigate("/dash");
     } catch (error) {
       console.log("😶‍🌫️", error);
     }
   };
 
-  return signin;
+  return signup;
 };
 
-export default useSignin;
+export default useSignup;
