@@ -5,6 +5,8 @@ import Config from "../../config.json";
 /**
  * Update value of expired access jwt token (requires refresh jwt token to be stored as http-only browser cookie).
  */
+
+// TODO: test and handle scenario when refresh token expired -> should require user to re-sign in and return back to the current page
 const useRefreshAccessToken = () => {
   const { updateAccessToken, updateUserDetails } = useContext(AuthContext);
 
