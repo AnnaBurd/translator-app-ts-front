@@ -8,8 +8,8 @@ import useSignup from "../../auth/useSignup";
 import Button from "../../components/UI/Button";
 
 type FormData = {
-  firstName: string;
-  lastName: string;
+  firstName: string | undefined;
+  lastName: string | undefined;
   email: string;
   password: string;
 };
