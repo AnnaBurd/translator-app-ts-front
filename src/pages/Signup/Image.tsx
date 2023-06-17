@@ -1,18 +1,13 @@
 const Image = () => {
   return (
-    <aside className="relative block h-16 bg-[--color-primary] lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
-      <img
-        alt="Pattern"
-        src="/hero.svg"
-        className="absolute inset-0 h-full w-full object-cover object-left"
-        style={{
-          width: "125%",
-          maxWidth: "170%",
-          height: "112%",
-          marginLeft: "-22%",
-          marginTop: "-13%",
-        }}
-      />
+    <aside className="pointer-events-none relative z-10 hidden h-full w-full overflow-clip bg-[--color-primary] max-xl:[clip-path:ellipse(100%_55%_at_48%_44%)] min-[500px]:block xl:order-last xl:col-span-6 xl:overflow-visible">
+      <div className="absolute left-[-20%] top-[-85%] h-[250%] w-[125%] lg:left-[-8%] lg:top-[0%] lg:h-[100%] lg:w-[110%] xl:left-[-26%] xl:top-[-14%] xl:h-[116%] xl:w-[126%] 2xl:left-[-21%] 2xl:top-[-16%] 2xl:h-[120%] 2xl:w-[126%]">
+        <img
+          alt="Pattern"
+          src="/hero.svg"
+          className="h-full w-full object-cover object-left"
+        />
+      </div>
     </aside>
   );
 };
