@@ -1,7 +1,8 @@
 export interface DocumentPreviewData {
+  _id: string;
   title: string;
-  text: string;
-  translation: string;
-  originLang: string;
+  lang?: string;
+  text?: string;
+  translation?: string;
   translationLang: string;
 }

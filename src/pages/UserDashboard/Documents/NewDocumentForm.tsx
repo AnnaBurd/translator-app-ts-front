@@ -1,8 +1,13 @@
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useContext } from "react";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+
+import Config from "../../../../config.json";
+import AuthContext from "../../../auth/AuthContext";
+import useRefreshAccessToken from "../../../auth/useRefreshAccessToken";
+import { useNavigate } from "react-router-dom";
 
 enum LanguageOptions {
   vn = "vn",
@@ -72,13 +77,58 @@ const NewDocumentForm = ({
     resolver: yupResolver(inputValidationSchema),
   });
 
+  const { accessToken } = useContext(AuthContext);
+  const refreshAccessToken = useRefreshAccessToken();
+
+  const navigate = useNavigate();
+
   const closeFormHandler = (event: React.MouseEvent<HTMLElement>) => {
     reset();
     onClose(event);
   };
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log("Submitting form", data);
+
+    // Show loading indicator
+
+    // Send form to backend
+    let response = await fetch(`${Config.API_BASE_URL}/${"docs"}`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    console.log("Response from server", response);
+
+    if (!response.ok) {
+      // Refresh access token
+      const newAccessToken = await refreshAccessToken();
+      // Retry fetching data
+      response = await fetch(`${Config.API_BASE_URL}/${"docs"}`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${newAccessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+    }
+
+    if (!response.ok) {
+      // Show error message
+    } else {
+      // On success -> navigate to the editor page with new document
+      const responseData = await response.json();
+      console.log("Response data", responseData);
+
+      navigate(`/editor/${responseData.data._id}`); // TODO: replace with unique slugs on backend api -> frontend
+    }
   };
 
   return visible ? (

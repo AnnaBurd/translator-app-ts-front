@@ -8,7 +8,7 @@ import useRefreshAccessToken from "../auth/useRefreshAccessToken";
  * Fetch private data from the backend, if access token expired (backend returns token expired error) refresh access token and refetch data.
  * @param url - backend api endpoint, e.g. users, docs, docs/:docid
  */
-const useDataPrivate = (url: string) => {
+const useDataPrivate = (url: string): [unknown, boolean, string] => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
