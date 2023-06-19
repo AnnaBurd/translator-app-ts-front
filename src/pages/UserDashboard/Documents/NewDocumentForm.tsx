@@ -3,7 +3,6 @@ import { MouseEventHandler } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Button from "../../../components/UI/Button";
 
 enum LanguageOptions {
   vn = "vn",
@@ -78,7 +77,9 @@ const NewDocumentForm = ({
     onClose(event);
   };
 
-  const onSubmit = (data: FormData) => console.log("Submitting form", data);
+  const onSubmit = (data: FormData) => {
+    console.log("Submitting form", data);
+  };
 
   return visible ? (
     <>
@@ -88,7 +89,7 @@ const NewDocumentForm = ({
       ></div>
       <div className="absolute inset-0 right-0 top-0 z-50 flex select-none overflow-y-visible">
         <div
-          className="h-min w-2/4 content-center justify-center rounded-2xl border border-blue-100 bg-white p-4 shadow-lg sm:p-4 lg:p-6"
+          className="h-min w-full content-center justify-center rounded-2xl border border-blue-100 bg-white p-3 shadow-lg sm:p-4 lg:w-3/4 lg:p-6 xl:w-2/4"
           role="alert"
         >
           <div className="mb-6 flex items-center justify-between">
@@ -138,8 +139,8 @@ const NewDocumentForm = ({
               </label>
             </div>
 
-            <div className="flex justify-between">
-              <fieldset className="relative mb-10 flex flex-wrap gap-2">
+            <div className="md:flex md:justify-between">
+              <fieldset className="relative mb-12 flex flex-wrap gap-2 md:mb-10">
                 <legend className="sr-only">Document Language</legend>
                 <span className="absolute -top-6 start-0 text-sm text-gray-700 dark:text-gray-200">
                   Document Language
