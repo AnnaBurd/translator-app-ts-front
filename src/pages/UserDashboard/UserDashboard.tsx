@@ -12,11 +12,8 @@ export default function Dashboard() {
 
   console.log("Rendering user dashboard component", user?.email);
 
-  const refreshAccessToken = useRefreshAccessToken();
-
   return (
     <>
-      <button onClick={refreshAccessToken}> REFRESH ACCESS TOKEN TEST</button>
       <header aria-label="Page Header" className="">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-8 sm:px-6 lg:px-4">
           <Welcome></Welcome>

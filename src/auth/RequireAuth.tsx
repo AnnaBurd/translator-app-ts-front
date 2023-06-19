@@ -20,9 +20,7 @@ const RequireAuth = () => {
       )}
       {!isRunningSilentSignin &&
         (signedInUser ? (
-          <div>
-            AUTHENTICATED ROUTE: <Outlet />
-          </div>
+          <Outlet />
         ) : (
           <Navigate to="/signup" state={{ from: location }} replace />
         ))}

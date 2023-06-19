@@ -27,7 +27,7 @@ const Documents = () => {
   console.log("Documents component body", docs);
 
   return (
-    <div className="grid w-2/3 grid-cols-3 gap-y-4">
+    <div className="relative grid w-2/3 grid-cols-3 gap-y-4">
       <Search></Search>
       {isLoading && (
         <div>TODO: wait a little bit, your documents are loading</div>

@@ -8,7 +8,7 @@ export default function Signin() {
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    signin({ email: "test2dfgfdg@mail.com", password: "123" });
+    signin({ email: "test@mail.com", password: "111" });
   };
 
   return (
