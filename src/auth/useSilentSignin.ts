@@ -22,7 +22,7 @@ const useSilentSignin = () => {
     const controller = new AbortController();
     const tryToSignin = async () => {
       try {
-        const response = await fetch(`${Config.API_BASE_URL}/refresh`, {
+        const response = await fetch(`${Config.API_BASE_URL}/refresh/signin`, {
           method: "GET",
           credentials: "include",
           headers: {

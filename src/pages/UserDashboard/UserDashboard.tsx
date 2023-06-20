@@ -5,12 +5,9 @@ import Welcome from "./Welcome";
 import UserProfile from "./UserProfile";
 import Documents from "./Documents/Documents";
 import Charts from "./Charts";
-import useRefreshAccessToken from "../../auth/useRefreshAccessToken";
 
 export default function Dashboard() {
   const { user } = useContext(AuthContext);
-
-  console.log("Rendering user dashboard component", user?.email);
 
   return (
     <>

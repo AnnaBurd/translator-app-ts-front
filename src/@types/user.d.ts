@@ -3,11 +3,5 @@ export interface User {
   firstName?: string;
   lastName?: string;
   password?: string;
+  newUser?: boolean;
 }
-
-// export interface UserCredentials {
-//   firstName?: string;
-//   lastName?: string;
-//   email: string;
-//   password: string;
-// }
