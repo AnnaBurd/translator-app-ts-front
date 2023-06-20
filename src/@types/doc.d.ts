@@ -1,8 +1,9 @@
-export interface DocumentPreviewData {
+export interface Doc {
   _id: string;
   title: string;
   lang?: string;
-  text?: string;
-  translation?: string;
-  translationLang: string;
+  translationLang?: string;
+  textPreview?: string;
+  translationPreview?: string;
+  changedAt?: string;
 }
