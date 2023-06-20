@@ -19,10 +19,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     accessTokenRef.current = token;
   }, []);
 
+  const getAccessToken = useCallback(() => {
+    return accessTokenRef.current;
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
-        accessToken: accessTokenRef.current,
+        getAccessToken,
         user,
         updateUserDetails,
         updateAccessToken,
