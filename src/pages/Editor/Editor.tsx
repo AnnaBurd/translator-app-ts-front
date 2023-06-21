@@ -34,6 +34,8 @@ export default function Editor() {
   const [inputBlocks, setInputBlocks] = useState<Array<OutputBlockData>>([]);
   const [outputBlocks, setOutputBlocks] = useState<Array<OutputBlockData>>([]);
 
+  console.log(outputBlocks);
+
   // Init text editors when document is loaded
   // TODO: consider init editors during document loading
   useEffect(() => {

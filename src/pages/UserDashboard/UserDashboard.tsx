@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import AuthContext from "../../auth/AuthContext";
+// import { useContext } from "react";
+// import AuthContext from "../../auth/AuthContext";
 
 import Welcome from "./Welcome";
 import UserProfile from "./UserProfile";
@@ -7,7 +7,7 @@ import Documents from "./Documents/Documents";
 import Charts from "./Charts";
 
 export default function Dashboard() {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
 
   return (
     <>
