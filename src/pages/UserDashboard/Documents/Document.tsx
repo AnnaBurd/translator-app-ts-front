@@ -26,14 +26,18 @@ const Document: React.FC<{ doc: Doc }> = ({ doc }) => {
           </span>
         </div>
 
-        <h3 className="mt-6 text-lg font-semibold text-slate-700">
+        <h3
+          className={`mt-6 text-lg font-semibold text-slate-700 ${
+            !doc.title ? "h-[1.75rem]" : ""
+          }`}
+        >
           {doc.title}
         </h3>
         <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
           {doc.textPreview}
         </p>
         <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
-          {doc.translationPreview ? doc.translationPreview + "..." : ""}
+          {doc.translationPreview ? doc.translationPreview.trim() + " ..." : ""}
         </p>
       </Link>
     </div>
