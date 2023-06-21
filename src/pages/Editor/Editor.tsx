@@ -17,6 +17,8 @@ import { Doc } from "../../@types/doc";
 import Breadcrumbs from "./Breadcrumbs";
 import SideMenu from "./SideMenu";
 
+// TODO: add copy to cliboard button
+
 export default function Editor() {
   // Load the document data
   const { docId } = useParams();
@@ -120,7 +122,7 @@ export default function Editor() {
     <>
       <SideMenu></SideMenu>
 
-      <div className="grid h-screen w-full grid-cols-1 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden py-6 pl-20 pr-4">
+      <div className="grid h-min w-full grid-cols-1 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden py-6 pl-16 pr-2 sm:pl-20 sm:pr-6 md:h-screen md:pr-4">
         <div className="pb-4">
           <Breadcrumbs
             title={(document as Doc)?.title}
@@ -128,7 +130,7 @@ export default function Editor() {
             translationLang={(document as Doc)?.translationLang}
           ></Breadcrumbs>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 max-md:h-[140vh] xl:grid-cols-2">
           <div
             className="editor overflow-x-hidden overflow-y-scroll rounded-md bg-slate-50 p-4"
             ref={inputContainerRef}
@@ -138,8 +140,8 @@ export default function Editor() {
             ref={outputContainerRef}
           ></div>
         </div>
-        <div className="mb-4 mt-4 grid grid-cols-3 grid-rows-1">
-          <span className="justify-self-end rounded-lg border border-slate-200 bg-transparent shadow-sm">
+        <div className="mb-4 mt-4 grid grid-cols-2 grid-rows-1 max-[400px]:grid-cols-1   md:grid-cols-3">
+          <span className="justify-self-end rounded-lg border border-slate-200 bg-transparent shadow-sm max-[400px]:mb-4 max-[400px]:justify-self-center">
             <button className="group relative inline-block border-e p-2 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 focus:relative">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

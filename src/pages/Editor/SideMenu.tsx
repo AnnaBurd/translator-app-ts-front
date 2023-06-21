@@ -2,7 +2,7 @@ import Logo from "../../../public/icon.svg";
 
 const SideMenu = () => {
   return (
-    <div className="fixed flex h-screen w-14 flex-col  justify-between bg-white shadow-sm">
+    <div className="fixed flex h-screen min-h-screen w-14 flex-col  justify-between bg-white shadow-sm">
       <div>
         <div className="inline-flex h-14 w-14 items-center justify-center">
           <span className="grid h-10 w-10 place-content-center rounded-lg bg-slate-100 text-xs text-slate-600">
@@ -121,7 +121,7 @@ const SideMenu = () => {
         </div>
       </div>
 
-      <div className="sticky inset-x-0 bottom-0 mb-6 border-t border-slate-100 bg-white">
+      <div className="sticky inset-x-12 mb-16 border-t border-slate-100 bg-white">
         <ul className="space-y-1 border-slate-100 pt-4">
           <li>
             <a
