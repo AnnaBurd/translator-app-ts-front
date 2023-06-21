@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Signin from "./pages/Signin/Signin";
 import Signup from "./pages/Signup/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
-import Editor from "./pages/Editor";
+import Editor from "./pages/Editor/Editor";
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
 import { NoMatch } from "./pages/NoMatch";
 import AuthProvider from "./auth/AuthProvider";
@@ -19,7 +19,7 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
           <Route element={<RequireAuth />}>
             <Route path="/dash" element={<UserDashboard />} />
-            <Route path="/editor/:doc" element={<Editor />} />
+            <Route path="/editor/:docId" element={<Editor />} />
             <Route path="/users" element={<AdminDashboard />} />
           </Route>
           <Route path="*" element={<NoMatch />} />

@@ -37,11 +37,11 @@ const useFetchPrivate = () => {
         options.body = JSON.stringify(data);
       }
 
-      console.log(
-        "useFetchPrivate: fetching data from endpoint - attempt 1",
-        url,
-        options
-      );
+      // console.log(
+      //   "useFetchPrivate: fetching data from endpoint - attempt 1",
+      //   url,
+      //   options
+      // );
       // Fetch data from backend using latest access token value
       let response = await fetch(`${Config.API_BASE_URL}/${url}`, options);
 
@@ -50,11 +50,11 @@ const useFetchPrivate = () => {
         const newAccessToken = await refreshAccessToken();
 
         options.headers.Authorization = `Bearer ${newAccessToken}`;
-        console.log(
-          "useFetchPrivate: fetching data from endpoint - attempt 2 after refreshing access token",
-          url,
-          options
-        );
+        // console.log(
+        //   "useFetchPrivate: fetching data from endpoint - attempt 2 after refreshing access token",
+        //   url,
+        //   options
+        // );
         response = await fetch(`${Config.API_BASE_URL}/${url}`, options);
       }
 
@@ -67,7 +67,7 @@ const useFetchPrivate = () => {
 
       const json = await response.json();
 
-      console.log("json=", json);
+      // console.log("json=", json);
       return json.data;
     },
     [getAccessToken, refreshAccessToken]
