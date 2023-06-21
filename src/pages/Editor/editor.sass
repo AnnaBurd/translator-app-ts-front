@@ -1,9 +1,33 @@
 // Override codex editor default styles
-.ce-toolbar
-    display: none
+// .ce-toolbar
+//     display: none
 
-.ce-block__content
-    margin: 0
+// .ce-block__content
+//     margin: 0
 
-.codex-editor__redactor
-    padding-bottom: 0 !important
+// .codex-editor__redactor
+//     padding-bottom: 0 !important
+
+
+/* Editor scrollbars */
+.editor
+    /* Width */
+    &::-webkit-scrollbar 
+        width: 5px
+
+  
+    /* Track */
+    &::-webkit-scrollbar-track 
+        background: var(--color-light)
+        border-radius: 10px
+
+    
+    /* Handle */
+    &::-webkit-scrollbar-thumb 
+        background: var(--color-primary)
+        border-radius: 5px
+
+    
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover 
+        background: var(--color-dark)
