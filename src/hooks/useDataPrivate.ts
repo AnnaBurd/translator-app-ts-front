@@ -28,11 +28,11 @@ const useDataPrivate = (url: string): [unknown, boolean, string] => {
 
         setData(data);
 
-        console.log(
-          "useDataPrivate: successfully fetched and set data from url ",
-          url,
-          data
-        );
+        // console.log(
+        //   "useDataPrivate: successfully fetched and set data from url ",
+        //   url,
+        //   data
+        // );
       } catch (error) {
         // Access token has expired and can not be refreshed - redirect to signin page
         if (
@@ -44,12 +44,12 @@ const useDataPrivate = (url: string): [unknown, boolean, string] => {
 
         // Request was cancelled by controller on useEffect cleanup - ignore error, either the component was unmounted or a new request was made
         if ((error as DOMException)?.name === "AbortError") {
-          console.log(
-            "Request was cancelled by controller on useEffect cleanup"
-          );
+          // console.log(
+          //   "Request was cancelled by controller on useEffect cleanup"
+          // );
         } else {
           // TODO: manage errors and display them to the user
-          console.log("UNHANDLED Error fetching data", error);
+          // console.log("UNHANDLED Error fetching data", error);
           setError("UNHANDLED Error fetching data");
         }
       } finally {

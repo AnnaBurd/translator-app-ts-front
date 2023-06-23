@@ -8,7 +8,7 @@ import { Doc } from "../../../@types/doc";
 const Documents = () => {
   const [docs, isLoading, error] = useDataPrivate(`docs`);
 
-  console.log("Documents component body", docs);
+  // console.log("Documents component body", docs);
 
   // TODO: pagination!
 

@@ -18,31 +18,27 @@ const useSignup = () => {
   const from = location.state?.from?.pathname || "/";
 
   const signup = async (user: User) => {
-    try {
-      const response = await fetch(`${Config.API_BASE_URL}/users/signup`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(user),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+    const response = await fetch(`${Config.API_BASE_URL}/users/signup`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
 
-      if (!response.ok) {
-        throw new Error("Could not sign up");
-      }
-
-      const json = await response.json();
-
-      updateAccessToken(json.accessToken);
-      updateUserDetails(json.data);
-
-      // Go to previous location from location state, or to user dash by default
-      navigate(from, { replace: true });
-    } catch (error) {
-      console.log("😶‍🌫️", error);
+    if (!response.ok) {
+      throw new Error("Could not sign up");
     }
+
+    const json = await response.json();
+
+    updateAccessToken(json.accessToken);
+    updateUserDetails(json.data);
+
+    // Go to previous location from location state, or to user dash by default
+    navigate(from, { replace: true });
   };
 
   return signup;

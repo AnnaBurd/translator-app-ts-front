@@ -2,10 +2,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import useSignup from "../../auth/useSignup";
 import Button from "../../components/UI/Button";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
 type FormData = {
   firstName: string | undefined;
@@ -32,6 +34,8 @@ const inputValidationSchema = yup
 const Form = () => {
   const signup = useSignup();
 
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -40,14 +44,28 @@ const Form = () => {
     resolver: yupResolver(inputValidationSchema),
   });
 
-  const onSubmit = (data: FormData) => signup(data);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+    try {
+      await signup(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error signing up", error);
+      setIsLoading(false);
+      setError((error as Error)?.message || "Something went wrong");
+      navigate("/error");
+    }
+  };
 
   return (
     <main
       aria-label="Main"
       className="flex items-center justify-center px-6 py-6 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6 2xl:px-28"
     >
-      <div className="max-w-xl lg:max-w-3xl">
+      <div className="relative max-w-xl lg:max-w-3xl">
         <h1 className="mt-6 text-2xl font-bold text-slate-800 sm:text-3xl md:text-4xl">
           Welcome to Translator App ✍🏻
         </h1>
@@ -56,14 +74,46 @@ const Form = () => {
           advanced editing features to ease your translation workflow.
         </p>
 
+        {(isLoading || error) && (
+          <motion.div
+            className="absolute z-30 h-[100%] w-[100%] bg-gradient-to-r from-[--color-secondary] "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5, transition: { duration: 0.5 } }}
+          ></motion.div>
+        )}
+
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mt-8 grid grid-cols-6 gap-6"
+          className="relative mt-8 grid grid-cols-6 gap-6"
         >
+          {isLoading && (
+            <motion.span
+              className="absolute left-1/2 top-1/3 z-50"
+              initial={{ opacity: 0 }}
+              animate={{
+                // rotate: 360,
+                opacity: 1,
+                // transition: { rotate: { duration: 2, yoyo: Infinity } },
+              }}
+            >
+              <div aria-label="Loading..." role="status">
+                <svg className="h-7 w-7 animate-spin" viewBox="3 3 18 18">
+                  <path
+                    className="fill-[--color-secondary]"
+                    d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"
+                  ></path>
+                  <path
+                    className="fill-[--color-primary]"
+                    d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z"
+                  ></path>
+                </svg>
+              </div>
+            </motion.span>
+          )}
           <div className="relative z-10 col-span-6 sm:col-span-3">
             <label
               htmlFor="firstName"
-              className={`block text-sm font-medium  ${
+              className={`block text-sm font-medium transition-colors duration-300 ${
                 errors.firstName ? "text-rose-600" : "text-slate-700"
               }`}
             >
@@ -71,7 +121,7 @@ const Form = () => {
             </label>
             <input
               {...register("firstName")}
-              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm focus-within:outline-1 ${
+              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors focus-within:outline-1 duration-300${
                 errors.firstName
                   ? "text-rose-600 focus-within:outline-rose-400"
                   : "text-slate-700 focus-within:outline-slate-400"
@@ -87,7 +137,7 @@ const Form = () => {
           <div className="relative col-span-6 sm:col-span-3">
             <label
               htmlFor="lastName"
-              className={`block text-sm font-medium  ${
+              className={`block text-sm font-medium transition-colors duration-300  ${
                 errors.lastName ? "text-rose-600" : "text-slate-700"
               }`}
             >
@@ -95,7 +145,7 @@ const Form = () => {
             </label>
             <input
               {...register("lastName")}
-              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm focus-within:outline-1 ${
+              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors duration-300 focus-within:outline-1 ${
                 errors.lastName
                   ? "text-rose-600 focus-within:outline-rose-400"
                   : "text-slate-700 focus-within:outline-slate-400"
@@ -108,10 +158,10 @@ const Form = () => {
             </p>
           </div>
 
-          <div className="relative z-20 col-span-6">
+          <motion.div className="relative z-20 col-span-6 opacity-[99]">
             <label
               htmlFor="email"
-              className={`block text-sm font-medium  ${
+              className={`block text-sm font-medium  transition-colors duration-300 ${
                 errors.email ? "text-rose-600" : "text-slate-700"
               }`}
             >
@@ -119,7 +169,7 @@ const Form = () => {
             </label>
             <input
               {...register("email")}
-              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm focus-within:outline-1 ${
+              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors duration-300 focus-within:outline-1  ${
                 errors.email
                   ? "text-rose-600 focus-within:outline-rose-400"
                   : "text-slate-700 focus-within:outline-slate-400"
@@ -128,15 +178,20 @@ const Form = () => {
               aria-invalid={errors.email ? "true" : "false"}
             />
             {errors.email && (
-              <p className="absolute -bottom-[1.1rem] left-0 p-0 text-xs text-rose-600">
+              <motion.p
+                className="absolute -bottom-[1.1rem] left-0 p-0 text-xs text-rose-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
                 {errors.email?.message}
-              </p>
+              </motion.p>
             )}
-          </div>
+          </motion.div>
           <div className="relative col-span-6">
             <label
               htmlFor="password"
-              className={`block text-sm font-medium  ${
+              className={`block text-sm font-medium  transition-colors duration-300 ${
                 errors.password ? "text-rose-600" : "text-slate-700"
               }`}
             >
@@ -144,7 +199,7 @@ const Form = () => {
             </label>
             <input
               {...register("password")}
-              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm focus-within:outline-1 ${
+              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors duration-300 focus-within:outline-1 ${
                 errors.password
                   ? "text-rose-600 focus-within:outline-rose-400"
                   : "text-slate-700 focus-within:outline-slate-400"
@@ -154,9 +209,14 @@ const Form = () => {
               aria-invalid={errors.password ? "true" : "false"}
             />
             {errors.password && (
-              <p className="absolute -bottom-[1.1rem] left-0 p-0 text-xs text-rose-600">
+              <motion.p
+                className="absolute -bottom-[1.1rem] left-0 p-0 text-xs text-rose-600"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
                 {errors.password?.message}
-              </p>
+              </motion.p>
             )}
           </div>
 
@@ -187,6 +247,7 @@ const Form = () => {
             </p>
           </div>
         </form>
+        {/* </motion.div> */}
 
         {/* <OAuth></OAuth> */}
       </div>
