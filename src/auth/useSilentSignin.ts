@@ -9,12 +9,13 @@ import AuthContext from "./AuthContext";
 const useSilentSignin = () => {
   const { user, updateAccessToken, updateUserDetails } =
     useContext(AuthContext);
-  const [isRunningSilentSignin, setIsRunningSilentSignin] = useState(true);
+  const [isRunningSilentSignin, setIsRunningSilentSignin] = useState(
+    user ? false : true
+  );
 
   useEffect(() => {
     // User has already signed in - do nothing
-    if (user) {
-      setIsRunningSilentSignin(false);
+    if (!isRunningSilentSignin) {
       return;
     }
 
@@ -56,7 +57,7 @@ const useSilentSignin = () => {
       // Cancel ongoing fetch requests
       controller.abort();
     };
-  }, [updateAccessToken, updateUserDetails, user]);
+  }, [isRunningSilentSignin, updateAccessToken, updateUserDetails, user]);
 
   return isRunningSilentSignin;
 };
