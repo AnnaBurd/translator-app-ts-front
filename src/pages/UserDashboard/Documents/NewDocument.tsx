@@ -15,7 +15,7 @@ const NewDocument = () => {
   return (
     <>
       <div
-        className="h-44 w-64 rounded-2xl bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400 p-[3px] hover:shadow-xl"
+        className="min-h-[4rem] rounded-2xl bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400 p-[3px] hover:shadow-xl md:min-h-[10rem]"
         onClick={formOpenHandler}
       >
         <div className="relative block h-full w-full cursor-pointer rounded-xl bg-white p-2">

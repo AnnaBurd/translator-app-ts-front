@@ -13,7 +13,7 @@ const Documents = () => {
   // TODO: pagination!
 
   return (
-    <div className="relative grid w-2/3 grid-cols-3 gap-y-4">
+    <div className="relative grid gap-x-4 gap-y-4 md:w-3/5 md:grid-cols-2 xl:w-2/3 xl:grid-cols-3">
       <Search></Search>
       {isLoading && (
         <div>TODO: wait a little bit, your documents are loading</div>

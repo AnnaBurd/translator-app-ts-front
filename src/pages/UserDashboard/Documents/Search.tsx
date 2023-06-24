@@ -1,6 +1,6 @@
 const Search = () => {
   return (
-    <div className="relative mb-0 w-fit [grid-column:1/-1]">
+    <div className="relative mb-0 w-full [grid-column:1/-1] sm:w-fit">
       <label className="sr-only" htmlFor="search">
         Search
       </label>

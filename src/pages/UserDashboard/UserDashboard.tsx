@@ -13,10 +13,10 @@ export default function Dashboard() {
   return (
     <>
       <AnimatedPage>
-        <header aria-label="Page Header" className="">
-          <div className="mx-auto flex max-w-screen-xl items-center justify-between px-4 py-8 sm:px-6 lg:px-4">
+        <header aria-label="User Dashboard" className="">
+          <div className="mx-auto flex max-w-screen-xl flex-col-reverse justify-between px-4 py-4 sm:px-6 md:py-8 lg:flex-row lg:items-center lg:px-4">
             <Welcome></Welcome>
-            <div className="flex items-center justify-end gap-4">
+            <div className="mb-4 flex items-center justify-end gap-4">
               <div className="flex items-center gap-4"></div>
               <button
                 className="mr-1 inline-flex items-center justify-center gap-1.5 rounded-lg border  border-slate-300 px-5 py-3 text-slate-500 transition hover:text-slate-700 focus:outline-none focus:ring"
@@ -48,8 +48,8 @@ export default function Dashboard() {
             </div>
           </div>
         </header>
-        <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-4">
-          <div className="flex justify-between">
+        <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4">
+          <div className="flex flex-col-reverse justify-between md:flex-row">
             <Documents></Documents>
             <Charts></Charts>
           </div>
