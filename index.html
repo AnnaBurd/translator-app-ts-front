@@ -5,9 +5,70 @@
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Translator App</title>
+    <style>
+      #root .loader-container {
+        background-color: #eff6ff;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #root .dot-flashing {
+        position: relative;
+        width: 8px;
+        height: 8px;
+        border-radius: 5px;
+        background-color: var(--color-primary);
+        color: var(--color-primary);
+        animation: dot-flashing 1s infinite linear alternate;
+        animation-delay: 0.5s;
+      }
+      #root .dot-flashing::before,
+      #root .dot-flashing::after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        top: 0;
+      }
+      #root .dot-flashing::before {
+        left: -15px;
+        width: 8px;
+        height: 8px;
+        border-radius: 5px;
+        background-color: var(--color-primary);
+        color: var(--color-primary);
+        animation: dot-flashing 1s infinite alternate;
+        animation-delay: 0s;
+      }
+      #root .dot-flashing::after {
+        left: 15px;
+        width: 8px;
+        height: 8px;
+        border-radius: 5px;
+        background-color: var(--color-primary);
+        color: var(--color-primary);
+        animation: dot-flashing 1s infinite alternate;
+        animation-delay: 1s;
+      }
+
+      @keyframes dot-flashing {
+        0% {
+          background-color: rgb(137, 156, 248);
+        }
+        50%,
+        100% {
+          background-color: rgba(137, 156, 248, 0.2);
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loader-container">
+        <div class="dot-flashing"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
