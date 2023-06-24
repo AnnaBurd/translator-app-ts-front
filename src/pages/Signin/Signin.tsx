@@ -5,41 +5,128 @@ import AnimatedPage from "../../components/animations/AnimatedPage";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+// TODO: add localization for form labels/error messages
+type FormData = {
+  email: string;
+  password: string;
+};
+
+const inputValidationSchema = yup
+  .object({
+    email: yup
+      .string()
+      .email("Please enter a valid email address (e.g. email@example.com)")
+      .required("Please enter a valid email address (e.g. email@example.com)"),
+    password: yup.string().required("Please enter a password"),
+  })
+  .required();
+
 export default function Signin() {
   const signin = useSignin();
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(inputValidationSchema),
+  });
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorSigningIn, setErrorSigningIn] = useState("");
+
+  const onSubmit = async (data: FormData) => {
+    // e.preventDefault();
+
+    console.log("data", data);
 
     try {
       setIsLoading(true);
-      // signin({ email: "test@mail.com", password: "111" });
-      // setIsLoading(false);
+      await signin(data);
+      setIsLoading(false);
     } catch (error) {
-      navigate("/error");
+      setIsLoading(false);
+      console.log("Error signing in", error);
+      setErrorSigningIn("Could not signin with these credentials.");
+      // navigate("/error");
     }
   };
 
   return (
-    <AnimatedPage>
+    <AnimatedPage fadeOnExit={false}>
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg">
-          <h1 className="text-center text-2xl font-bold text-[var(--color-primary)] sm:text-3xl">
-            Start Free
-          </h1>
+          <motion.h1
+            className="text-center text-2xl font-bold text-[var(--color-primary)] sm:text-3xl"
+            exit={{
+              // y: "-100vh",
+              // scale: 0.1,
+              opacity: 0,
+              transition: {
+                duration: 0.1,
+                ease: "easeOut",
+                // opacity: { duration: 0.3 },
 
-          <p className="mx-auto mt-4 max-w-md text-center text-slate-500">
+                // bounce: 0.25,
+                // damping: 5,
+                // mass: 10,
+                // stiffness: 10,
+              },
+            }}
+          >
+            Start Free
+          </motion.h1>
+
+          <motion.p
+            className="mx-auto mt-4 max-w-md text-center text-slate-500"
+            exit={{
+              // y: "-100vh",
+              // scale: 0.1,
+              opacity: 0,
+              transition: {
+                duration: 0.1,
+                ease: "easeOut",
+                // opacity: { duration: 0.3 },
+
+                // bounce: 0.25,
+                // damping: 5,
+                // mass: 10,
+                // stiffness: 10,
+              },
+            }}
+          >
             Sign in to start new translation, download or edit your documents,
             or view usage statistics.
-          </p>
+          </motion.p>
 
-          <form
-            action=""
-            className="relative mb-0 mt-4  overflow-hidden rounded-lg border border-slate-200 p-4 shadow-lg sm:p-6 lg:p-8"
-            onSubmit={handleSubmit}
+          <motion.form
+            layout="size"
+            transition={{
+              layout: { duration: 0.3 },
+            }}
+            exit={{
+              y: "-100vh",
+              // scale: 0.1,
+              opacity: 0,
+              transition: {
+                duration: 0.6,
+                ease: "easeOut",
+                opacity: { duration: 0.3 },
+
+                // bounce: 0.25,
+                // damping: 5,
+                // mass: 10,
+                // stiffness: 10,
+              },
+            }}
+            className={`relative mb-0 mt-4  overflow-hidden rounded-lg border border-slate-200 p-4 shadow-lg sm:p-6 lg:p-8`}
+            onSubmit={handleSubmit(onSubmit)}
           >
             {isLoading && (
               <motion.div
@@ -80,16 +167,24 @@ export default function Signin() {
 
               <div className="relative">
                 <input
-                  type="email"
-                  className="w-full rounded-lg border-slate-200 p-4 pe-12 text-sm shadow-sm"
+                  {...register("email")}
+                  className={`w-full rounded-lg border-slate-200 p-4 pe-12 text-sm shadow-sm transition-colors duration-300 focus-within:outline-1 ${
+                    errors.email
+                      ? "text-rose-600 focus-within:outline-rose-400"
+                      : "text-slate-700 focus-within:outline-slate-400"
+                  }`}
                   placeholder="Enter email"
-                  id="email"
+                  // id="email"
+                  autoComplete="email"
+                  aria-invalid={errors.email ? "true" : "false"}
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-slate-400"
+                    className={`h-4 w-4 ${
+                      errors.email ? "text-rose-400" : "text-slate-400"
+                    }`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -103,6 +198,16 @@ export default function Signin() {
                   </svg>
                 </span>
               </div>
+              {errors.email && (
+                <motion.p
+                  className="px-4 py-1 text-xs text-rose-600"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {errors.email?.message}
+                </motion.p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -112,16 +217,24 @@ export default function Signin() {
 
               <div className="relative">
                 <input
+                  {...register("password")}
                   type="password"
-                  className="w-full rounded-lg border-slate-200 p-4 pe-12 text-sm shadow-sm"
+                  className={`w-full rounded-lg border-slate-200 p-4 pe-12 text-sm shadow-sm transition-colors duration-300 focus-within:outline-1 ${
+                    errors.password
+                      ? "text-rose-600 focus-within:outline-rose-400"
+                      : "text-slate-700 focus-within:outline-slate-400"
+                  }`}
                   placeholder="Enter password"
-                  id="password"
+                  autoComplete="current-password"
+                  aria-invalid={errors.password ? "true" : "false"}
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-slate-400"
+                    className={`h-4 w-4 ${
+                      errors.password ? "text-rose-400" : "text-slate-400"
+                    }`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -141,14 +254,35 @@ export default function Signin() {
                   </svg>
                 </span>
               </div>
+              {errors.password && (
+                <motion.p
+                  className="px-4 py-1 text-xs text-rose-600"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {errors.password?.message}
+                </motion.p>
+              )}
             </div>
+
             <button
               type="submit"
-              className="mb-4 block w-full rounded-md border border-indigo-400 bg-indigo-400 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-indigo-400 focus:outline-none focus:ring active:text-indigo-300"
+              disabled={errors.email || errors.password ? true : false}
+              className="mb-4 block w-full rounded-md border border-indigo-400 bg-indigo-400 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-indigo-400 focus:outline-none focus:ring active:text-indigo-300 disabled:pointer-events-none disabled:border-slate-200 disabled:bg-slate-200"
             >
               Sign in
             </button>
 
+            {errorSigningIn && (
+              <p className="mb-1 text-center text-sm text-slate-500">
+                {errorSigningIn}{" "}
+                <Link className="underline" to="#TODO">
+                  Restore password
+                </Link>
+                ?
+              </p>
+            )}
             <p className="text-center text-sm text-slate-500">
               No account?{" "}
               <Link className="underline" to="/signup">
@@ -156,7 +290,7 @@ export default function Signin() {
               </Link>
             </p>
             {/* <OAuth></OAuth> */}
-          </form>
+          </motion.form>
         </div>
       </div>
     </AnimatedPage>
