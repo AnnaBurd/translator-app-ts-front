@@ -49,7 +49,7 @@ export default function Signin() {
     try {
       setIsLoading(true);
       await signin(data);
-      setIsLoading(false);
+      // setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.log("Error signing in", error);
@@ -64,42 +64,50 @@ export default function Signin() {
         <div className="mx-auto max-w-lg">
           <motion.h1
             className="text-center text-2xl font-bold text-[var(--color-primary)] sm:text-3xl"
-            exit={{
-              // y: "-100vh",
-              // scale: 0.1,
-              opacity: 0,
-              transition: {
-                duration: 0.1,
-                ease: "easeOut",
-                // opacity: { duration: 0.3 },
+            exit={
+              isLoading
+                ? {
+                    // y: "-100vh",
+                    // scale: 0.1,
+                    opacity: 0,
+                    transition: {
+                      duration: 0.1,
+                      ease: "easeOut",
+                      // opacity: { duration: 0.3 },
 
-                // bounce: 0.25,
-                // damping: 5,
-                // mass: 10,
-                // stiffness: 10,
-              },
-            }}
+                      // bounce: 0.25,
+                      // damping: 5,
+                      // mass: 10,
+                      // stiffness: 10,
+                    },
+                  }
+                : {}
+            }
           >
             Start Free
           </motion.h1>
 
           <motion.p
             className="mx-auto mt-4 max-w-md text-center text-slate-500"
-            exit={{
-              // y: "-100vh",
-              // scale: 0.1,
-              opacity: 0,
-              transition: {
-                duration: 0.1,
-                ease: "easeOut",
-                // opacity: { duration: 0.3 },
+            exit={
+              isLoading
+                ? {
+                    // y: "-100vh",
+                    // scale: 0.1,
+                    opacity: 0,
+                    transition: {
+                      duration: 0.1,
+                      ease: "easeOut",
+                      // opacity: { duration: 0.3 },
 
-                // bounce: 0.25,
-                // damping: 5,
-                // mass: 10,
-                // stiffness: 10,
-              },
-            }}
+                      // bounce: 0.25,
+                      // damping: 5,
+                      // mass: 10,
+                      // stiffness: 10,
+                    },
+                  }
+                : ""
+            }
           >
             Sign in to start new translation, download or edit your documents,
             or view usage statistics.
@@ -110,21 +118,25 @@ export default function Signin() {
             transition={{
               layout: { duration: 0.3 },
             }}
-            exit={{
-              y: "-100vh",
-              // scale: 0.1,
-              opacity: 0,
-              transition: {
-                duration: 0.6,
-                ease: "easeOut",
-                opacity: { duration: 0.3 },
+            exit={
+              isLoading
+                ? {
+                    y: "-100vh",
+                    scale: 0.7,
+                    opacity: 0,
+                    transition: {
+                      duration: 0.6,
+                      ease: "backInOut",
+                      opacity: { duration: 0.3 },
 
-                // bounce: 0.25,
-                // damping: 5,
-                // mass: 10,
-                // stiffness: 10,
-              },
-            }}
+                      // bounce: 0.25,
+                      // damping: 5,
+                      // mass: 10,
+                      // stiffness: 10,
+                    },
+                  }
+                : {}
+            }
             className={`relative mb-0 mt-4  overflow-hidden rounded-lg border border-slate-200 p-4 shadow-lg sm:p-6 lg:p-8`}
             onSubmit={handleSubmit(onSubmit)}
           >
