@@ -32,7 +32,7 @@ const Document: React.FC<DocumentProps> = ({ doc, onDelete }) => {
         </div>
 
         <h3
-          className={`mt-6 text-lg font-semibold text-slate-700 ${
+          className={`mt-6 overflow-hidden overflow-ellipsis text-lg font-semibold text-slate-700 ${
             !doc.title ? "h-[1.75rem]" : ""
           }`}
         >
