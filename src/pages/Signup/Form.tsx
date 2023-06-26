@@ -121,6 +121,7 @@ const Form = () => {
             </label>
             <input
               {...register("firstName")}
+              id="firstName"
               className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors focus-within:outline-1 duration-300${
                 errors.firstName
                   ? "text-rose-600 focus-within:outline-rose-400"
@@ -145,6 +146,7 @@ const Form = () => {
             </label>
             <input
               {...register("lastName")}
+              id="lastName"
               className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors duration-300 focus-within:outline-1 ${
                 errors.lastName
                   ? "text-rose-600 focus-within:outline-rose-400"
@@ -169,6 +171,7 @@ const Form = () => {
             </label>
             <input
               {...register("email")}
+              id="email"
               className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors duration-300 focus-within:outline-1  ${
                 errors.email
                   ? "text-rose-600 focus-within:outline-rose-400"
@@ -199,6 +202,7 @@ const Form = () => {
             </label>
             <input
               {...register("password")}
+              id="password"
               className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors duration-300 focus-within:outline-1 ${
                 errors.password
                   ? "text-rose-600 focus-within:outline-rose-400"
