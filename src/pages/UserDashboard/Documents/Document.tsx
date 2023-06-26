@@ -1,7 +1,12 @@
 import { Link } from "react-router-dom";
 import { Doc } from "../../../@types/doc";
 
-const Document: React.FC<{ doc: Doc }> = ({ doc }) => {
+type DocumentProps = {
+  doc: Doc;
+  onDelete: (id: string) => void;
+};
+
+const Document: React.FC<DocumentProps> = ({ doc, onDelete }) => {
   return (
     <div className="group/doc rounded-2xl border-[1px] border-slate-200 shadow-md transition-shadow duration-300 hover:shadow-xl">
       <Link
@@ -39,7 +44,13 @@ const Document: React.FC<{ doc: Doc }> = ({ doc }) => {
         <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-600 ">
           {doc.translationPreview?.trim()}
         </p>
-        <button className="group invisible absolute bottom-3  right-3 z-30 inline-flex items-center justify-center  rounded-xl bg-white p-2 text-slate-500 opacity-0 transition-opacity delay-0  duration-300 hover:bg-slate-50 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 group-hover/doc:visible group-hover/doc:opacity-100 group-hover/doc:delay-150 group-hover/doc:duration-1000">
+        <button
+          onClick={(event) => {
+            event.preventDefault();
+            onDelete(doc._id);
+          }}
+          className="group invisible absolute bottom-3  right-3 z-30 inline-flex items-center justify-center  rounded-xl bg-white p-2 text-slate-500 opacity-0 transition-opacity delay-0  duration-300 hover:bg-slate-50 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 group-hover/doc:visible group-hover/doc:opacity-100 group-hover/doc:delay-150 group-hover/doc:duration-1000"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useFetchPrivate from "./useFetchPrivate";
+import { Doc } from "../@types/doc";
 
 /**
  * Load data from the backend on the component mount.
  * If access token is expired and can not be refreshed redirects to signin page.
  * @param url - backend api endpoint, e.g. users, docs, docs/:docid
  */
-const useDataPrivate = (url: string): [unknown, boolean, string] => {
-  const [data, setData] = useState(null);
+const useDataPrivate = <T>(
+  url: string
+): [T | null, boolean, string, (id: string) => Promise<void>] => {
+  const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -17,14 +20,40 @@ const useDataPrivate = (url: string): [unknown, boolean, string] => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const deleteDataItem = async (id: string) => {
+    console.log("deleteData: ", id);
+
+    // Filter out data in array with the given id
+    setData((prevData) => {
+      if (prevData instanceof Array) {
+        return prevData.filter((item) => item._id !== id) as T;
+      }
+
+      return null;
+    });
+
+    // Save changes to the database
+    try {
+      await fetchPrivate(`${url}/${id}`, "DELETE", null);
+    } catch (error) {
+      // TODO: manage errors and display them to the user
+      console.log("Error deleting data", error);
+    }
+  };
+
   useEffect(() => {
-    // Controller is used to cancel repeating requests during useEffect cleanup call
+    // Controller is used to cancel repeating requests during use Effect cleanup call
     const controller = new AbortController();
 
     // Wrap callback in async function to use async-await inside useEffect hook
     const fetchData = async () => {
       try {
-        const data = await fetchPrivate(url, "GET", null, controller.signal);
+        const data = (await fetchPrivate(
+          url,
+          "GET",
+          null,
+          controller.signal
+        )) as T;
 
         setData(data);
 
@@ -65,7 +94,7 @@ const useDataPrivate = (url: string): [unknown, boolean, string] => {
     };
   }, [url, navigate, location, fetchPrivate]);
 
-  return [data, isLoading, error];
+  return [data, isLoading, error, deleteDataItem];
 };
 
 export default useDataPrivate;
