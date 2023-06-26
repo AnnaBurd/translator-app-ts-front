@@ -33,11 +33,11 @@ const Document: React.FC<{ doc: Doc }> = ({ doc }) => {
         >
           {doc.title}
         </h3>
-        <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
-          {doc.textPreview}
+        <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-600 ">
+          {doc.textPreview?.trim()}
         </p>
-        <p className="mt-2 text-sm  leading-5 text-slate-600 sm:block">
-          {doc.translationPreview ? doc.translationPreview.trim() + " ..." : ""}
+        <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-600 ">
+          {doc.translationPreview?.trim()}
         </p>
       </Link>
     </div>
