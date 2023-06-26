@@ -1,8 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import useSilentSignin from "./useSilentSignin";
-import { AnimatePresence, motion } from "framer-motion";
 import LogoLoader from "../components/animations/LogoLoader";
 
 /**

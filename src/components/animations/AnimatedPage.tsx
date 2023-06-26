@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 
 type AnimatedPageProps = {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ const AnimatedPage: React.FC<AnimatedPageProps> = ({
   children,
   fadeOnExit = true,
 }) => {
-  const location = useLocation();
+  // const location = useLocation();
   return (
     <motion.div
       // key={location.key}

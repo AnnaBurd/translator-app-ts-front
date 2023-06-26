@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import OAuth from "../../auth/OAuth";
 import useSignin from "../../auth/useSignin";
 import AnimatedPage from "../../components/animations/AnimatedPage";
@@ -27,12 +27,12 @@ const inputValidationSchema = yup
 
 export default function Signin() {
   const signin = useSignin();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(inputValidationSchema),

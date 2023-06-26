@@ -1,4 +1,4 @@
-import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Signin from "./pages/Signin/Signin";
 import Signup from "./pages/Signup/Signup";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -12,8 +12,7 @@ import { AnimatePresence } from "framer-motion";
 
 export default function App() {
   const location = useLocation();
-  console.log("App location: ", location);
-
+  // TODO: style scrollbar
   return (
     <AuthProvider>
       {/* <div className="fixed left-0 top-0 flex gap-10 opacity-50">

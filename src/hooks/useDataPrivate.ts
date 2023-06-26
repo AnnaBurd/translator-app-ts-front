@@ -1,7 +1,6 @@
-import { useState, useEffect, Dispatch } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useFetchPrivate from "./useFetchPrivate";
-import { Doc } from "../@types/doc";
 
 /**
  * Load data from the backend on the component mount.
