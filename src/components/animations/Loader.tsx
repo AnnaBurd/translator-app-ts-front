@@ -1,6 +1,9 @@
 const Loader = () => {
-  return <div>LOADING </div>;
+  return (
+    <div className="loader-container">
+      <div className="dot-flashing"></div>
+    </div>
+  );
 };
 
-// TODO: refactor
 export default Loader;
