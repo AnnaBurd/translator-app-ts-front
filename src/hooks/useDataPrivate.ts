@@ -20,7 +20,7 @@ const useDataPrivate = <T>(
   const location = useLocation();
 
   const deleteDataItem = async (id: string) => {
-    console.log("deleteData: ", id);
+    // console.log("deleteData: ", id);
 
     // Filter out data in array with the given id
     setData((prevData) => {

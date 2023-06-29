@@ -65,9 +65,12 @@ const useFetchPrivate = () => {
         );
       }
 
-      const json = await response.json();
+      // Successfully deleted data - no json returned
+      if (response.status === 204) {
+        return null;
+      }
 
-      // console.log("json=", json);
+      const json = await response.json();
       return json.data;
     },
     [getAccessToken, refreshAccessToken]

@@ -5,9 +5,13 @@ import EditorJS, {
   BlockRemovedEvent,
   OutputBlockData,
 } from "@editorjs/editorjs";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { BlockMutationEvent } from "@editorjs/editorjs/types/events/block";
+
+import copy from "copy-to-clipboard";
+
 import { Doc } from "../../../@types/doc";
 import { blockToOutputBlock, outputBlockToBlock } from "./helper";
 import { initInputEditor, initOutputEditor } from "./init";
@@ -26,6 +30,9 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
   const outputContainerRef = useRef<HTMLDivElement>(null);
   const inputEditorRef = useRef<EditorJS>();
   const outputEditorRef = useRef<EditorJS>();
+
+  const [loadingBlock, setLoadingBlock] = useState<string>("");
+  const [errorLoadingBlock, setErrorLoadingBlock] = useState<string>("");
 
   // Last snapshot of the document state as stored in the database
   const [inputBlocks, setInputBlocks] = useState<Array<OutputBlockData>>([]);
@@ -142,6 +149,22 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
     const newInputBlocks: OutputBlockData[] = [];
     const newTranslatedBlocks: OutputBlockData[] = [];
 
+    // Remove  all deleted blocks from the database, not to mess up the order
+    if (blocksDeleted.current.length > 0) {
+      console.log("Deleting blocks", blocksDeleted.current);
+
+      try {
+        await fetchPrivate(`docs/${document?._id}`, "PATCH", {
+          // block: null,
+          blockIds: blocksDeleted.current,
+          translationOption: "removeBlocks",
+        });
+      } catch (err) {
+        console.log("ERROR DELETING BLOCKS FROM DB:", err);
+        setErrorLoadingBlock("Error deleting blocks");
+      }
+    }
+
     for (const [index, block] of currentEditorInput.entries()) {
       console.log(block, index);
 
@@ -149,36 +172,44 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
       if (newBlocksAdded.current.includes(block.id as string)) {
         console.log("Added at index", block, index);
 
-        // Fetch translation
-        const translatedBlock = await fetchPrivate(
-          `docs/${document?._id}`,
-          "PATCH",
-          {
-            block: outputBlockToBlock(block),
-            blockPositionIndex: index,
-          }
-        );
+        try {
+          setLoadingBlock(block.id as string);
 
-        console.log(
-          "Got translation:",
-          translatedBlock,
-          "for block at index",
-          index
-        );
+          // Fetch translation
+          const translatedBlock = await fetchPrivate(
+            `docs/${document?._id}`,
+            "PATCH",
+            {
+              block: outputBlockToBlock(block),
+              blockPositionIndex: index,
+            }
+          );
 
-        const translatedBlockData = blockToOutputBlock(translatedBlock);
+          console.log(
+            "Got translation:",
+            translatedBlock,
+            "for block at index",
+            index
+          );
 
-        // newTranslatedBlocks.push(translatedBlockData);
+          const translatedBlockData = blockToOutputBlock(translatedBlock);
 
-        outputEditorRef.current?.blocks.insert(
-          "paragraph",
-          { text: translatedBlockData.data.text },
-          null,
-          index,
-          true,
-          false,
-          translatedBlockData.id
-        );
+          // newTranslatedBlocks.push(translatedBlockData);
+
+          outputEditorRef.current?.blocks.insert(
+            "paragraph",
+            { text: translatedBlockData.data.text },
+            null,
+            index,
+            true,
+            false,
+            translatedBlockData.id
+          );
+        } catch (err) {
+          console.log("ERROR FETCHING TRANSLATION:", err);
+          setErrorLoadingBlock(block.id as string);
+          break;
+        }
       }
 
       // Update changed block
@@ -191,7 +222,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
           "PATCH",
           {
             block: outputBlockToBlock(block),
-            options: "updateOrigin",
+            translationOption: "editOriginalBlock",
           }
         );
 
@@ -217,13 +248,6 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
           true,
           translatedBlockData.id
         );
-      }
-
-      // Update deleted block
-      if (blocksDeleted.current.includes(block.id as string)) {
-        console.log("Deleted at index", block, index);
-
-        // Save changed to the database (mark block as deleted and do not include it when document is fetched)
       }
     }
 
@@ -316,7 +340,25 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
               Redo&nbsp;(Ctrl+Y)
             </span>
           </button> */}
-          <button className="group relative inline-block border-e p-2 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 focus:relative">
+          <button
+            className="group relative inline-block border-e p-2 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 focus:relative"
+            onClick={async () => {
+              console.log("COPY TO CLIPBOARD INPUT TEXT:");
+
+              const inputBlockDivs =
+                inputContainerRef.current?.querySelectorAll(".ce-paragraph");
+
+              const text = Array.from(inputBlockDivs || [])
+                .map((div) => div.textContent)
+                .join("\n");
+
+              console.log(text);
+
+              // const cleanText = text ? decodeHtmlCharCodes(text) : "";
+
+              copy(text);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -337,7 +379,25 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
             </span>
           </button>
 
-          <button className="group relative inline-block border-e p-2 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 focus:relative">
+          <button
+            className="group relative inline-block border-e p-2 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 focus:relative"
+            onClick={async () => {
+              console.log("COPY TO CLIPBOARD OUTPUT TEXT:");
+
+              const inputBlockDivs =
+                outputContainerRef.current?.querySelectorAll(".ce-paragraph");
+
+              const text = Array.from(inputBlockDivs || [])
+                .map((div) => div.textContent)
+                .join("\n");
+
+              console.log(text);
+
+              // const cleanText = text ? decodeHtmlCharCodes(text) : "";
+
+              copy(text);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
