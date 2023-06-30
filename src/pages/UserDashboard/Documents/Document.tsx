@@ -8,7 +8,7 @@ type DocumentProps = {
 
 const Document: React.FC<DocumentProps> = ({ doc, onDelete }) => {
   return (
-    <div className="group/doc rounded-2xl border-[1px] border-slate-200 shadow-md transition-shadow duration-300 hover:shadow-xl">
+    <div className="group/doc rounded-2xl border-[1px] border-slate-200 shadow-md transition-shadow duration-300 hover:shadow-xl ">
       <Link
         className="relative block h-full w-full rounded-xl bg-white p-6 md:px-4 lg:p-6"
         to={`/editor/${doc._id}`}

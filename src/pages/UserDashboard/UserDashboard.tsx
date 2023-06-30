@@ -4,7 +4,7 @@
 import Welcome from "./Welcome";
 import UserProfile from "./UserProfile";
 import Documents from "./Documents/Documents";
-import Charts from "./Charts";
+import Charts from "./Charts/Charts";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 
 import useDataPrivate from "../../hooks/useDataPrivate";
@@ -79,9 +79,9 @@ export default function Dashboard() {
           </div>
         </header>
         <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4">
-          <div className="flex flex-col-reverse justify-between md:flex-row">
+          <div className="flex flex-col-reverse items-start justify-between gap-4 md:flex-row">
             <Documents></Documents>
-            <Charts></Charts>
+            <Charts stats={userProfile?.usageStatistics}></Charts>
           </div>
         </div>
       </AnimatedPage>
