@@ -7,15 +7,45 @@ import Documents from "./Documents/Documents";
 import Charts from "./Charts";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 
+import useDataPrivate from "../../hooks/useDataPrivate";
+import Loader from "../../components/animations/Loader";
+import { User, UserProfileStats } from "../../@types/user";
+
 export default function Dashboard() {
   // const { user } = useContext(AuthContext);
+
+  const [userProfile, isLoading, error] = useDataPrivate<{
+    usageStatistics: UserProfileStats;
+    user: User;
+  }>(`users/profile`);
+
+  console.log("User dash render:");
+  console.log("userProfile:", userProfile);
+  console.log("isLoading:", isLoading);
+  console.log("error:", error);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <div>🔥 Could not load document: {error}</div>;
+  }
 
   return (
     <>
       <AnimatedPage>
         <header aria-label="User Dashboard" className="">
           <div className="mx-auto flex max-w-screen-xl flex-col-reverse justify-between px-4 py-4 sm:px-6 md:py-8 lg:flex-row lg:items-center lg:px-4">
-            <Welcome></Welcome>
+            <Welcome
+              stats={{
+                words:
+                  userProfile?.usageStatistics.numberOfWordsTranslatedThisMonth,
+                paragraphs:
+                  userProfile?.usageStatistics
+                    .numOfParagraphsTranslatedThisMonth,
+              }}
+            ></Welcome>
             <div className="mb-4 flex items-center justify-end gap-4">
               <div className="flex items-center gap-4"></div>
               <button

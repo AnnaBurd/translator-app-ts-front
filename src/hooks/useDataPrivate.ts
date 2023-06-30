@@ -55,6 +55,7 @@ const useDataPrivate = <T>(
         )) as T;
 
         setData(data);
+        setIsLoading(false);
 
         // console.log(
         //   "useDataPrivate: successfully fetched and set data from url ",
@@ -79,9 +80,8 @@ const useDataPrivate = <T>(
           // TODO: manage errors and display them to the user
           // console.log("UNHANDLED Error fetching data", error);
           setError("UNHANDLED Error fetching data");
+          setIsLoading(false);
         }
-      } finally {
-        setIsLoading(false);
       }
     };
 
