@@ -1,11 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* If the user prefers dark mode, 
+we of course apply color-scheme: dark, as usual
+But not now, because it is not ready yet.  */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light !important;
+  }
+}
+
 :root {
+  --color-primary: rgb(161, 174, 217);
+  --color-secondary: #eff6ff;
+  --color-dark: rgb(113, 131, 152);
+  --color-light: #deeeff;
+  --color-white: #ffffff;
+  --color-accent: rgb(236, 99, 87);
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: var(--color-secondary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

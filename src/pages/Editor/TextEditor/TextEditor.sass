@@ -1,0 +1,60 @@
+// Note: Although project uses Tailwind classes, Text Editor is styled with plain css (sass) to easier control appearance of the default Editor JS css classes.
+    
+/* Hide toolbar */
+.ce-toolbar
+    display: none
+
+/* Style text blocks */
+.codex-editor__redactor
+    padding-bottom: 5rem !important
+
+.ce-block
+    margin: 4px 0px
+    &__content
+        margin: 0
+        max-width: 100%
+
+.ce-paragraph
+    line-height: 1.6em !important
+    cursor: text
+
+
+/* Text highlight effect */   
+.editor
+    .ce-paragraph
+        padding: 0px 4px 0px 8px
+        box-decoration-break: clone
+        -webkit-box-decoration-break: clone
+        border-radius: 4px
+        transition: background-color 0.6s ease-in-out
+
+    .changed-block
+        .ce-paragraph
+            display: inline
+            background-color: #fff1f2
+            
+
+/* Scrollbars */
+.editor
+    /* Firefox */
+    scrollbar-width: thin !important
+    scrollbar-color:  var(--color-primary) var(--color-light) !important
+
+    /* Chrome */
+    /* Width */    
+    &::-webkit-scrollbar        
+        width: 5px !important  
+
+    /* Track */
+    &::-webkit-scrollbar-track 
+        background: var(--color-light)
+        border-radius: 10px    
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb 
+        background: var(--color-primary)
+        border-radius: 5px
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover 
+        background: var(--color-dark)
