@@ -10,6 +10,7 @@ import AnimatedPage from "../../components/animations/AnimatedPage";
 import useDataPrivate from "../../hooks/useDataPrivate";
 import Loader from "../../components/animations/Loader";
 import { User, UserProfileStats } from "../../@types/user";
+import { Doc } from "../../@types/doc";
 
 export default function Dashboard() {
   // const { user } = useContext(AuthContext);
@@ -18,6 +19,9 @@ export default function Dashboard() {
     usageStatistics: UserProfileStats;
     user: User;
   }>(`users/profile`);
+
+  const [docs, isLoadingDocuments, errorLoadingDocs, deleteDocument] =
+    useDataPrivate<Array<Doc>>(`docs`);
 
   console.log("User dash render:");
   console.log("userProfile:", userProfile);
@@ -31,6 +35,26 @@ export default function Dashboard() {
   if (error) {
     return <div>🔥 Could not load document: {error}</div>;
   }
+
+  const navigateToEditorTab = () => {
+    const lastChangedDoc = docs?.reduce((prev, current) =>
+      new Date(prev.changedAt || "") > new Date(current.changedAt || "")
+        ? prev
+        : current
+    );
+
+    console.log(
+      "Opening last changed document in Editor (new tab)",
+      lastChangedDoc
+    );
+
+    if (lastChangedDoc)
+      window.open(`/editor/${lastChangedDoc?._id}`, "_blank", "noreferrer");
+
+    if (!lastChangedDoc) {
+      window.open(`/editor`, "_blank", "noreferrer");
+    }
+  };
 
   return (
     <>
@@ -49,6 +73,7 @@ export default function Dashboard() {
             <div className="mb-4 flex items-center justify-end gap-4">
               <div className="flex items-center gap-4"></div>
               <button
+                onClick={navigateToEditorTab}
                 className="mr-1 inline-flex items-center justify-center gap-1.5 rounded-lg border  border-slate-300 px-5 py-3 text-slate-500 transition hover:text-slate-700 focus:outline-none focus:ring"
                 type="button"
               >
@@ -80,7 +105,12 @@ export default function Dashboard() {
         </header>
         <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
-            <Documents></Documents>
+            <Documents
+              docs={docs}
+              deleteDocument={deleteDocument}
+              isLoading={isLoadingDocuments}
+              error={errorLoadingDocs}
+            ></Documents>
             <Charts stats={userProfile?.usageStatistics}></Charts>
           </div>
         </div>

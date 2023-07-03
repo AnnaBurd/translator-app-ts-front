@@ -2,7 +2,6 @@ import Search from "./Search";
 import Document from "./Document";
 import NewDocument from "./NewDocument";
 
-import useDataPrivate from "../../../hooks/useDataPrivate";
 import { Doc } from "../../../@types/doc";
 import DeleteDocumentModal from "./DeleteDocumentModal";
 import { useState } from "react";
@@ -23,9 +22,23 @@ const localeContains = (str: string, substr: string) => {
   return ascii(str).includes(ascii(substr));
 };
 
-const Documents = () => {
-  const [docs, isLoading, error, deleteDocument] =
-    useDataPrivate<Array<Doc>>(`docs`);
+type DocumentsProps = {
+  docs: Array<Doc> | null | undefined;
+  isLoading?: boolean;
+  error?: string;
+  deleteDocument: (id: string) => Promise<void>;
+};
+
+const Documents: React.FC<DocumentsProps> = ({
+  docs,
+  isLoading,
+  error,
+  deleteDocument,
+}) => {
+  // const [docs, isLoading, error, deleteDocument] =
+  //   useDataPrivate<Array<Doc>>(`docs`);
+
+  console.log(docs);
 
   const [documentIDToDelete, setDocumentIDToDelete] = useState("");
   const [docTitleToDelete, setDocTitleToDelete] = useState("");
