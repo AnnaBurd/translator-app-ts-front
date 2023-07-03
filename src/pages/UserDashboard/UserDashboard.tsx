@@ -79,7 +79,7 @@ export default function Dashboard() {
           </div>
         </header>
         <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4">
-          <div className="flex flex-col-reverse items-start justify-between gap-4 md:flex-row">
+          <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
             <Documents></Documents>
             <Charts stats={userProfile?.usageStatistics}></Charts>
           </div>

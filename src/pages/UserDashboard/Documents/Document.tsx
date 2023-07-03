@@ -49,7 +49,7 @@ const Document: React.FC<DocumentProps> = ({ doc, onDelete }) => {
             event.preventDefault();
             onDelete(doc._id);
           }}
-          className="group invisible absolute bottom-3 right-3  z-30  items-center justify-center rounded-xl  bg-white p-2 text-slate-500 opacity-0 transition-opacity delay-0 duration-300  hover:bg-slate-50 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 group-hover/doc:visible group-hover/doc:inline-flex group-hover/doc:opacity-100 group-hover/doc:delay-150 group-hover/doc:duration-1000"
+          className="group absolute bottom-3 right-3 z-30  items-center  justify-center rounded-xl bg-white  p-2 text-slate-500 transition-opacity delay-0 duration-300 hover:bg-slate-50 hover:text-slate-800  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 group-hover/doc:visible group-hover/doc:inline-flex group-hover/doc:opacity-100 group-hover/doc:delay-150 group-hover/doc:duration-1000 lg:invisible lg:opacity-0"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@ const Document: React.FC<DocumentProps> = ({ doc, onDelete }) => {
             />
           </svg>
 
-          <span className="invisible absolute  -left-40 -top-10 z-30 -translate-x-1/2 translate-y-[1.5rem] whitespace-pre rounded bg-slate-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity delay-300 duration-500 group-hover:visible group-hover:left-1/2 group-hover:top-1/2 group-hover:opacity-100">
+          <span className="invisible absolute  -left-40 -top-10 z-30 -translate-x-1/2 translate-y-[1.5rem] whitespace-pre rounded bg-slate-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity delay-300 duration-500 lg:group-hover:visible lg:group-hover:left-1/2 lg:group-hover:top-1/2 lg:group-hover:opacity-100">
             {`Delete ${
               doc.title
                 ? `"${

@@ -149,7 +149,7 @@ const Barchart: React.FC<BarchartProps> = ({
   };
 
   return (
-    <div>
+    <div className="flex justify-center">
       <Bar options={options} data={data} />
     </div>
   );

@@ -2,6 +2,12 @@
   --donut-fill-width: 34px;
   --donut-base-width: 170px;
   --donut-fill-percent: 70;
+
+  /* @media (width>=500px) {
+    --donut-fill-width: 20px;
+    --donut-base-width: 130px;
+    --donut-fill-percent: 70;
+  } */
 }
 
 .donut {

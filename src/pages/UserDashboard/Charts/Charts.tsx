@@ -19,7 +19,7 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
   if (tokensUsagePercent > 100) tokensUsagePercent = 100;
 
   return (
-    <aside className="ml-5 h-fit flex-auto">
+    <aside className="h-fit w-full flex-auto md:ml-5 md:w-1/3 lg:w-1/4">
       <div className="border-slate-150 relative mb-4 block h-full w-full rounded-2xl border-[1px] p-6 shadow-md transition-shadow duration-300 hover:shadow-xl md:px-4 lg:p-6">
         <h2 className="mb-2 text-base font-bold text-slate-600">Tokens</h2>
         <Semidonut fillPercent={tokensUsagePercent} />
