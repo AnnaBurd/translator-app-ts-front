@@ -40,7 +40,7 @@ const Welcome: React.FC<WelcomeProps> = ({ stats }) => {
           <p className="mt-1.5 text-sm text-slate-500">
             You are on the right track! 🚜 <br />
             To start your *free* translation session, create or open a document
-            with a button below.
+            below.
           </p>
         ))}
     </div>

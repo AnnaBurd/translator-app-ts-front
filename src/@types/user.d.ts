@@ -11,6 +11,9 @@ export interface UserProfileStats {
   numOfParagraphsTranslatedThisMonth?: number;
   numberOfDocuments?: number;
   numberOfWordsTranslatedThisMonth?: number;
-  tokensPerMonthForCurrentYear?: number[];
   totalTokens: number;
+  docsUsageStats: number[];
+  tokensUsageStats: number[];
+  wordsUsageStats: number[];
+  lastSixMonths: string[];
 }
