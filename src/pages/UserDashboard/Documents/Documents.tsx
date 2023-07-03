@@ -7,6 +7,21 @@ import { Doc } from "../../../@types/doc";
 import DeleteDocumentModal from "./DeleteDocumentModal";
 import { useState } from "react";
 
+const localeContains = (str: string, substr: string) => {
+  if (substr === "") return true;
+  if (!substr || !str.length) return false;
+  substr = "" + substr;
+  if (substr.length > str.length) return false;
+
+  const ascii = (s: string) =>
+    s
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+  return ascii(str).includes(ascii(substr));
+};
+
 const Documents = () => {
   const [docs, isLoading, error, deleteDocument] =
     useDataPrivate<Array<Doc>>(`docs`);
@@ -14,13 +29,9 @@ const Documents = () => {
   const [documentIDToDelete, setDocumentIDToDelete] = useState("");
   const [docTitleToDelete, setDocTitleToDelete] = useState("");
 
-  // const docIndexToDelete =docs?.findIndex(
-  //   (doc) => doc._id === documentIDToDelete
-  // )
-  // const docTitleToDelete = docs?.find(
-  //   (doc) => doc._id === documentIDToDelete
-  // )?.title;
-  // const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // const handleChange
 
   const handleDelete = async (id: string) => {
     setDocumentIDToDelete(id);
@@ -51,9 +62,25 @@ const Documents = () => {
 
   // TODO: pagination!
 
+  let filteredDocs;
+  if (searchQuery) {
+    filteredDocs = docs?.filter((doc) =>
+      localeContains(doc.title, searchQuery)
+    );
+  } else {
+    filteredDocs = docs;
+  }
+
   return (
     <div className=" relative grid w-full gap-x-4 gap-y-4 md:w-3/5 md:grid-cols-2 xl:w-2/3 xl:grid-cols-3">
-      <Search></Search>
+      <Search
+        onSearch={(query) => {
+          console.log("Searching", query);
+
+          searchQuery !== query && setSearchQuery(query);
+        }}
+        searchQuery={searchQuery}
+      ></Search>
       {isLoading && (
         <div>TODO: wait a little bit, your documents are loading</div>
       )}
@@ -61,7 +88,7 @@ const Documents = () => {
       {!isLoading && !error && <NewDocument />}
       {!isLoading &&
         !error &&
-        (docs as Array<Doc>)?.map((doc) => (
+        (filteredDocs as Array<Doc>)?.map((doc) => (
           <Document key={doc._id} doc={doc} onDelete={handleDelete} />
         ))}
       <DeleteDocumentModal
