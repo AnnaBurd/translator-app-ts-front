@@ -6,6 +6,7 @@ import useDataPrivate from "../../../hooks/useDataPrivate";
 import { Doc } from "../../../@types/doc";
 import DeleteDocumentModal from "./DeleteDocumentModal";
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 const localeContains = (str: string, substr: string) => {
   if (substr === "") return true;
@@ -86,11 +87,15 @@ const Documents = () => {
       )}
       {!isLoading && error && <div>Error: {error}</div>}
       {!isLoading && !error && <NewDocument />}
-      {!isLoading &&
-        !error &&
-        (filteredDocs as Array<Doc>)?.map((doc) => (
-          <Document key={doc._id} doc={doc} onDelete={handleDelete} />
-        ))}
+
+      {!isLoading && !error && (
+        <AnimatePresence mode="popLayout">
+          {(filteredDocs as Array<Doc>)?.map((doc) => (
+            <Document key={doc._id} doc={doc} onDelete={handleDelete} />
+          ))}
+        </AnimatePresence>
+      )}
+      {/* </AnimatePresence> */}
       <DeleteDocumentModal
         visible={documentIDToDelete ? true : false}
         onClose={() => {

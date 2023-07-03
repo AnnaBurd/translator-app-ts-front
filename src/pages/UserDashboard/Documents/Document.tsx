@@ -1,14 +1,27 @@
 import { Link } from "react-router-dom";
 import { Doc } from "../../../@types/doc";
+import { forwardRef } from "react";
+import { motion } from "framer-motion";
 
 type DocumentProps = {
   doc: Doc;
   onDelete: (id: string) => void;
 };
 
-const Document: React.FC<DocumentProps> = ({ doc, onDelete }) => {
+const Document: React.FC<DocumentProps> = forwardRef<
+  HTMLDivElement,
+  DocumentProps
+>(({ doc, onDelete }, ref) => {
   return (
-    <div className="group/doc rounded-2xl border-[1px] border-slate-200 shadow-md transition-shadow duration-300 hover:shadow-xl ">
+    <motion.div
+      layout
+      // key={doc._id}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.8, opacity: 0 }}
+      transition={{ type: "spring", mass: 0.35, damping: 10 }}
+      className="group/doc z-10 rounded-2xl border-[1px] border-slate-200 shadow-md transition-shadow duration-300 hover:shadow-xl"
+      ref={ref}
+    >
       <Link
         className="relative block h-full w-full rounded-xl bg-white p-6 md:px-4 lg:p-6"
         to={`/editor/${doc._id}`}
@@ -79,8 +92,8 @@ const Document: React.FC<DocumentProps> = ({ doc, onDelete }) => {
           </span>
         </button>
       </Link>
-    </div>
+    </motion.div>
   );
-};
+});
 
 export default Document;
