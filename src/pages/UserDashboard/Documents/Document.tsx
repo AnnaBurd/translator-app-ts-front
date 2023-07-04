@@ -49,7 +49,7 @@ const Document: React.FC<DocumentProps> = forwardRef<
             !doc.title ? "h-[1.75rem]" : ""
           }`}
         >
-          {doc.title}
+          {doc.title.length > 25 ? doc.title.slice(0, 25) + "..." : doc.title}
         </h3>
         <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-600 ">
           {doc.textPreview?.trim()}

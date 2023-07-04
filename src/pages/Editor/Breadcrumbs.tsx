@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 type BreadcrumbsProps = {
@@ -11,6 +12,32 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   lang,
   translationLang,
 }) => {
+  // const { width } = useWindowDimensions();
+
+  const [isWide, setIsWide] = useState(false);
+
+  console.log(
+    "Breadcrumbs component render:",
+    title,
+    lang,
+    translationLang,
+    isWide
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 640px)");
+
+    const onChange = () => setIsWide(!!mql.matches);
+    mql.addEventListener("change", onChange);
+    setIsWide(mql.matches);
+
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  let docTitle = title || "Untitled";
+  if (docTitle.length > 15 && !isWide) docTitle = docTitle.slice(0, 15) + "...";
+  if (docTitle.length > 50) docTitle = docTitle.slice(0, 50) + "...";
+
   return (
     <nav aria-label="Breadcrumb">
       <ol className="flex items-center gap-2.5 text-sm text-slate-700 dark:text-slate-300">
@@ -30,7 +57,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
               <path d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z" />
             </svg>
 
-            <span>All Documents</span>
+            <span className="hidden sm:block">All Documents</span>
           </Link>
         </li>
 
@@ -56,7 +83,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
             to="#"
             className="flex items-center transition hover:text-gray-700 dark:hover:text-gray-200"
           >
-            {title ? title : "Untitled"}
+            {docTitle}
             <span className="self-start pl-1 pr-1 text-xs font-medium text-slate-600">
               ({lang}-{translationLang})
             </span>
