@@ -19,7 +19,7 @@ const Document: React.FC<DocumentProps> = forwardRef<
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.8, opacity: 0 }}
       transition={{ type: "spring", mass: 0.35, damping: 10 }}
-      className="group/doc z-10 rounded-2xl border-[1px] border-slate-200 shadow-md transition-shadow duration-300 hover:shadow-xl"
+      className="group/doc rounded-2xl border-[1px] border-slate-200 shadow-md transition-shadow duration-300 hover:shadow-xl"
       ref={ref}
     >
       <Link
@@ -62,7 +62,7 @@ const Document: React.FC<DocumentProps> = forwardRef<
             event.preventDefault();
             onDelete(doc._id);
           }}
-          className="group absolute bottom-3 right-3 z-30  items-center  justify-center rounded-xl bg-white  p-2 text-slate-500 transition-opacity delay-0 duration-300 hover:bg-slate-50 hover:text-slate-800  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 group-hover/doc:visible group-hover/doc:inline-flex group-hover/doc:opacity-100 group-hover/doc:delay-150 group-hover/doc:duration-1000 lg:invisible lg:opacity-0"
+          className="group absolute bottom-3 right-3 z-30  items-center  justify-center rounded-xl bg-white  p-2 text-slate-500 transition-opacity delay-0 duration-300 hover:bg-slate-50 hover:text-slate-800  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 group-hover/doc:visible group-hover:z-[150] group-hover/doc:inline-flex group-hover/doc:opacity-100 group-hover/doc:delay-150 group-hover/doc:duration-1000 lg:invisible lg:opacity-0"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +79,7 @@ const Document: React.FC<DocumentProps> = forwardRef<
             />
           </svg>
 
-          <span className="invisible absolute  -left-40 -top-10 z-30 -translate-x-1/2 translate-y-[1.5rem] whitespace-pre rounded bg-slate-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity delay-300 duration-500 lg:group-hover:visible lg:group-hover:left-1/2 lg:group-hover:top-1/2 lg:group-hover:opacity-100">
+          <span className="invisible absolute  -left-40 -top-10 z-50 -translate-x-1/2 translate-y-[1.5rem] whitespace-pre rounded bg-slate-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity delay-300 duration-500 lg:group-hover:visible lg:group-hover:left-1/2 lg:group-hover:top-1/2 lg:group-hover:z-[200] lg:group-hover:opacity-100">
             {`Delete ${
               doc.title
                 ? `"${

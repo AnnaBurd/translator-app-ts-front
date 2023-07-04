@@ -86,7 +86,7 @@ const Documents: React.FC<DocumentsProps> = ({
   }
 
   return (
-    <div className=" relative grid w-full gap-x-4 gap-y-4 md:w-3/5 md:grid-cols-2 xl:w-2/3 xl:grid-cols-3">
+    <div className=" relative z-10 grid w-full gap-x-4 gap-y-4 md:w-3/5 md:grid-cols-2 xl:w-2/3 xl:grid-cols-3">
       <Search
         onSearch={(query) => {
           console.log("Searching", query);
