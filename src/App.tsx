@@ -31,6 +31,12 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
           <Route element={<RequireAuth />}>
             <Route path="/dash" element={<UserDashboard />} />
+            <Route
+              path="/editor/"
+              element={
+                <div>TODO: Open new doc form and Create New Document!</div>
+              }
+            />
             <Route path="/editor/:docId" element={<Editor />} />
             <Route path="/users" element={<AdminDashboard />} />
           </Route>
