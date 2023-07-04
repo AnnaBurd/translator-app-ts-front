@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import useFetchPrivate from "../../../hooks/useFetchPrivate";
 import { AnimatePresence, motion } from "framer-motion";
 import DotLoader from "../../../components/animations/DotLoader";
+import { Doc } from "../../../@types/doc";
 
 enum LanguageOptions {
   vn = "vn",
@@ -78,6 +79,7 @@ const NewDocumentForm = ({
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchPrivateData = useFetchPrivate();
 
@@ -88,6 +90,8 @@ const NewDocumentForm = ({
 
     setTimeout(() => {
       reset();
+      setError(null);
+      setIsLoading(false);
     }, 150);
   };
 
@@ -104,9 +108,11 @@ const NewDocumentForm = ({
       const responseData = await fetchPrivateData("docs", "POST", data);
 
       // On success -> navigate to the editor page with new document
-      navigate(`/editor/${responseData._id}`); // TODO: replace with unique slugs on backend api -> frontend
+      navigate(`/editor/${responseData.slug}`);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
+      setError((error as Error).message || "Error creating document");
 
       // TODO: show error message
       // Hide loading indicator
@@ -315,7 +321,21 @@ const NewDocumentForm = ({
                         <DotLoader />
                       </motion.span>
                     )}
-                    {!isLoading && (
+                    {!isLoading && error && (
+                      <motion.span
+                        key="btn-error"
+                        initial={{ opacity: 0 }}
+                        animate={{
+                          opacity: 1,
+                          transition: { duration: 4 },
+                        }}
+                      >
+                        {
+                          "Ups! Could not create document, please check connection and try again later."
+                        }
+                      </motion.span>
+                    )}
+                    {!isLoading && !error && (
                       <motion.span
                         key="btn-create"
                         initial={{ opacity: 1 }}

@@ -56,7 +56,7 @@ export default function Dashboard() {
     );
 
     if (lastChangedDoc)
-      window.open(`/editor/${lastChangedDoc?._id}`, "_blank", "noreferrer");
+      window.open(`/editor/${lastChangedDoc?.slug}`, "_blank", "noreferrer");
 
     if (!lastChangedDoc) {
       window.open(`/editor`, "_blank", "noreferrer");

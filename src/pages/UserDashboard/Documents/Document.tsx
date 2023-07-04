@@ -24,7 +24,7 @@ const Document: React.FC<DocumentProps> = forwardRef<
     >
       <Link
         className="relative block h-full w-full rounded-xl bg-white p-6 md:px-4 lg:p-6"
-        to={`/editor/${doc._id}`}
+        to={`/editor/${doc.slug}`}
       >
         <div className="absolute right-4 top-4 flex gap-1">
           {!doc.textPreview && !doc.translationPreview && (

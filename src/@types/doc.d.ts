@@ -7,6 +7,7 @@ export interface BlockData {
 export interface Doc {
   _id: string;
   title: string;
+  slug: string;
   lang?: string;
   translationLang?: string;
   textPreview?: string;

@@ -154,7 +154,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
       console.log("Deleting blocks", blocksDeleted.current);
 
       try {
-        await fetchPrivate(`docs/${document?._id}`, "PATCH", {
+        await fetchPrivate(`docs/${document?.slug}`, "PATCH", {
           // block: null,
           blockIds: blocksDeleted.current,
           translationOption: "removeBlocks",
@@ -177,7 +177,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
 
           // Fetch translation
           const translatedBlock = await fetchPrivate(
-            `docs/${document?._id}`,
+            `docs/${document?.slug}`,
             "PATCH",
             {
               block: outputBlockToBlock(block),
@@ -218,7 +218,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
 
         // Fetch updated translation
         const translatedBlock = await fetchPrivate(
-          `docs/${document?._id}`,
+          `docs/${document?.slug}`,
           "PATCH",
           {
             block: outputBlockToBlock(block),
