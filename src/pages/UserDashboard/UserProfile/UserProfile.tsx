@@ -15,6 +15,8 @@ const UserProfile: React.FC<UserProfileProps> = ({
 }) => {
   const { user } = useContext(AuthContext);
 
+  // console.log(user, user.firstName + "+" + user.lastName);
+
   const signout = useSignout();
 
   // const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -39,8 +41,11 @@ const UserProfile: React.FC<UserProfileProps> = ({
       >
         <span className="sr-only">Menu</span>
         <img
-          alt="Man"
-          src="https://i.pravatar.cc/300"
+          alt="User profile picture"
+          src={
+            user.photo ||
+            `https://ui-avatars.com/api/?size=64&font-size=0.4&bold=true&background=deeeff&color=718398&name=${user.firstName[0]}`
+          }
           className="h-10 w-10 rounded-full object-cover"
         />
 
