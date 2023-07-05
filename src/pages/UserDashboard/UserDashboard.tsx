@@ -11,12 +11,14 @@ import useDataPrivate from "../../hooks/useDataPrivate";
 import Loader from "../../components/animations/Loader";
 import { User, UserProfileStats } from "../../@types/user";
 import { Doc } from "../../@types/doc";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
-import AuthContext from "../../auth/AuthContext";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   // const { user } = useContext(AuthContext);
+
+  // TODO: refactor animations and remove animations for mobile devices
 
   const [userProfile, isLoading, error] = useDataPrivate<{
     usageStatistics: UserProfileStats;
@@ -103,7 +105,24 @@ export default function Dashboard() {
                       .numOfParagraphsTranslatedThisMonth,
                 }}
               ></Welcome>
-              <div className="mb-4 flex items-center justify-end gap-4">
+              <motion.div
+                className="mb-4 flex items-center justify-end gap-4"
+                initial={{ opacity: 0, y: "-20vh" }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  // x: 0,
+                  transition: {
+                    opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+                    y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+                  },
+                }}
+                exit={{
+                  opacity: 0,
+                  y: "-20vh",
+                  transition: { duration: 1, ease: "backOut" },
+                }}
+              >
                 <div className="flex items-center gap-4"></div>
                 <button
                   onClick={navigateToEditorTab}
@@ -162,7 +181,7 @@ export default function Dashboard() {
                   isOpenMenu={isOpenUserProfileMenu}
                   toggleOpenMenu={toggleUserProfileMenu}
                 ></UserProfile>
-              </div>
+              </motion.div>
             </div>
           </header>
           <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4 2xl:max-w-screen-2xl ">

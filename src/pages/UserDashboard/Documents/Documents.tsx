@@ -5,7 +5,7 @@ import NewDocument from "./NewDocument";
 import { Doc } from "../../../@types/doc";
 import DeleteDocumentModal from "./DeleteDocumentModal";
 import { useRef, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useIntersection } from "@mantine/hooks";
 
 const localeContains = (str: string, substr: string) => {
@@ -107,7 +107,26 @@ const Documents: React.FC<DocumentsProps> = ({
   }
 
   return (
-    <div className=" relative z-10 grid w-full gap-x-4 gap-y-4 md:w-3/5 md:grid-cols-2 xl:w-2/3 xl:grid-cols-3">
+    <motion.div
+      className=" relative z-10 grid w-full gap-x-4 gap-y-4 md:w-3/5 md:grid-cols-2 xl:w-2/3 xl:grid-cols-3"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        transition: {
+          opacity: { duration: 1.2, ease: "backInOut" },
+          scale: { duration: 1.2, ease: "backInOut" },
+          x: { duration: 2, ease: "easeInOut", delay: 0.8 },
+        },
+      }}
+      exit={{
+        opacity: 0,
+        x: "-20vw",
+        transition: { duration: 1, ease: "backOut" },
+      }}
+    >
       <Search
         onSearch={(query) => {
           console.log("Searching", query);
@@ -143,7 +162,7 @@ const Documents: React.FC<DocumentsProps> = ({
         <Pagination />
       </div> */}
       <span ref={observedReference} className="h-0 w-0"></span>
-    </div>
+    </motion.div>
   );
 };
 

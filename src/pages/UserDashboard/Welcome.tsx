@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import AuthContext from "../../auth/AuthContext";
+import { motion } from "framer-motion";
 
 type WelcomeProps = {
   stats?: {
@@ -14,7 +15,22 @@ const Welcome: React.FC<WelcomeProps> = ({ stats }) => {
   // console.log("Welcome component render:", user, stats);
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: "-20vh" }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        transition: {
+          opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+          y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+        },
+      }}
+      exit={{
+        opacity: 0,
+        y: "-20vh",
+        transition: { duration: 1, ease: "backOut" },
+      }}
+    >
       <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
         {user.newUser && `Welcome, ${user.firstName}!`}
         {!user.newUser && `Welcome back, ${user.firstName}!`}
@@ -43,7 +59,7 @@ const Welcome: React.FC<WelcomeProps> = ({ stats }) => {
             below.
           </p>
         ))}
-    </div>
+    </motion.div>
   );
 };
 

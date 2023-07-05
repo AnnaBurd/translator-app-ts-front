@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { UserProfileStats } from "../../../@types/user";
 import Barchart from "./Barchart";
 import Semidonut from "./Semidonut";
@@ -19,7 +20,26 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
   if (tokensUsagePercent > 100) tokensUsagePercent = 100;
 
   return (
-    <aside className="z-0 h-fit w-full flex-auto md:ml-5 md:w-1/3 lg:w-1/4">
+    <motion.aside
+      className="z-0 h-fit w-full flex-auto md:ml-5 md:w-1/3 lg:w-1/4"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        transition: {
+          opacity: { duration: 1.2, ease: "backInOut", delay: 0 },
+          scale: { duration: 1.2, ease: "backInOut", delay: 0 },
+          x: { duration: 2, ease: "easeInOut", delay: 0.8 },
+        },
+      }}
+      exit={{
+        opacity: 0,
+        x: "20vw",
+        transition: { duration: 1, ease: "backOut" },
+      }}
+    >
       <div className="border-slate-150 relative mb-4 block h-full w-full rounded-2xl border-[1px] p-6 shadow-md transition-shadow duration-300 hover:shadow-xl md:px-4 lg:p-6">
         <h2 className="mb-2 text-base font-bold text-slate-600">Tokens</h2>
         <Semidonut fillPercent={tokensUsagePercent} />
@@ -63,7 +83,7 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
           }
         />
       </div>
-    </aside>
+    </motion.aside>
   );
 };
 
