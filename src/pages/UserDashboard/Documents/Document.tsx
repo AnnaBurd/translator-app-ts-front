@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 type DocumentProps = {
   doc: Doc;
-  onDelete: (id: string) => void;
+  onDelete: (slug: string) => void;
 };
 
 const Document: React.FC<DocumentProps> = forwardRef<
@@ -60,7 +60,7 @@ const Document: React.FC<DocumentProps> = forwardRef<
         <button
           onClick={(event) => {
             event.preventDefault();
-            onDelete(doc._id);
+            onDelete(doc.slug);
           }}
           className="group absolute bottom-3 right-3 z-30  items-center  justify-center rounded-xl bg-white  p-2 text-slate-500 transition-opacity delay-0 duration-300 hover:bg-slate-50 hover:text-slate-800  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-400 group-hover/doc:visible group-hover:z-[150] group-hover/doc:inline-flex group-hover/doc:opacity-100 group-hover/doc:delay-150 group-hover/doc:duration-1000 lg:invisible lg:opacity-0"
         >

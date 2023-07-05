@@ -7,7 +7,7 @@ type ChartsProps = {
 };
 
 const Charts: React.FC<ChartsProps> = ({ stats }) => {
-  console.log("Charts usagestats", stats);
+  // console.log("Charts usagestats", stats);
 
   const tokensUsedThisMonth = stats?.tokensUsageStats
     ? stats?.tokensUsageStats[4]

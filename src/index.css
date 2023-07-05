@@ -12,9 +12,9 @@ But not now, because it is not ready yet.  */
 }
 
 :root {
-  --color-primary: rgb(161, 174, 217);
+  --color-primary: #a1aed9;
   --color-secondary: #eff6ff;
-  --color-dark: rgb(113, 131, 152);
+  --color-dark: #718398;
   --color-light: #deeeff;
   --color-white: #ffffff;
   --color-accent: rgb(236, 99, 87);
@@ -29,4 +29,9 @@ But not now, because it is not ready yet.  */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent scrollbar from repositioning page content */
+html {
+  padding-left: calc(100vw - 100%);
 }

@@ -4,8 +4,9 @@ import NewDocument from "./NewDocument";
 
 import { Doc } from "../../../@types/doc";
 import DeleteDocumentModal from "./DeleteDocumentModal";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
+import { useIntersection } from "@mantine/hooks";
 
 const localeContains = (str: string, substr: string) => {
   if (substr === "") return true;
@@ -26,7 +27,8 @@ type DocumentsProps = {
   docs: Array<Doc> | null | undefined;
   isLoading?: boolean;
   error?: string;
-  deleteDocument: (id: string) => Promise<void>;
+  deleteDocument: (slug: string) => Promise<void>;
+  onEndOfViewport: () => void;
 };
 
 const Documents: React.FC<DocumentsProps> = ({
@@ -34,22 +36,41 @@ const Documents: React.FC<DocumentsProps> = ({
   isLoading,
   error,
   deleteDocument,
+  onEndOfViewport,
 }) => {
   // const [docs, isLoading, error, deleteDocument] =
   //   useDataPrivate<Array<Doc>>(`docs`);
 
-  console.log(docs);
+  // console.log(docs);
 
-  const [documentIDToDelete, setDocumentIDToDelete] = useState("");
+  const [documentSlugToDelete, setDocumentSlugToDelete] = useState("");
   const [docTitleToDelete, setDocTitleToDelete] = useState("");
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  const lastDocRef = useRef<HTMLSpanElement>(null);
+  const { ref: observedReference, entry } = useIntersection({
+    root: lastDocRef.current,
+    threshold: 1,
+    rootMargin: "800px",
+  });
+
+  console.log("DOCUMENTS COMP");
+  console.log(lastDocRef.current);
+  console.log(observedReference);
+  console.log(entry);
+
+  if (entry?.isIntersecting) {
+    console.log("💖🎉SHOULD FETCH MORE");
+    console.log(observedReference, entry);
+    onEndOfViewport();
+  }
+
   // const handleChange
 
-  const handleDelete = async (id: string) => {
-    setDocumentIDToDelete(id);
-    const docTitle = docs?.find((doc) => doc._id === id)?.title;
+  const handleDelete = async (slug: string) => {
+    setDocumentSlugToDelete(slug);
+    const docTitle = docs?.find((doc) => doc.slug === slug)?.title;
 
     setDocTitleToDelete(docTitle || "");
   };
@@ -61,8 +82,8 @@ const Documents: React.FC<DocumentsProps> = ({
     // Delete document from state and in the database
     // TODO: handle delete error
     try {
-      await deleteDocument(documentIDToDelete);
-      setDocumentIDToDelete("");
+      await deleteDocument(documentSlugToDelete);
+      setDocumentSlugToDelete("");
 
       // setTimeout(() => {
       //   setDocumentIDToDelete("");
@@ -110,14 +131,18 @@ const Documents: React.FC<DocumentsProps> = ({
       )}
       {/* </AnimatePresence> */}
       <DeleteDocumentModal
-        visible={documentIDToDelete ? true : false}
+        visible={documentSlugToDelete ? true : false}
         onClose={() => {
-          setDocumentIDToDelete("");
+          setDocumentSlugToDelete("");
         }}
         onDelete={handleDeleteSubmit}
         documentTitle={`"${docTitleToDelete}"`}
         // documentIndex={0}
       />
+      {/* <div className="col-span-3 -mt-2 justify-self-end ">
+        <Pagination />
+      </div> */}
+      <span ref={observedReference} className="h-0 w-0"></span>
     </div>
   );
 };

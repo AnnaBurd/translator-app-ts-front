@@ -7,9 +7,7 @@ import useFetchPrivate from "./useFetchPrivate";
  * If access token is expired and can not be refreshed redirects to signin page.
  * @param url - backend api endpoint, e.g. users, docs, docs/:docid
  */
-const useDataPrivate = <T>(
-  url: string
-): [T | null, boolean, string, (id: string) => Promise<void>] => {
+const useDataPrivate = <T>(url: string): [T | null, boolean, string] => {
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -18,27 +16,6 @@ const useDataPrivate = <T>(
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  const deleteDataItem = async (id: string) => {
-    // console.log("deleteData: ", id);
-
-    // Filter out data in array with the given id
-    setData((prevData) => {
-      if (prevData instanceof Array) {
-        return prevData.filter((item) => item._id !== id) as T;
-      }
-
-      return null;
-    });
-
-    // Save changes to the database
-    try {
-      await fetchPrivate(`${url}/${id}`, "DELETE", null);
-    } catch (error) {
-      // TODO: manage errors and display them to the user
-      console.log("Error deleting data", error);
-    }
-  };
 
   useEffect(() => {
     // Controller is used to cancel repeating requests during use Effect cleanup call
@@ -93,7 +70,7 @@ const useDataPrivate = <T>(
     };
   }, [url, navigate, location, fetchPrivate]);
 
-  return [data, isLoading, error, deleteDataItem];
+  return [data, isLoading, error];
 };
 
 export default useDataPrivate;

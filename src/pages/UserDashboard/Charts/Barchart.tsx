@@ -118,7 +118,7 @@ const Barchart: React.FC<BarchartProps> = ({
   documentsUsageStats,
   labels,
 }) => {
-  console.log(tokensUsageStats, wordsUsageStats, documentsUsageStats, labels);
+  // console.log(tokensUsageStats, wordsUsageStats, documentsUsageStats, labels);
 
   const data = {
     labels,

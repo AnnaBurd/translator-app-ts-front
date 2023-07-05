@@ -4,6 +4,7 @@ export interface User {
   lastName?: string;
   password?: string;
   newUser?: boolean;
+  role?: string;
 }
 
 export interface UserProfileStats {

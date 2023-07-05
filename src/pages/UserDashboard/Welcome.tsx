@@ -11,7 +11,7 @@ type WelcomeProps = {
 const Welcome: React.FC<WelcomeProps> = ({ stats }) => {
   const { user } = useContext(AuthContext);
 
-  console.log("Welcome component render:", user, stats);
+  // console.log("Welcome component render:", user, stats);
 
   return (
     <div>

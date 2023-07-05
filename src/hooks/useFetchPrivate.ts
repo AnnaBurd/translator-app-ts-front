@@ -21,7 +21,9 @@ const useFetchPrivate = () => {
       url: string,
       method: RequestMethod = "GET",
       data: unknown,
-      signal?: AbortSignal
+      signal?: AbortSignal,
+      page?: number,
+      limit?: number
     ) => {
       const options: RequestOptions = {
         method,
@@ -33,6 +35,12 @@ const useFetchPrivate = () => {
         signal,
       };
 
+      if (url === "docs") console.log("🚀🚀🎈", "fetchPrivate", url);
+
+      let requestUrl = `${Config.API_BASE_URL}/${url}`;
+      if (page && limit)
+        requestUrl = `${requestUrl}?page=${page}&limit=${limit}`;
+
       if (data !== null) {
         options.body = JSON.stringify(data);
       }
@@ -43,7 +51,7 @@ const useFetchPrivate = () => {
       //   options
       // );
       // Fetch data from backend using latest access token value
-      let response = await fetch(`${Config.API_BASE_URL}/${url}`, options);
+      let response = await fetch(requestUrl, options);
 
       // If server replies that access token has expired - try to refresh token and repeat request
       if (!response.ok && response.status === 401) {
@@ -55,7 +63,7 @@ const useFetchPrivate = () => {
         //   url,
         //   options
         // );
-        response = await fetch(`${Config.API_BASE_URL}/${url}`, options);
+        response = await fetch(requestUrl, options);
       }
 
       // If second attempt to fetch data fails - throw error
@@ -71,6 +79,8 @@ const useFetchPrivate = () => {
       }
 
       const json = await response.json();
+
+      if (page && limit) return [json.data, json.currentPage, json.totalPages];
       return json.data;
     },
     [getAccessToken, refreshAccessToken]
