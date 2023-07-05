@@ -72,6 +72,14 @@ const Documents: React.FC<DocumentsProps> = ({
     setDocumentSlugToDelete(slug);
     const docTitle = docs?.find((doc) => doc.slug === slug)?.title;
 
+    console.log(
+      "doc title in documents",
+      docTitle,
+      docTitle?.length,
+      docTitle === "",
+      docTitle ? docTitle : "empty"
+    );
+
     setDocTitleToDelete(docTitle || "");
   };
 
@@ -155,7 +163,9 @@ const Documents: React.FC<DocumentsProps> = ({
           setDocumentSlugToDelete("");
         }}
         onDelete={handleDeleteSubmit}
-        documentTitle={`"${docTitleToDelete}"`}
+        documentTitle={
+          docTitleToDelete ? `"${docTitleToDelete}"` : "untitled document"
+        }
         // documentIndex={0}
       />
       {/* <div className="col-span-3 -mt-2 justify-self-end ">

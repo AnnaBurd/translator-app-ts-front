@@ -61,11 +61,13 @@ export default function Dashboard() {
   }
 
   const navigateToEditorTab = () => {
-    const lastChangedDoc = docs?.reduce((prev, current) =>
-      new Date(prev.changedAt || "") > new Date(current.changedAt || "")
-        ? prev
-        : current
-    );
+    const lastChangedDoc =
+      docs.length &&
+      docs.reduce((prev, current) =>
+        new Date(prev.changedAt || "") > new Date(current.changedAt || "")
+          ? prev
+          : current
+      );
 
     console.log(
       "Opening last changed document in Editor (new tab)",
@@ -92,9 +94,10 @@ export default function Dashboard() {
             console.log("clicking on dashboard");
             if (isOpenUserProfileMenu) setIsOpenUserProfileMenu(false);
           }}
+          // className="relative"
         >
-          <header aria-label="User Dashboard" className="">
-            <div className="mx-auto flex max-w-screen-xl flex-col-reverse justify-between px-4 py-4 sm:px-6 md:py-8 lg:flex-row lg:items-center lg:px-4 2xl:max-w-screen-2xl">
+          <header aria-label="User Dashboard" className="relative z-50">
+            <div className=" mx-auto flex max-w-screen-xl flex-col-reverse justify-between px-4 py-4 sm:px-6 md:py-8 lg:flex-row lg:items-center lg:px-4 2xl:max-w-screen-2xl">
               <Welcome
                 stats={{
                   words:
@@ -184,7 +187,7 @@ export default function Dashboard() {
               </motion.div>
             </div>
           </header>
-          <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4 2xl:max-w-screen-2xl ">
+          <div className="z-0 mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4 2xl:max-w-screen-2xl ">
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row 2xl:gap-16">
               <Documents
                 docs={docs}

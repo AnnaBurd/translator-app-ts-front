@@ -9,6 +9,7 @@ import AuthProvider from "./auth/AuthProvider";
 import RequireAuth from "./auth/RequireAuth";
 
 import { AnimatePresence } from "framer-motion";
+import NewDocument from "./pages/Editor/NewDocument";
 
 export default function App() {
   const location = useLocation();
@@ -31,12 +32,7 @@ export default function App() {
           <Route path="/signup" element={<Signup />} />
           <Route element={<RequireAuth />}>
             <Route path="/dash" element={<UserDashboard />} />
-            <Route
-              path="/editor/"
-              element={
-                <div>TODO: Open new doc form and Create New Document!</div>
-              }
-            />
+            <Route path="/editor/" element={<NewDocument />} />
             <Route path="/editor/:docId" element={<Editor />} />
             <Route path="/users" element={<AdminDashboard />} />
           </Route>

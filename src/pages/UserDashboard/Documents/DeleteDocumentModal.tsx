@@ -20,6 +20,15 @@ const DeleteDocumentModal: React.FC<DeleteDocumentModalProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
+  // console.log(
+  //   "doc title",
+  //   documentTitle,
+  //   !documentTitle,
+  //   documentTitle?.length,
+  //   "" + documentTitle?.trim() === "",
+  //   !documentTitle || documentTitle === ""
+  // );
+
   const closeFormHandler = (event: React.MouseEvent<HTMLElement>) => {
     onClose(event);
   };
@@ -114,7 +123,7 @@ const DeleteDocumentModal: React.FC<DeleteDocumentModalProps> = ({
             >
               <div className="mb-6 flex items-center justify-between">
                 <p className="text-md pointer-events-none font-medium text-slate-800">
-                  Delete {documentTitle || "this document"}?
+                  Delete {documentTitle}?
                 </p>
                 <button
                   type="button"

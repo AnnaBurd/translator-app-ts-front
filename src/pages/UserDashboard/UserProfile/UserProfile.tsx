@@ -33,7 +33,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center">
+    <div className="relative z-50 flex flex-col items-center justify-center">
       <button
         onClick={handleToggleMenu}
         type="button"

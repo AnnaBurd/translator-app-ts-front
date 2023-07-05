@@ -37,7 +37,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onSignout }) => {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="absolute end-0 top-12 z-10 mt-2 w-44 min-w-fit divide-y divide-slate-100 rounded-md border border-slate-100 bg-white shadow-lg dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900"
+          className="absolute end-0 top-12 z-50 mt-2 w-44 min-w-fit divide-y divide-slate-100 rounded-md border border-slate-100 bg-white shadow-lg dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="user-menu"
