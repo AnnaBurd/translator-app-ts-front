@@ -18,6 +18,9 @@ import { initInputEditor, initOutputEditor } from "./init";
 import useFetchPrivate from "../../../hooks/useFetchPrivate";
 
 import "./TextEditor.sass";
+import { AnimatePresence, motion } from "framer-motion";
+import DotLoader from "../../../components/animations/DotLoader";
+import { set } from "react-hook-form";
 
 type TextEditorProps = {
   document: Doc | null;
@@ -31,6 +34,8 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
   const inputEditorRef = useRef<EditorJS>();
   const outputEditorRef = useRef<EditorJS>();
 
+  const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
+  const [errorLoadingTranslation, setErrorLoadingTranslation] = useState("");
   const [loadingBlock, setLoadingBlock] = useState<string>("");
   const [errorLoadingBlock, setErrorLoadingBlock] = useState<string>("");
 
@@ -139,6 +144,19 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
     console.log("Blocks moved", blocksMoved.current);
     console.log("Blocks deleted", blocksDeleted.current);
 
+    let errorUpdating = "";
+
+    if (
+      newBlocksAdded.current.length === 0 &&
+      blocksChanged.current.length === 0 &&
+      blocksMoved.current.length === 0 &&
+      blocksDeleted.current.length === 0
+    )
+      return;
+
+    setErrorLoadingTranslation("");
+    setIsLoadingTranslation(true);
+
     // Get full input content
     const currentEditorInput = (await inputEditorRef.current?.save())?.blocks;
     // const currentOutputEditorInput = (await outputEditorRef.current?.save())
@@ -161,8 +179,14 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
         });
       } catch (err) {
         console.log("ERROR DELETING BLOCKS FROM DB:", err);
-        setErrorLoadingBlock("Error deleting blocks");
+        setIsLoadingTranslation(false);
+        // setErrorLoadingTranslation("Error deleting blocks");
+        errorUpdating = "Error deleting blocks";
+        // setErrorLoadingBlock("Error deleting blocks");
       }
+
+      // Remove deleted blocks from the list of changes
+      blocksDeleted.current = [];
     }
 
     for (const [index, block] of currentEditorInput.entries()) {
@@ -172,11 +196,12 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
       if (newBlocksAdded.current.includes(block.id as string)) {
         console.log("Added at index", block, index);
 
+        let translatedBlock;
         try {
           setLoadingBlock(block.id as string);
 
           // Fetch translation
-          const translatedBlock = await fetchPrivate(
+          translatedBlock = await fetchPrivate(
             `docs/${document?.slug}`,
             "PATCH",
             {
@@ -184,47 +209,66 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
               blockPositionIndex: index,
             }
           );
-
-          console.log(
-            "Got translation:",
-            translatedBlock,
-            "for block at index",
-            index
-          );
-
-          const translatedBlockData = blockToOutputBlock(translatedBlock);
-
-          // newTranslatedBlocks.push(translatedBlockData);
-
-          outputEditorRef.current?.blocks.insert(
-            "paragraph",
-            { text: translatedBlockData.data.text },
-            null,
-            index,
-            true,
-            false,
-            translatedBlockData.id
-          );
         } catch (err) {
-          console.log("ERROR FETCHING TRANSLATION:", err);
-          setErrorLoadingBlock(block.id as string);
+          console.log("ERROR FETCHING TRANSLATION:", err, block);
+          setIsLoadingTranslation(false);
+          // setErrorLoadingTranslation("Error fetching translation");
+          errorUpdating =
+            (err as Error).message || "Error fetching translation";
           break;
         }
+
+        console.log(
+          "Got translation:",
+          translatedBlock,
+          "for block at index",
+          index
+        );
+
+        const translatedBlockData = blockToOutputBlock(translatedBlock);
+
+        // newTranslatedBlocks.push(translatedBlockData);
+
+        outputEditorRef.current?.blocks.insert(
+          "paragraph",
+          { text: translatedBlockData.data.text },
+          null,
+          index,
+          true,
+          false,
+          translatedBlockData.id
+        );
+
+        // Remove block from the list of new blocks
+        newBlocksAdded.current.splice(
+          newBlocksAdded.current.indexOf(block.id as string),
+          1
+        );
       }
 
       // Update changed block
       if (blocksChanged.current.includes(block.id as string)) {
         console.log("Changed at index", block, index);
 
-        // Fetch updated translation
-        const translatedBlock = await fetchPrivate(
-          `docs/${document?.slug}`,
-          "PATCH",
-          {
-            block: outputBlockToBlock(block),
-            translationOption: "editOriginalBlock",
-          }
-        );
+        let translatedBlock;
+        try {
+          // Fetch updated translation
+          translatedBlock = await fetchPrivate(
+            `docs/${document?.slug}`,
+            "PATCH",
+            {
+              block: outputBlockToBlock(block),
+              translationOption: "editOriginalBlock",
+            }
+          );
+        } catch (err) {
+          console.log("ERROR FETCHING TRANSLATION:", err, block);
+          setIsLoadingTranslation(false);
+          // setErrorLoadingTranslation("Error fetching translation");
+          errorUpdating =
+            (err as Error).message || "Error updating translation";
+          break;
+        }
 
         console.log(
           "Got translation:",
@@ -248,6 +292,12 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
           true,
           translatedBlockData.id
         );
+
+        // Remove block from the list of changed blocks
+        blocksChanged.current.splice(
+          blocksChanged.current.indexOf(block.id as string),
+          1
+        );
       }
     }
 
@@ -255,11 +305,17 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
     // setInputBlocks((prev) => [...prev, ...newInputBlocks]);
     // setOutputBlocks((prev) => [...prev, ...newTranslatedBlocks]);
 
-    // Clear current changes
-    newBlocksAdded.current = [];
-    blocksChanged.current = [];
-    blocksMoved.current = [];
-    blocksDeleted.current = [];
+    if (errorUpdating) setErrorLoadingTranslation(errorUpdating);
+
+    if (!errorUpdating) {
+      // No errors has happend, can clear all current changes if any are left
+      newBlocksAdded.current = [];
+      blocksChanged.current = [];
+      blocksMoved.current = [];
+      blocksDeleted.current = [];
+    }
+
+    setIsLoadingTranslation(false);
   };
 
   // Init text editors when document is loaded
@@ -289,7 +345,10 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
     // TODO: destroy editors before navigating away?
   }, [document, handleEditorEvent]);
 
-  // TODO: add copy to cliboard button
+  // const controls =
+  //   inputBlocks.length === 0
+  //     ? "Generate AI translation"
+  //     : "Update AI translation";
 
   return (
     <>
@@ -421,9 +480,49 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
 
         <button
           onClick={applyChangesHandler}
-          className="inline-block shrink-0 justify-self-center rounded-md border border-indigo-400 bg-indigo-400 px-4 py-2 text-xs font-medium text-white transition hover:bg-transparent hover:text-indigo-400 focus:outline-none focus:ring active:text-indigo-300 disabled:pointer-events-none disabled:border-slate-200 disabled:bg-slate-200"
+          className="inline-block shrink-0 justify-self-center rounded-md border border-indigo-400 bg-indigo-400 px-4 py-2 text-xs font-medium text-white transition hover:bg-transparent hover:text-indigo-400 focus:outline-none focus:ring active:text-indigo-300 disabled:pointer-events-none disabled:opacity-90"
+          disabled={isLoadingTranslation}
         >
-          Generate AI Translation
+          <AnimatePresence mode="wait">
+            {isLoadingTranslation && (
+              <motion.span
+                key="btn-loading"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 4 },
+                }}
+              >
+                Generating translation
+                <DotLoader />
+              </motion.span>
+            )}
+            {!isLoadingTranslation && errorLoadingTranslation && (
+              <motion.span
+                key="btn-error"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: 1,
+                  transition: { duration: 4 },
+                }}
+              >
+                {errorLoadingTranslation.includes("tokens")
+                  ? "Ups! You have run out of tokens, please contact administrator to increase limits."
+                  : "Ups! Could not generate translation, please check connection and try again later."}
+              </motion.span>
+            )}
+            {!isLoadingTranslation && !errorLoadingTranslation && (
+              <motion.span
+                key="btn-create"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0, transition: { duration: 0.5 } }}
+              >
+                {inputBlocks.length === 0
+                  ? "Generate AI translation"
+                  : "Update AI translation"}
+              </motion.span>
+            )}
+          </AnimatePresence>
         </button>
       </div>
     </>

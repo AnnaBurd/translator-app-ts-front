@@ -17,7 +17,8 @@ export function initInputEditor(
     // splitOnPaste: false,
     tools: {
       paragraph: {
-        inlineToolbar: ["bold", "italic", "Regenerate"],
+        // inlineToolbar: ["bold", "italic", "Regenerate"],
+        inlineToolbar: [],
       },
       Regenerate: {
         class: Regenerate,

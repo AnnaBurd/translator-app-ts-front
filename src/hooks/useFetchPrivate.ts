@@ -68,6 +68,11 @@ const useFetchPrivate = () => {
 
       // If second attempt to fetch data fails - throw error
       if (!response.ok) {
+        if (response.status === 402)
+          throw new Error(
+            "You have run out of tokens. Contact administrator to expand monthly limit."
+          );
+
         throw new Error(
           `useFetchPrivate: Failed second attempt to fetch data from endpoint ${url}.}`
         );

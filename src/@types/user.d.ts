@@ -13,8 +13,10 @@ export interface UserProfileStats {
   numberOfDocuments?: number;
   numberOfWordsTranslatedThisMonth?: number;
   totalTokens: number;
+  tokensUsedMonth: number;
   docsUsageStats: number[];
   tokensUsageStats: number[];
   wordsUsageStats: number[];
   lastSixMonths: string[];
+  limit: number;
 }

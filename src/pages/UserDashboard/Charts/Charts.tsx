@@ -8,13 +8,14 @@ type ChartsProps = {
 };
 
 const Charts: React.FC<ChartsProps> = ({ stats }) => {
-  // console.log("Charts usagestats", stats);
+  console.log("Charts usagestats", stats);
 
-  const tokensUsedThisMonth = stats?.tokensUsageStats
-    ? stats?.tokensUsageStats[4]
-    : 0;
+  // const tokensUsedThisMonth = stats?.tokensUsageStats
+  //   ? stats?.tokensUsageStats[4]
+  //   : 0;
+  const tokensUsedThisMonth = stats?.tokensUsedMonth || 0;
 
-  const tokensUsageLimit = 100;
+  const tokensUsageLimit = stats?.limit || 0;
 
   let tokensUsagePercent = (tokensUsedThisMonth / tokensUsageLimit) * 100;
   if (tokensUsagePercent > 100) tokensUsagePercent = 100;
@@ -47,7 +48,7 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
           <div className="flex flex-col items-center justify-center text-base font-semibold text-slate-700">
             <span className="-mb-1.5">
               <span className="text-lg font-bold text-slate-800">
-                {tokensUsageLimit}
+                {tokensUsageLimit.toLocaleString()}
               </span>{" "}
               tk
             </span>
@@ -59,7 +60,7 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
           <div className="flex flex-col items-center justify-center text-base font-semibold text-slate-700">
             <span className="-mb-1.5">
               <span className="text-lg font-bold text-slate-800">
-                {tokensUsedThisMonth}
+                {tokensUsedThisMonth.toLocaleString()}
               </span>{" "}
               tk
             </span>
