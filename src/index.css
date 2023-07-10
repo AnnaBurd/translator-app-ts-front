@@ -34,4 +34,5 @@ But not now, because it is not ready yet.  */
 /* Prevent scrollbar from repositioning page content */
 html {
   padding-left: calc(100vw - 100%);
+  overflow-x: hidden;
 }

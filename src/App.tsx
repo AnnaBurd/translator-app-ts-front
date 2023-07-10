@@ -27,11 +27,11 @@ export default function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           {/* TODO:? add landing page? */}
-          <Route index element={<Navigate to="/dash" />} />
+          <Route index element={<Navigate to="/dashboard" />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
           <Route element={<RequireAuth />}>
-            <Route path="/dash" element={<UserDashboard />} />
+            <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/editor/" element={<NewDocument />} />
             <Route path="/editor/:docId" element={<Editor />} />
             <Route path="/users" element={<AdminDashboard />} />
