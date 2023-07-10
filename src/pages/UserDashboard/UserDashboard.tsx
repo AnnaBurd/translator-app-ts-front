@@ -11,7 +11,7 @@ import useDataPrivate from "../../hooks/useDataPrivate";
 import Loader from "../../components/animations/Loader";
 import { User, UserProfileStats } from "../../@types/user";
 import { Doc } from "../../@types/doc";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import { motion } from "framer-motion";
 
@@ -45,6 +45,18 @@ export default function Dashboard() {
   // console.log("USER ROLE", userProfile?.user.role);
 
   const isAdmin = userProfile?.user.role === "Admin";
+
+  const [isWide, setIsWide] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 640px)");
+
+    const onChange = () => setIsWide(!!mql.matches);
+    mql.addEventListener("change", onChange);
+    setIsWide(mql.matches);
+
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   const [isOpenUserProfileMenu, setIsOpenUserProfileMenu] = useState(false);
 
@@ -132,7 +144,9 @@ export default function Dashboard() {
                   className="mr-1 inline-flex items-center justify-center gap-1.5 rounded-lg border  border-slate-300 px-5 py-3 text-slate-500 transition hover:text-slate-700 focus:outline-none focus:ring"
                   type="button"
                 >
-                  <span className="text-xs font-medium"> Open Editor </span>
+                  <span className="text-xs font-medium">
+                    {isWide ? "Open Editor" : "Editor"}
+                  </span>
 
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -156,7 +170,7 @@ export default function Dashboard() {
                     type="button"
                   >
                     <span className="text-xs font-medium">
-                      Open Admin Dashboard
+                      {isWide ? "Open Admin Dashboard" : "Users"}
                     </span>
 
                     <svg

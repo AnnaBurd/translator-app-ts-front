@@ -293,7 +293,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
 
   return (
     <>
-      <div className="grid gap-4 !text-sm max-md:h-[140vh] xl:grid-cols-2">
+      <div className="grid gap-4 !text-sm max-md:h-[140vh] xl:grid-cols-2 2xl:gap-10">
         <div
           className="editor input-editor overflow-x-hidden overflow-y-scroll rounded-md bg-slate-50 p-4"
           ref={inputContainerRef}
@@ -375,7 +375,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
             </svg>
 
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-6 rounded bg-slate-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity delay-300 duration-500 group-hover:opacity-100">
-              Copy to clipboard
+              Copy to&nbsp;clipboard
             </span>
           </button>
 
@@ -414,7 +414,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
             </svg>
 
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-6 rounded bg-slate-900 px-2 py-1.5 text-xs font-medium text-white opacity-0 transition-opacity delay-300 duration-500 group-hover:opacity-100">
-              Copy translation to clipboard
+              Copy&nbsp;translation to&nbsp;clipboard
             </span>
           </button>
         </span>
