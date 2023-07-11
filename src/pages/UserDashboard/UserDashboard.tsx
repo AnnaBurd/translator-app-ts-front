@@ -25,13 +25,13 @@ export default function Dashboard() {
     user: User;
   }>(`users/profile`);
 
-  const [
-    docs,
-    isLoadingDocuments,
-    errorLoadingDocs,
-    deleteDocument,
-    fetchMoreDocuments,
-  ] = useDocumentsPrivate<Doc>(`docs`);
+  const {
+    data: docs,
+    isFetchingData: isLoadingDocuments,
+    errorFetchingData: errorLoadingDocs,
+    fetchNextPage: fetchMoreDocuments,
+    deleteDataItem: deleteDocument,
+  } = useDocumentsPrivate<Doc>(`docs`);
 
   console.log("*** User dash render ***");
   console.log("*** docs:", docs);

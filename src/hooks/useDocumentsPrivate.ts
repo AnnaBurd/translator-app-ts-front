@@ -3,21 +3,31 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useFetchPrivate from "./useFetchPrivate";
 
 type Slugified = {
-  slug: string;
+  slug?: string;
+  id?: string;
 };
 
 const useDocumentsPrivate = <T extends Slugified>(
   url: string
-): [T[], boolean, string, (id: string) => Promise<void>, () => void] => {
+): {
+  data: T[];
+  isFetchingData: boolean;
+  errorFetchingData: string;
+  deleteDataItem: (slug: string) => Promise<void>;
+  fetchNextPage: () => void;
+  totalPages: number;
+} => {
   const [data, setData] = useState<T[]>([]);
   const [isFetchingData, setIsFetching] = useState(false);
   const [errorFetchingData, setErrorFetchingData] = useState("");
 
   const [fetchMore, setFetchMore] = useState(true);
-  const [hasNextPage, setHasNextPage] = useState(true);
+  // const [hasNextPage, setHasNextPage] = useState(true);
+  const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [windowSize, setWindowSize] = useState("large");
 
+  // TODO: adjust
   const maxDocuments =
     windowSize === "large" ? 100 : windowSize === "medium" ? 50 : 30;
   const itemsPerPage =
@@ -71,7 +81,7 @@ const useDocumentsPrivate = <T extends Slugified>(
   const shouldBeFetching =
     !isFetchingData &&
     !errorFetchingData &&
-    hasNextPage &&
+    (currentPage < totalPages || !totalPages) &&
     fetchMore &&
     data.length < maxDocuments;
 
@@ -110,7 +120,8 @@ const useDocumentsPrivate = <T extends Slugified>(
         //   setCurrentPage(currPage + 1);
         // }
 
-        setHasNextPage(+currPage < +totalPages);
+        // setHasNextPage(+currPage < +totalPages);
+        setTotalPages(+totalPages);
         setCurrentPage(+currPage + 1);
         setData((prevData) => [...prevData, ...fetchedData]);
         setIsFetching(false);
@@ -171,18 +182,18 @@ const useDocumentsPrivate = <T extends Slugified>(
     data,
     isFetchingData,
     errorFetchingData,
-    hasNextPage,
     shouldBeFetching,
     itemsPerPage,
   ]);
 
-  return [
+  return {
     data,
     isFetchingData,
     errorFetchingData,
     deleteDataItem,
     fetchNextPage,
-  ];
+    totalPages,
+  };
 };
 
 export default useDocumentsPrivate;

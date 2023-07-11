@@ -11,6 +11,7 @@ export interface User {
   tokensUsedTotal?: number;
   tokensLimit?: number;
   isBlocked?: boolean;
+  slug?: string;
 }
 
 export interface UserProfileStats {
