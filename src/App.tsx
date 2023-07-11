@@ -1,15 +1,17 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Signin from "./pages/Signin/Signin";
 import Signup from "./pages/Signup/Signup";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import Editor from "./pages/Editor/Editor";
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
-import { NoMatch } from "./pages/NoMatch";
+import { NoMatch } from "./pages/Error/NoMatch";
 import AuthProvider from "./auth/AuthProvider";
 import RequireAuth from "./auth/RequireAuth";
 
 import { AnimatePresence } from "framer-motion";
 import NewDocument from "./pages/Editor/NewDocument";
+import RequireAdmin from "./auth/RequireAdmin";
+import Profile from "./pages/UserProfile/Profile";
 
 export default function App() {
   const location = useLocation();
@@ -34,7 +36,10 @@ export default function App() {
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/editor/" element={<NewDocument />} />
             <Route path="/editor/:docId" element={<Editor />} />
-            <Route path="/users" element={<AdminDashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route element={<RequireAdmin />}>
+              <Route path="/users" element={<AdminDashboard />} />
+            </Route>
           </Route>
           <Route path="*" element={<NoMatch />} />
         </Routes>

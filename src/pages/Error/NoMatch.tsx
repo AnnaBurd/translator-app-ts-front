@@ -1,4 +1,4 @@
-import AnimatedPage from "../components/animations/AnimatedPage";
+import AnimatedPage from "../../components/animations/AnimatedPage";
 
 export const NoMatch = () => {
   return (

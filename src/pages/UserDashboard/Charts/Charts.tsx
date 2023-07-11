@@ -19,6 +19,7 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
 
   let tokensUsagePercent = (tokensUsedThisMonth / tokensUsageLimit) * 100;
   if (tokensUsagePercent > 100) tokensUsagePercent = 100;
+  if (tokensUsageLimit === 0) tokensUsagePercent = 0;
 
   return (
     <motion.aside

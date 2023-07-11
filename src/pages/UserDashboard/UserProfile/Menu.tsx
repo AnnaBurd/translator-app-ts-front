@@ -1,6 +1,7 @@
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { FormEvent } from "react";
+import { FormEvent, useContext } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../auth/AuthContext";
 
 type MenuProps = {
   isOpen: boolean;
@@ -33,6 +34,8 @@ const menuVariants = {
 } satisfies Variants;
 
 const Menu: React.FC<MenuProps> = ({ isOpen, onSignout }) => {
+  const { user: signedInUser } = useContext(AuthContext);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -56,12 +59,22 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onSignout }) => {
             </Link>
 
             <Link
-              to="/dash"
+              to="/dashboard"
               className="block rounded-lg px-4 py-2 text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300"
               role="menuitem"
             >
               Dashboard
             </Link>
+
+            {signedInUser.role === "Admin" && (
+              <Link
+                to="/users"
+                className="block rounded-lg px-4 py-2 text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300"
+                role="menuitem"
+              >
+                Admin Dashboard
+              </Link>
+            )}
           </div>
 
           <div className="p-2">

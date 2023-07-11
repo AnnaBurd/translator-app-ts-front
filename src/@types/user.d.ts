@@ -1,10 +1,16 @@
 export interface User {
+  photo: string;
   email?: string;
   firstName?: string;
   lastName?: string;
   password?: string;
   newUser?: boolean;
   role?: string;
+  registrationDate?: string;
+  tokensUsedMonth?: number;
+  tokensUsedTotal?: number;
+  tokensLimit?: number;
+  isBlocked?: boolean;
 }
 
 export interface UserProfileStats {
