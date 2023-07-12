@@ -22,7 +22,27 @@ export default function AdminDashboard() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const usersOnPage = users.slice(
+  const [filterUsersBy, setFilterUsersBy] = useState(""); // Options: "", "active", "inactive", "blocked"
+
+  const filteredUsers = users?.filter((user) => {
+    if (filterUsersBy === "") return true;
+
+    if (filterUsersBy === "blocked") {
+      return user.isBlocked;
+    }
+
+    if (filterUsersBy === "active") {
+      return (
+        !user.isBlocked && user.tokensUsedMonth && user.tokensUsedMonth > 0
+      );
+    }
+
+    if (filterUsersBy === "inactive") {
+      return !user.isBlocked && !user.tokensUsedMonth;
+    }
+  });
+
+  const usersOnPage = filteredUsers.slice(
     currentPage * usersPerPage - usersPerPage,
     currentPage * usersPerPage
   );
@@ -31,6 +51,8 @@ export default function AdminDashboard() {
     useDataPrivate<{
       activeUsers: number;
       tokensUsedMonth: number;
+      inactiveUsers: number;
+      blockedUsers: number;
     }>("users/usagestatistics");
 
   // For wide screens show table
@@ -69,33 +91,77 @@ export default function AdminDashboard() {
               Users
             </h2>
             <div className="flex justify-start gap-2 sm:gap-4">
-              <a
-                className="group inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-500 focus:outline-none focus:ring active:bg-emerald-50"
-                href="#"
+              <button
+                className={`group inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-500 focus:outline-none focus:ring active:bg-emerald-50 ${
+                  filterUsersBy === "active"
+                    ? "bg-emerald-50 text-emerald-500"
+                    : ""
+                }`}
+                onClick={() => {
+                  if (filterUsersBy === "active") {
+                    setFilterUsersBy("");
+                  } else {
+                    setFilterUsersBy("active");
+                  }
+                }}
               >
-                <span className="mr-1.5 rounded-sm bg-slate-300 px-[.15rem] py-[.1rem] text-[.6rem] group-hover:bg-emerald-300 group-hover:text-white">
-                  10
+                <span
+                  className={`mr-1.5 rounded-sm bg-slate-300 px-[.25rem] py-[.1rem] text-[.6rem] group-hover:bg-emerald-300 group-hover:text-white ${
+                    filterUsersBy === "active"
+                      ? "bg-emerald-300 text-white"
+                      : ""
+                  }`}
+                >
+                  {usageStats?.activeUsers || 0}
                 </span>
                 Active
-              </a>
-              <a
-                className="group inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200 hover:text-slate-500 focus:outline-none focus:ring active:bg-slate-50"
-                href="#"
+              </button>
+              <button
+                className={`group inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200 hover:text-slate-500 focus:outline-none focus:ring active:bg-slate-50 ${
+                  filterUsersBy === "inactive"
+                    ? "bg-slate-200 text-slate-500"
+                    : ""
+                }`}
+                onClick={() => {
+                  if (filterUsersBy === "inactive") {
+                    setFilterUsersBy("");
+                  } else {
+                    setFilterUsersBy("inactive");
+                  }
+                }}
               >
-                <span className="mr-1.5 rounded-sm bg-slate-300 px-[.15rem] py-[.1rem] text-[.6rem] group-hover:bg-slate-400 group-hover:text-white">
-                  12
+                <span
+                  className={`mr-1.5 rounded-sm bg-slate-300 px-[.25rem] py-[.1rem] text-[.6rem] group-hover:bg-slate-400 group-hover:text-white ${
+                    filterUsersBy === "inactive"
+                      ? "bg-slate-400 text-white"
+                      : ""
+                  }`}
+                >
+                  {usageStats?.inactiveUsers || 0}
                 </span>
                 Inactive
-              </a>
-              <a
-                className="group mr-4 inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-red-50 hover:text-red-500 focus:outline-none focus:ring active:bg-red-50"
-                href="#"
+              </button>
+              <button
+                className={`group mr-4 inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-500 focus:outline-none focus:ring active:bg-rose-50 ${
+                  filterUsersBy === "blocked" ? "bg-rose-50 text-rose-500" : ""
+                }`}
+                onClick={() => {
+                  if (filterUsersBy === "blocked") {
+                    setFilterUsersBy("");
+                  } else {
+                    setFilterUsersBy("blocked");
+                  }
+                }}
               >
-                <span className="mr-1.5 rounded-sm bg-slate-300 px-[.15rem] py-[.1rem] text-[.6rem] group-hover:bg-red-300 group-hover:text-white">
-                  10
+                <span
+                  className={`mr-1.5 rounded-sm bg-slate-300 px-[.25rem] py-[.1rem] text-[.6rem] group-hover:bg-rose-300 group-hover:text-white ${
+                    filterUsersBy === "blocked" ? "bg-rose-300 text-white" : ""
+                  }`}
+                >
+                  {usageStats?.blockedUsers || 0}
                 </span>
                 Blocked
-              </a>
+              </button>
             </div>
           </div>
           <motion.div
