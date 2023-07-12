@@ -1,16 +1,37 @@
 type PaginationProps = {
   totalPages: number;
   currentPage: number;
+  onNextPage: () => void;
+  onPreviousPage: () => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  totalPages,
+  currentPage,
+  onNextPage,
+  onPreviousPage,
+}) => {
+  const nextPageHandler = () => {
+    console.log("nextPageHandler");
+    if (currentPage >= totalPages) return;
+    onNextPage();
+  };
+
+  const prevPageHandler = () => {
+    console.log("prevPageHandler");
+    if (currentPage <= 1) return;
+    onPreviousPage();
+  };
+
   return (
     <div className="inline-flex items-center justify-center gap-3">
-      <a
-        href="#"
-        className="inline-flex h-8 w-8 items-center justify-center rounded border border-slate-100 bg-white text-slate-900 rtl:rotate-180 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+      <button
+        className={`inline-flex h-8 w-8 items-center justify-center rounded border border-slate-100 bg-white text-slate-900 rtl:rotate-180 dark:border-slate-800 dark:bg-slate-900 dark:text-white ${
+          totalPages <= 1 ? "invisible " : ""
+        }}`}
+        onClick={prevPageHandler}
       >
-        <span className="sr-only">Next Page</span>
+        <span className="sr-only">Previous Page</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-3 w-3"
@@ -23,19 +44,19 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
             clipRule="evenodd"
           />
         </svg>
-      </a>
+      </button>
 
       <p className="text-xs text-slate-900 dark:text-white">
-        1<span className="mx-0.25">/</span>
+        {currentPage}
+        <span className="mx-0.25">/</span>
         {totalPages}
       </p>
 
-      <a
-        href="#"
-        className="inline-flex h-8 w-8 items-center justify-center rounded border border-slate-100 bg-white text-slate-900 rtl:rotate-180 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
-        onClick={() => {
-          console.log("next page");
-        }}
+      <button
+        className={`inline-flex h-8 w-8 items-center justify-center rounded border border-slate-100 bg-white text-slate-900 rtl:rotate-180 dark:border-slate-800 dark:bg-slate-900 dark:text-white ${
+          totalPages <= 1 ? "invisible " : ""
+        }}`}
+        onClick={nextPageHandler}
       >
         <span className="sr-only">Next Page</span>
         <svg
@@ -50,7 +71,7 @@ const Pagination: React.FC<PaginationProps> = ({ totalPages }) => {
             clipRule="evenodd"
           />
         </svg>
-      </a>
+      </button>
     </div>
   );
 };

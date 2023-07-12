@@ -8,7 +8,8 @@ type Slugified = {
 };
 
 const useDocumentsPrivate = <T extends Slugified>(
-  url: string
+  url: string,
+  documentsPerPage?: number
 ): {
   data: T[];
   isFetchingData: boolean;
@@ -23,15 +24,16 @@ const useDocumentsPrivate = <T extends Slugified>(
 
   const [fetchMore, setFetchMore] = useState(true);
   // const [hasNextPage, setHasNextPage] = useState(true);
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(-1);
   const [currentPage, setCurrentPage] = useState(1);
   const [windowSize, setWindowSize] = useState("large");
 
   // TODO: adjust
   const maxDocuments =
     windowSize === "large" ? 100 : windowSize === "medium" ? 50 : 30;
-  const itemsPerPage =
+  let itemsPerPage =
     windowSize === "large" ? 9 : windowSize === "medium" ? 6 : 3;
+  if (documentsPerPage) itemsPerPage = documentsPerPage;
 
   // TODO refactor dimensions hook from here and breadcrumbs component
 
@@ -76,14 +78,23 @@ const useDocumentsPrivate = <T extends Slugified>(
     }
   };
 
-  console.log("-------------- useDocumentsPrivate hook body");
-
   const shouldBeFetching =
     !isFetchingData &&
     !errorFetchingData &&
-    (currentPage < totalPages || !totalPages) &&
+    (currentPage <= totalPages || totalPages < 0) &&
     fetchMore &&
     data.length < maxDocuments;
+
+  console.log("-------------- useDocumentsPrivate hook body");
+
+  console.log("🏸 isFetchingData", isFetchingData);
+  console.log("🏸 errorFetchingData", errorFetchingData);
+  console.log("🏸 should init fetching? ", shouldBeFetching);
+  console.log("🏸 currentPage", currentPage);
+  console.log("🏸 totalPages", totalPages);
+  console.log("🏸 data.length", data.length);
+  console.log("🏸 maxDocuments", maxDocuments);
+  console.log("🏸 fetchMore", fetchMore);
 
   useEffect(() => {
     console.log("-------------- useDocumentsPrivate useEffect");

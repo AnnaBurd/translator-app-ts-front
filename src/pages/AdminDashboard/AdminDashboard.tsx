@@ -11,13 +11,21 @@ import Loader from "../../components/animations/Loader";
 import Pagination from "./Controls/Pagination";
 
 export default function AdminDashboard() {
+  const usersPerPage = 6;
   const {
     data: users,
     isFetchingData,
     errorFetchingData,
     fetchNextPage,
     totalPages,
-  } = useDocumentsPrivate<User>("users");
+  } = useDocumentsPrivate<User>("users", usersPerPage);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const usersOnPage = users.slice(
+    currentPage * usersPerPage - usersPerPage,
+    currentPage * usersPerPage
+  );
 
   const [usageStats, isLoadingUsageStats, isErrorLoadingUsageStats] =
     useDataPrivate<{
@@ -48,9 +56,6 @@ export default function AdminDashboard() {
   if (errorFetchingData) {
     return <div>🔥 Error loading users: {errorFetchingData}</div>;
   }
-
-  // TODO: pagination
-  const filteredUsers = users.slice(0, 10);
 
   return (
     <AnimatedPage>
@@ -183,6 +188,15 @@ export default function AdminDashboard() {
       <div className="mx-auto max-w-screen-xl px-4 py-0 sm:px-4 lg:px-10 2xl:max-w-screen-2xl">
         {isWideScreen && users && users?.length > 0 && (
           <table className="w-full border-separate border-spacing-0">
+            <colgroup>
+              <col style={{ width: "30%" }}></col>
+              <col style={{ width: "8%" }}></col>
+              <col style={{ width: "10%" }}></col>
+              <col style={{ width: "14%" }}></col>
+              <col style={{ width: "10%" }}></col>
+              <col style={{ width: "10%" }}></col>
+              <col style={{}}></col>
+            </colgroup>
             <thead className="border-separate border-spacing-0 overflow-hidden rounded-lg">
               <tr className="text-md bg-[--color-primary] text-left text-xs tracking-widest text-white">
                 {[
@@ -194,14 +208,17 @@ export default function AdminDashboard() {
                   "Status",
                   "Administer",
                 ].map((title) => (
-                  <th className="px-5 py-3 font-semibold first:rounded-ss-lg last:rounded-se-lg">
+                  <th
+                    key={title}
+                    className="px-5 py-3 font-semibold first:rounded-ss-lg last:rounded-se-lg"
+                  >
                     {title}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody className="text-[--color-dark]">
-              {users?.map((user) => (
+              {usersOnPage?.map((user) => (
                 <UserRow key={user.email} user={user} />
               ))}
             </tbody>
@@ -210,7 +227,7 @@ export default function AdminDashboard() {
 
         {!isWideScreen && users && users?.length > 0 && (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {users.map((user) => (
+            {usersOnPage.map((user) => (
               <UserCard key={user.email} user={user} />
             ))}
           </div>
@@ -230,7 +247,20 @@ export default function AdminDashboard() {
             usage.`
               : "."}
           </span>
-          <Pagination totalPages={totalPages} currentPage={0} />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onNextPage={() => {
+              setCurrentPage((prev) => prev + 1);
+
+              // Trigger load of next page (if not yet loaded)
+              if (users.length === currentPage * usersPerPage) fetchNextPage();
+            }}
+            onPreviousPage={() => {
+              console.log("PREVIOUS PAGE");
+              setCurrentPage((prev) => prev - 1);
+            }}
+          />
         </div>
       </div>
     </AnimatedPage>
