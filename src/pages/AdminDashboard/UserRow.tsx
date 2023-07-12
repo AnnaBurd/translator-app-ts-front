@@ -5,9 +5,17 @@ import StatusBadge from "./StatusBadge";
 
 type UserRowProps = {
   user: User;
+  onBlockAccess: (email: string) => void;
+  onUnblockAccess: (email: string) => void;
+  onSetTokensLimit: (email: string) => void;
 };
 
-const UserRow: React.FC<UserRowProps> = ({ user }) => {
+const UserRow: React.FC<UserRowProps> = ({
+  user,
+  onBlockAccess,
+  onUnblockAccess,
+  onSetTokensLimit,
+}) => {
   return (
     <tr key={user.email}>
       <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
@@ -85,9 +93,21 @@ const UserRow: React.FC<UserRowProps> = ({ user }) => {
       </td>
       <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
         <span className="inline-flex rounded-md border bg-white shadow-sm ">
-          <TokensUsageBtn />
+          <TokensUsageBtn
+            onAction={() => {
+              onSetTokensLimit(user.email || "");
+            }}
+          />
 
-          <UserAccessBtn isBlocked={user.isBlocked || false} />
+          <UserAccessBtn
+            isBlocked={user.isBlocked || false}
+            onAction={() => {
+              onBlockAccess(user.email || "");
+            }}
+            onReverseAction={() => {
+              onUnblockAccess(user.email || "");
+            }}
+          />
         </span>
       </td>
     </tr>

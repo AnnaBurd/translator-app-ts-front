@@ -1,6 +1,13 @@
-const TokensUsageBtn = () => {
+type TokensUsageBtnProps = {
+  onAction: () => void;
+};
+
+const TokensUsageBtn: React.FC<TokensUsageBtnProps> = ({ onAction }) => {
   return (
-    <button className="group relative inline-block border-e p-3 text-slate-700 hover:bg-slate-50 focus:relative">
+    <button
+      className="group relative inline-block border-e p-3 text-slate-700 hover:bg-slate-50 focus:relative"
+      onClick={onAction}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

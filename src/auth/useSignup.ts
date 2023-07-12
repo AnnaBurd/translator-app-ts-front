@@ -4,6 +4,7 @@ import { User } from "../@types/user";
 import Config from "../../config.json";
 import AuthContext from "./AuthContext";
 
+// TODO: email notification on a new user signup
 /**
  * Sign up new user with email address and password
  *

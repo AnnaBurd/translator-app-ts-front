@@ -2,13 +2,18 @@ import { motion } from "framer-motion";
 import { User } from "../../@types/user";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 import UserProfile from "../UserDashboard/UserProfile/UserProfile";
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEvent } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import useDataPrivate from "../../hooks/useDataPrivate";
 import UserRow from "./UserRow";
 import UserCard from "./UserCard";
 import Loader from "../../components/animations/Loader";
 import Pagination from "./Controls/Pagination";
+import BlockUserModal from "./Modals/BlockUserModal";
+import useFetchPrivate from "../../hooks/useFetchPrivate";
+import { set } from "react-hook-form";
+import UnblockUserModal from "./Modals/UnblockUserModal";
+import LimitTokensForm from "./Modals/LimitTokensForm";
 
 export default function AdminDashboard() {
   const usersPerPage = 6;
@@ -21,6 +26,8 @@ export default function AdminDashboard() {
   } = useDocumentsPrivate<User>("users", usersPerPage);
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchPrivate = useFetchPrivate();
 
   const [filterUsersBy, setFilterUsersBy] = useState(""); // Options: "", "active", "inactive", "blocked"
 
@@ -41,6 +48,10 @@ export default function AdminDashboard() {
       return !user.isBlocked && !user.tokensUsedMonth;
     }
   });
+
+  const [userToBlockAccess, setUserToBlockAccess] = useState("");
+  const [userToUnblockAccess, setUserToUnblockAccess] = useState("");
+  const [userToSetTokensLimit, setUserToSetTokensLimit] = useState("");
 
   const usersOnPage = filteredUsers.slice(
     currentPage * usersPerPage - usersPerPage,
@@ -285,7 +296,19 @@ export default function AdminDashboard() {
             </thead>
             <tbody className="text-[--color-dark]">
               {usersOnPage?.map((user) => (
-                <UserRow key={user.email} user={user} />
+                <UserRow
+                  key={user.email}
+                  user={user}
+                  onBlockAccess={(email) => {
+                    setUserToBlockAccess(email);
+                  }}
+                  onUnblockAccess={(email) => {
+                    setUserToUnblockAccess(email);
+                  }}
+                  onSetTokensLimit={(email) => {
+                    setUserToSetTokensLimit(email);
+                  }}
+                />
               ))}
             </tbody>
           </table>
@@ -298,6 +321,89 @@ export default function AdminDashboard() {
             ))}
           </div>
         )}
+
+        <BlockUserModal
+          visible={userToBlockAccess.length > 0}
+          onClose={() => {
+            setUserToBlockAccess("");
+          }}
+          onAction={async () => {
+            console.log("block user", userToBlockAccess);
+
+            try {
+              const resp = await fetchPrivate(
+                `users/${userToBlockAccess}`,
+                "PATCH",
+                {
+                  isBlocked: true,
+                }
+              );
+
+              // Update user in current state
+
+              users.filter((u) => u.email === userToBlockAccess)[0].isBlocked =
+                true;
+
+              setUserToBlockAccess("");
+            } catch (e) {
+              console.log("error", e);
+            }
+
+            // return Promise.resolve();
+          }}
+          userEmail={userToBlockAccess}
+        />
+
+        <UnblockUserModal
+          visible={userToUnblockAccess.length > 0}
+          onClose={() => {
+            setUserToUnblockAccess("");
+          }}
+          onAction={async () => {
+            console.log("block user", userToUnblockAccess);
+
+            try {
+              const resp = await fetchPrivate(
+                `users/${userToUnblockAccess}`,
+                "PATCH",
+                {
+                  isBlocked: false,
+                }
+              );
+
+              // Update user in current state
+
+              users.filter(
+                (u) => u.email === userToUnblockAccess
+              )[0].isBlocked = false;
+
+              setUserToUnblockAccess("");
+            } catch (e) {
+              console.log("error", e);
+            }
+
+            // return Promise.resolve();
+          }}
+          userEmail={userToUnblockAccess}
+        />
+
+        <LimitTokensForm
+          visible={userToSetTokensLimit.length > 0}
+          email={userToSetTokensLimit}
+          currentPlan={
+            users.find((u) => u.email === userToSetTokensLimit)?.tokensLimit ||
+            0
+          }
+          onClose={() => {
+            setUserToSetTokensLimit("");
+          }}
+          onSubmit={(newLimit) => {
+            console.log("new limit", newLimit);
+            const user = users.find((u) => u.email === userToSetTokensLimit);
+            if (user) user.tokensLimit = newLimit;
+          }}
+        />
+
         {!users ||
           (users?.length === 0 && <div>No registered users found</div>)}
         {/* TODO: fix styles for no users */}

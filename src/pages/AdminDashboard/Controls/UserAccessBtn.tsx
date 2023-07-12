@@ -1,13 +1,21 @@
 type UserAccessBtnProps = {
   isBlocked: boolean;
+  onAction: () => void;
+  onReverseAction: () => void;
 };
 
-const UserAccessBtn: React.FC<UserAccessBtnProps> = ({ isBlocked }) => {
+const UserAccessBtn: React.FC<UserAccessBtnProps> = ({
+  isBlocked,
+  onAction,
+  onReverseAction,
+}) => {
   return (
     <>
       {isBlocked && (
         <button
           className="group relative inline-block p-3 text-emerald-700 hover:bg-emerald-50 focus:relative"
+          onClick={onReverseAction}
+
           //   title="Unblock User"
         >
           <svg
@@ -33,6 +41,7 @@ const UserAccessBtn: React.FC<UserAccessBtnProps> = ({ isBlocked }) => {
       {!isBlocked && (
         <button
           className="group relative inline-block p-3 text-red-700 hover:bg-red-50 focus:relative"
+          onClick={onAction}
           //   title="Block User"
         >
           <svg
