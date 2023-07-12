@@ -180,7 +180,7 @@ const LimitTokensForm: React.FC<LimitTokensFormProps> = ({
               scale: 0.7,
               transition: { duration: 0.15, ease: "easeIn" },
             }}
-            className={` absolute left-1/3 top-1/3 z-50 h-min w-full max-w-xl select-none content-center justify-center rounded-2xl border border-indigo-100 bg-white p-3 shadow-lg sm:p-4 lg:w-3/4 lg:p-6 xl:w-2/4 `}
+            className={` fixed left-0 top-0 z-50 m-4 h-min w-[calc(100%-2rem)] max-w-xl select-none content-center justify-center rounded-2xl border border-indigo-100 bg-white p-3 shadow-lg sm:p-4 lg:w-3/4 lg:p-6 xl:w-2/4 `}
             role="alert"
           >
             <div className="mb-4 flex items-center justify-between">

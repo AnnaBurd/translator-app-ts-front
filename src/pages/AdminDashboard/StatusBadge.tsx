@@ -5,7 +5,7 @@ const blockedSvg = (
     viewBox="0 0 24 24"
     strokeWidth="1.5"
     stroke="currentColor"
-    className="-ms-1 me-1.5 h-4 w-4"
+    className="-ms-1 me-1.5 h-3.5 w-3.5 md:h-4 md:w-4 "
   >
     <path
       strokeLinecap="round"
@@ -22,7 +22,7 @@ const activeSvg = (
     viewBox="0 0 24 24"
     strokeWidth="1.5"
     stroke="currentColor"
-    className="-ms-1 me-1.5 h-4 w-4"
+    className="-ms-1 me-1.5 h-3.5 w-3.5 md:h-4 md:w-4"
   >
     <path
       strokeLinecap="round"
@@ -39,7 +39,7 @@ const inactiveSvg = (
     viewBox="0 0 24 24"
     strokeWidth="1.5"
     stroke="currentColor"
-    className="-ms-1 me-1.5 h-4 w-4"
+    className="-ms-1 me-1.5 h-3.5 w-3.5 md:h-4 md:w-4 "
   >
     <path
       strokeLinecap="round"
@@ -78,7 +78,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
     >
       {statusSvg}
 
-      <p className="whitespace-nowrap text-sm">{statusText}</p>
+      <p className="whitespace-nowrap text-xs md:text-sm">{statusText}</p>
     </span>
   );
 };

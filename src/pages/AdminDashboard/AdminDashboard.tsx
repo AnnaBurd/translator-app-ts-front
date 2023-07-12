@@ -317,7 +317,19 @@ export default function AdminDashboard() {
         {!isWideScreen && users && users?.length > 0 && (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {usersOnPage.map((user) => (
-              <UserCard key={user.email} user={user} />
+              <UserCard
+                key={user.email}
+                user={user}
+                onBlockAccess={(email) => {
+                  setUserToBlockAccess(email);
+                }}
+                onUnblockAccess={(email) => {
+                  setUserToUnblockAccess(email);
+                }}
+                onSetTokensLimit={(email) => {
+                  setUserToSetTokensLimit(email);
+                }}
+              />
             ))}
           </div>
         )}
@@ -419,6 +431,7 @@ export default function AdminDashboard() {
             usage.`
               : "."}
           </span>
+          {/* TODO: fix pages when users are filtered */}
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}
