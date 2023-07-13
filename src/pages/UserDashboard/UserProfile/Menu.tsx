@@ -58,10 +58,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onSignout }) => {
           <div className="p-2">
             <Link
               to="/profile"
-              className={`block rounded-lg px-4 py-2 text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300 ${
+              className={`block rounded-lg px-4 py-2 text-sm  dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300 ${
                 currentPath === "/profile"
                   ? "text-indigo-400 hover:bg-inherit hover:text-indigo-500"
-                  : ""
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-700 "
               }`}
               role="menuitem"
             >
@@ -70,10 +70,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onSignout }) => {
 
             <Link
               to="/dashboard"
-              className={`block rounded-lg px-4 py-2 text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300 ${
+              className={`block rounded-lg px-4 py-2 text-sm  dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300 ${
                 currentPath === "/dashboard"
                   ? "text-indigo-400 hover:bg-inherit hover:text-indigo-500"
-                  : ""
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-700 "
               }`}
               role="menuitem"
             >
@@ -83,10 +83,10 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onSignout }) => {
             {signedInUser.role === "Admin" && (
               <Link
                 to="/users"
-                className={`block rounded-lg px-4 py-2 text-sm text-slate-500 hover:bg-slate-50 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300 ${
+                className={`block rounded-lg px-4 py-2 text-sm  dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300 ${
                   currentPath === "/users"
                     ? "text-indigo-400 hover:bg-inherit hover:text-indigo-500"
-                    : ""
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-700 "
                 }`}
                 role="menuitem"
               >
