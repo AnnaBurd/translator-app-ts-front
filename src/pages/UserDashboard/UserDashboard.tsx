@@ -11,12 +11,16 @@ import useDataPrivate from "../../hooks/useDataPrivate";
 import Loader from "../../components/animations/Loader";
 import { User, UserProfileStats } from "../../@types/user";
 import { Doc } from "../../@types/doc";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import { motion } from "framer-motion";
+import AuthContext from "../../auth/AuthContext";
+import WelcomeModal from "./WelcomeModal";
 
 export default function Dashboard() {
   // const { user } = useContext(AuthContext);
+
+  const { user: signedInUser } = useContext(AuthContext);
 
   // TODO: refactor animations and remove animations for mobile devices
 
@@ -214,6 +218,8 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+        {/* {signedInUser.newUser || (true && <WelcomeModal />)} */}
+        {signedInUser.newUser && <WelcomeModal />}
       </AnimatedPage>
     </>
   );
