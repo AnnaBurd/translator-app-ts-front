@@ -506,6 +506,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
                   transition: { duration: 4 },
                 }}
               >
+                {/* TODO: show messages in popup below, not in the button */}
                 {errorLoadingTranslation.includes("tokens")
                   ? "Ups! You have run out of tokens, please contact administrator to increase limits."
                   : "Ups! Could not generate translation, please check connection and try again later."}

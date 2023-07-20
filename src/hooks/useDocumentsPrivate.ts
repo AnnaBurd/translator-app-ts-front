@@ -60,7 +60,11 @@ const useDocumentsPrivate = <T extends Slugified>(
   const location = useLocation();
 
   const fetchNextPage = () => {
-    setFetchMore(true);
+    // Workaround to avoid setting state while component renders
+    // TODO: reconsider after refactoring
+    if (!fetchMore) {
+      setTimeout(() => setFetchMore(true), 0);
+    }
   };
 
   const deleteDataItem = async (slug: string) => {
