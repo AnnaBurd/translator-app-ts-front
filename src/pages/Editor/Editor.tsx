@@ -7,7 +7,6 @@ import SideMenu from "./SideMenu/SideMenu";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 import Loader from "../../components/animations/Loader";
 import TextEditor from "./TextEditor/TextEditor";
-import { useState } from "react";
 import DocxHandler from "./DocxHandler";
 
 export default function Editor() {
