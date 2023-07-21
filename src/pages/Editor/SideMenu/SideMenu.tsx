@@ -7,20 +7,35 @@ import SearchInDocument from "./Buttons/SearchInDocument";
 import AccountSettings from "./Buttons/AccountSettings";
 import EditorSettings from "./Buttons/EditorSettings";
 
+import NewDocumentModal from "../NewDocument";
+
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const [isNewDocumentModalOpen, setIsNewDocumentModalOpen] = useState(false);
+
+  const toggleSideMenu = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  const closeSideMenu = () => {
+    setIsOpen(false);
+  };
+
+  const onNewDocument = async () => {
+    console.log("New document button clicked");
+    setIsNewDocumentModalOpen(true);
+  };
+
   return (
     <>
-      <div className="fixed z-[100] flex h-14 w-16  flex-col justify-between">
+      <div className="fixed left-0 top-0 z-[100] flex h-14 w-16  flex-col justify-between">
         <div className="inline-flex h-14 w-16 items-center justify-center">
           <span
             className={`grid  cursor-pointer place-content-center rounded-lg  text-xs text-slate-600 shadow-2xl ${
               isOpen ? "h-9 w-10 bg-slate-100" : "h-8 w-9 bg-white"
             } duration-400 transition-all ease-in-out`}
-            onClick={() => {
-              setIsOpen((prev) => !prev);
-            }}
+            onClick={toggleSideMenu}
           >
             <img
               className="h-full w-full p-1.5"
@@ -32,16 +47,14 @@ const SideMenu = () => {
       </div>
       {isOpen && (
         <div
-          className="fixed z-[40] h-screen w-screen "
-          onClick={() => {
-            setIsOpen(false);
-          }}
+          className="fixed left-0 top-0 z-[40] h-screen w-screen "
+          onClick={closeSideMenu}
         ></div>
       )}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed z-50 flex h-screen min-h-screen w-16  flex-col justify-between bg-white shadow-sm"
+            className="fixed left-0 top-0 z-[60] flex h-screen min-h-screen w-16  flex-col justify-between bg-white shadow-sm"
             initial={{ opacity: 0, x: -100 }}
             animate={{
               opacity: 1,
@@ -62,9 +75,8 @@ const SideMenu = () => {
                       exit={{ opacity: 0 }}
                     >
                       <NewDocument
-                        onNewDocument={async () => {
-                          console.log("New document button clicked");
-                        }}
+                        onNewDocument={onNewDocument}
+                        isActive={isNewDocumentModalOpen}
                       />
                     </motion.li>
                     <motion.li
@@ -133,6 +145,22 @@ const SideMenu = () => {
                 </motion.li>
               </ul>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isNewDocumentModalOpen && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 1, transition: { duration: 0.2 } }}
+          >
+            <NewDocumentModal
+              key="new-document-modal"
+              onModalClose={() => {
+                setIsNewDocumentModalOpen(false);
+              }}
+            />
           </motion.div>
         )}
       </AnimatePresence>

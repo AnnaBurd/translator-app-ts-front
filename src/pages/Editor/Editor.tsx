@@ -26,9 +26,7 @@ export default function Editor() {
   return (
     <>
       <AnimatedPage>
-        <SideMenu></SideMenu>
-
-        <div className="grid h-min w-full grid-cols-1 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden px-6 pb-10 pt-[1.15rem] md:h-screen md:px-4 2xl:px-16 ">
+        <div className="relative z-0 grid h-min w-full grid-cols-1 grid-rows-[auto_minmax(0,1fr)_auto] overflow-hidden px-6 pb-10 pt-[1.15rem] md:h-screen md:px-4 2xl:px-16">
           <DocxHandler />
           <div className="pb-4 pl-10 md:pl-12 2xl:pl-0">
             <Breadcrumbs
@@ -40,6 +38,7 @@ export default function Editor() {
           </div>
           <TextEditor document={document} />
         </div>
+        <SideMenu></SideMenu>
       </AnimatedPage>
     </>
   );

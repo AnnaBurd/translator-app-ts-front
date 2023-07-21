@@ -129,7 +129,7 @@ const NewDocumentForm = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.2 }}
             exit={{ opacity: 0 }}
-            className="fixed left-0 top-0 z-30 h-screen w-screen bg-slate-400 opacity-20"
+            className="fixed left-0 top-0 z-50 h-screen w-screen bg-slate-400 opacity-20"
             onClick={closeFormHandler}
           ></motion.div>
           {/* 

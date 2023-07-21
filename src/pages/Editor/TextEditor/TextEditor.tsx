@@ -20,7 +20,6 @@ import useFetchPrivate from "../../../hooks/useFetchPrivate";
 import "./TextEditor.sass";
 import { AnimatePresence, motion } from "framer-motion";
 import DotLoader from "../../../components/animations/DotLoader";
-import { set } from "react-hook-form";
 
 type TextEditorProps = {
   document: Doc | null;
