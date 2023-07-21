@@ -8,11 +8,15 @@ import AccountSettings from "./Buttons/AccountSettings";
 import EditorSettings from "./Buttons/EditorSettings";
 
 import NewDocumentModal from "../NewDocument";
+import UploadDocumentModal from "../UploadDocument";
+import { set } from "react-hook-form";
 
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isNewDocumentModalOpen, setIsNewDocumentModalOpen] = useState(false);
+  const [isUploadDocumentModalOpen, setIsUploadDocumentModalOpen] =
+    useState(false);
 
   const toggleSideMenu = () => {
     setIsOpen((prev) => !prev);
@@ -23,8 +27,12 @@ const SideMenu = () => {
   };
 
   const onNewDocument = async () => {
-    console.log("New document button clicked");
     setIsNewDocumentModalOpen(true);
+  };
+
+  const onUploadDocument = async () => {
+    // console.log("Upload document button clicked");
+    setIsUploadDocumentModalOpen(true);
   };
 
   return (
@@ -85,9 +93,8 @@ const SideMenu = () => {
                       exit={{ opacity: 0 }}
                     >
                       <UploadDocument
-                        onUploadDocument={async () => {
-                          console.log("Upload document button clicked");
-                        }}
+                        onUploadDocument={onUploadDocument}
+                        isActive={isUploadDocumentModalOpen}
                       />
                     </motion.li>
                     <motion.li
@@ -159,6 +166,22 @@ const SideMenu = () => {
               key="new-document-modal"
               onModalClose={() => {
                 setIsNewDocumentModalOpen(false);
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isUploadDocumentModalOpen && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 1, transition: { duration: 0.2 } }}
+          >
+            <UploadDocumentModal
+              key="Upload-document-modal"
+              onModalClose={() => {
+                setIsUploadDocumentModalOpen(false);
               }}
             />
           </motion.div>

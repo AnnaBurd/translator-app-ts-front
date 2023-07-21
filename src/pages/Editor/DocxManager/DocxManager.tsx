@@ -13,7 +13,7 @@ type TextParagraphContentItem = {
   };
 };
 
-const DocxHandler = () => {
+const DocxManager = () => {
   const [file, setFile] = useState<File>();
 
   const [docxFile, setDocxFile] = useState<JSZip>();
@@ -222,4 +222,4 @@ const DocxHandler = () => {
   );
 };
 
-export default DocxHandler;
+export default DocxManager;

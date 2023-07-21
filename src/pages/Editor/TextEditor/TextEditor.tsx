@@ -6,20 +6,26 @@ import EditorJS, {
   OutputBlockData,
 } from "@editorjs/editorjs";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { BlockMutationEvent } from "@editorjs/editorjs/types/events/block";
 
 import copy from "copy-to-clipboard";
 
 import { Doc } from "../../../@types/doc";
-import { blockToOutputBlock, outputBlockToBlock } from "./helper";
+import {
+  blockToOutputBlock,
+  outputBlockToBlock,
+  paragraphToOutputBlock,
+} from "./helper";
 import { initInputEditor, initOutputEditor } from "./init";
 import useFetchPrivate from "../../../hooks/useFetchPrivate";
 
 import "./TextEditor.sass";
 import { AnimatePresence, motion } from "framer-motion";
 import DotLoader from "../../../components/animations/DotLoader";
+import { useSearchParams } from "react-router-dom";
+import Context from "../../../context/Context";
 
 type TextEditorProps = {
   document: Doc | null;
@@ -47,6 +53,17 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
   const blocksChanged = useRef<Array<string>>([]);
   const blocksMoved = useRef<Array<string>>([]);
   const blocksDeleted = useRef<Array<string>>([]);
+
+  // Get uploaded document data from the application memory (app context)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { uploadedDocuments } = useContext(Context);
+  const isUploadedDocument =
+    searchParams.get("upload") === "true" && uploadedDocuments.length > 0;
+
+  console.log("Text editor app component:", isUploadedDocument, searchParams);
+  console.log("Text editor component: uploadedDocuments", uploadedDocuments);
+
+  // let initialInputBlocks: Array<OutputBlockData> = [];
 
   // Follow current changes of the input text editor
   const handleEditorEvent = useCallback(
@@ -321,10 +338,16 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
   // TODO: optionally - init editors during document loading to speed up the process
   useEffect(() => {
     if (!inputEditorRef.current && !outputEditorRef.current && document) {
-      const inputBlocks = (document as Doc)?.content?.map(blockToOutputBlock);
+      let inputBlocks = (document as Doc)?.content?.map(blockToOutputBlock);
       const outputBlocks = (document as Doc)?.translationContent?.map(
         blockToOutputBlock
       );
+
+      if (inputBlocks?.length === 0 && isUploadedDocument) {
+        inputBlocks = uploadedDocuments[
+          uploadedDocuments.length - 1
+        ].paragraphs.map(paragraphToOutputBlock);
+      }
 
       inputEditorRef.current = initInputEditor(
         inputContainerRef.current as HTMLDivElement,
@@ -342,7 +365,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ document }) => {
     }
 
     // TODO: destroy editors before navigating away?
-  }, [document, handleEditorEvent]);
+  }, [document, handleEditorEvent, isUploadedDocument, uploadedDocuments]);
 
   // const controls =
   //   inputBlocks.length === 0

@@ -12,38 +12,33 @@ import { AnimatePresence } from "framer-motion";
 import NewDocument from "./pages/Editor/NewDocument";
 import RequireAdmin from "./auth/RequireAdmin";
 import Profile from "./pages/UserProfile/Profile";
+import ContextProvider from "./context/ContextProvider";
 
 export default function App() {
   const location = useLocation();
   // TODO: style scrollbar
   return (
     <AuthProvider>
-      {/* <div className="fixed left-0 top-0 flex gap-10 opacity-50">
-        <Link to={"/signin"}>Signin</Link>
-        <Link to={"/signup"}>Signup</Link>
-        <Link to={"/dash"}>Dash</Link>
-        <Link to={"/editor/123"}>Editor</Link>
-        <Link to={"/users"}>Users</Link>
-      </div> */}
-
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          {/* TODO:? add landing page? */}
-          <Route index element={<Navigate to="/dashboard" />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route element={<RequireAuth />}>
-            <Route path="/dashboard" element={<UserDashboard />} />
-            <Route path="/editor/" element={<NewDocument />} />
-            <Route path="/editor/:docId" element={<Editor />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route element={<RequireAdmin />}>
-              <Route path="/users" element={<AdminDashboard />} />
+      <ContextProvider>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            {/* TODO:? add landing page? */}
+            <Route index element={<Navigate to="/dashboard" />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route element={<RequireAuth />}>
+              <Route path="/dashboard" element={<UserDashboard />} />
+              <Route path="/editor/" element={<NewDocument />} />
+              <Route path="/editor/:docId" element={<Editor />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route element={<RequireAdmin />}>
+                <Route path="/users" element={<AdminDashboard />} />
+              </Route>
             </Route>
-          </Route>
-          <Route path="*" element={<NoMatch />} />
-        </Routes>
-      </AnimatePresence>
+            <Route path="*" element={<NoMatch />} />
+          </Routes>
+        </AnimatePresence>
+      </ContextProvider>
     </AuthProvider>
   );
 }
