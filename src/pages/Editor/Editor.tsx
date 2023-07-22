@@ -7,7 +7,7 @@ import SideMenu from "./SideMenu/SideMenu";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 import Loader from "../../components/animations/Loader";
 import TextEditor from "./TextEditor/TextEditor";
-import useUploadedDocument from "../../hooks/useUploadedDocument";
+import useUploadedDocument from "./DocxManager/useUploadedDocument";
 
 export default function Editor() {
   // Load the document data from the database

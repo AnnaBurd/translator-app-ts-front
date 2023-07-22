@@ -1,7 +1,8 @@
-import { XMLParser } from "fast-xml-parser";
+import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import JSZip from "jszip";
 import { useContext } from "react";
 import Context from "../../../context/Context";
+import saveAs from "file-saver";
 
 const unzipFileContent = async (file: File) => {
   // Under the hood docx file is a zip archive of xml files together with images etc.
@@ -98,7 +99,7 @@ const getParagraphsContent = (documentContentXMLobj: any) => {
     });
 
     // Has looped over all nodes in the xml paragraph, now add resulting paragraph to the array of paragraphs (skip empty paragraphs)
-    if (paragraph.text.length > 0) paragraphsContent.push(paragraph);
+    if (paragraph.text.trim() !== "") paragraphsContent.push(paragraph);
   });
 
   // Has looped over all nodes in the xml document, all found text content is in the array of paragraphs (paragraphsContent)
@@ -122,6 +123,53 @@ const readDocumentContent = async (file: File): Promise<DocxDocument> => {
   };
 };
 
+const generateUpdatedDocument = async (
+  originalDocument: DocxDocument,
+  updates: string[]
+) => {
+  const documentBody =
+    originalDocument.documentContentXMLobj[1]["w:document"][0]["w:body"];
+
+  originalDocument.paragraphs.forEach((paragraph, paragraphNum) => {
+    const {
+      containingXMLParagraphNodeNum: bodyChildNum,
+      containingXMLRunNodeNum: paragraphChildNum,
+      containingXMLTextNodeNum: runChildNum,
+      numberOfTextSubNodes,
+    } = paragraph.position;
+
+    const paragraphNode = documentBody[bodyChildNum]["w:p"];
+    const runNode = paragraphNode[paragraphChildNum]["w:r"];
+    const textNode = runNode[runChildNum]["w:t"];
+    if (updates[paragraphNum]) textNode[0]["#text"] = updates[paragraphNum];
+
+    // Clear other nodes with text content (incertion into the first node only for simplicity, but in such case the styles changes within the paragraph are not preserved)
+    if (numberOfTextSubNodes > 1) {
+      const paragraphNodeCropped = paragraphNode.slice(
+        0,
+        paragraphChildNum + 1
+      );
+      documentBody[bodyChildNum]["w:p"] = paragraphNodeCropped;
+    }
+  });
+
+  // Generate XML string from the JS XML object
+  const builder = new XMLBuilder({
+    ignoreAttributes: false,
+    preserveOrder: true,
+  });
+  const newDocumentContent = builder.build(
+    originalDocument.documentContentXMLobj
+  );
+
+  // Replace old XML with updated XML content and apply zip compression
+  const document = await originalDocument.unzippedFile
+    .file("word/document.xml", newDocumentContent)
+    .generateAsync({ type: "blob" });
+
+  return document;
+};
+
 const useDocxManager = () => {
   const { uploadedDocuments, addDocument } = useContext(Context);
 
@@ -133,12 +181,37 @@ const useDocxManager = () => {
   };
 
   const downloadHandler = async () => {
-    console.log(
-      "downloadHandler has translations so far: "
-      // translatedParagraphsTexts
+    // TODO: how to identify back paragraphs which were translated?
+    // If some paragraphs were deleted the whole order is messed up
+    // As of now, the temporary solution is to query content of the editor output and plug out as it is
+
+    const divElementsWithText = document
+      .querySelector(".output-editor")
+      ?.querySelectorAll(".ce-paragraph");
+
+    const translatedTexts = Array.from(divElementsWithText || []).map(
+      (div) => div.textContent || ""
     );
 
-    console.log("downloadHandler has  uploadedDocuments: ", uploadedDocuments);
+    console.log("translatedTexts: ", translatedTexts);
+
+    // console.log("downloadHandler has  uploadedDocuments: ", uploadedDocuments);
+    // TODO: how to identify uploaded documents?
+    const uploadedDoc = uploadedDocuments.find(
+      (doc) => doc.title === "title" || true
+    );
+    if (!uploadedDoc) return;
+
+    console.log("uploadedDoc: ", uploadedDoc);
+
+    // Generate updated docx file
+    const newDocument = await generateUpdatedDocument(
+      uploadedDoc,
+      translatedTexts
+    );
+
+    // Allow user to save the updated file
+    saveAs(newDocument, `${uploadedDoc.title}-translated.docx`);
   };
 
   return { uploadHandler, downloadHandler };

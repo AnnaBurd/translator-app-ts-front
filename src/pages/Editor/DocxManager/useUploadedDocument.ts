@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Context from "../context/Context";
-import { DocxDocument } from "../pages/Editor/DocxManager/useDocxManager";
+import Context from "../../../context/Context";
+import { DocxDocument } from "./useDocxManager";
 
 const useUploadedDocument = (title: string) => {
   const [searchParams] = useSearchParams();
