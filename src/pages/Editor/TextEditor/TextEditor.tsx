@@ -19,6 +19,8 @@ import GenerateControl from "./Controls/GenerateControl";
 import CopyTranslation from "./Controls/CopyTranslation";
 import CopyText from "./Controls/CopyText";
 import { DocxDocument } from "../DocxManager/useDocxManager";
+import ErrorNotification from "./Notifications/ErrorNotification";
+import InfoNotification from "./Notifications/InfoNotification";
 
 type TextEditorProps = {
   document: Doc | null;
@@ -50,11 +52,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const fetchPrivate = useFetchPrivate();
   const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
   const [errorLoadingTranslation, setErrorLoadingTranslation] = useState("");
-  const [loadingBlock, setLoadingBlock] = useState<string>("");
-  const [errorLoadingBlock, setErrorLoadingBlock] = useState<string>("");
+  const [currentlyWorkingOn, setCurrentlyWorkingOn] = useState<string>("");
+  const hasRunOutTokens = errorLoadingTranslation.includes("tokens");
 
-  console.log(`🧌🧌 Text editor render, uploaded document: `, uploadedDocument);
-  console.log(`🧌🧌 Text editor render, downloaded document: `, document);
+  // console.log(`🧌🧌 Text editor render, uploaded document: `, uploadedDocument);
+  // console.log(`🧌🧌 Text editor render, downloaded document: `, document);
 
   // TODO: fix error of new document not having title(should be untitled-xvxcv)
 
@@ -202,7 +204,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
       positionIndex: number
     ) => {
       // Update loading state
-      setLoadingBlock(block.id as string);
+      setCurrentlyWorkingOn(
+        `Generating translation for paragraph ${positionIndex + 1} of ${
+          currentEditorInput.length
+        }`
+      );
 
       // Save block to the database and fetch translation from the server
       const translatedBlock = await fetchPrivate(
@@ -241,7 +247,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
       positionIndex: number
     ) => {
       // Update loading state
-      setLoadingBlock(block.id as string);
+      setCurrentlyWorkingOn(
+        `Updating translation for paragraph ${positionIndex + 1} of ${
+          currentEditorInput.length
+        }`
+      );
 
       // Save block to the database and fetch translation from the server
       const translatedBlock = await fetchPrivate(
@@ -305,7 +315,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     newBlocksAdded.current = [];
     blocksChanged.current = [];
     blocksDeleted.current = [];
-    setLoadingBlock("");
+    setCurrentlyWorkingOn("");
 
     // setInputBlocks((prev) => [...prev, ...newInputBlocks]);
     // setOutputBlocks((prev) => [...prev, ...newTranslatedBlocks]);
@@ -388,12 +398,25 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
         <GenerateControl
           onClick={applyChangesHandler}
-          errorMessage={errorLoadingTranslation}
           isFirstGeneration={
             document?.content?.length === 0 ||
             blocksChanged.current.length === 0
           }
-          isLoadingTranslation={isLoadingTranslation}
+          isDisabled={hasRunOutTokens || isLoadingTranslation}
+          isLoading={isLoadingTranslation}
+          errorMessage={errorLoadingTranslation}
+          currentInfoMessage={currentlyWorkingOn}
+        />
+      </div>
+      <div className="relative flex h-8 justify-center ">
+        <InfoNotification
+          key="info-notification"
+          message={errorLoadingTranslation ? "" : currentlyWorkingOn}
+        />
+
+        <ErrorNotification
+          key="error-notification"
+          message={errorLoadingTranslation}
         />
       </div>
     </>
