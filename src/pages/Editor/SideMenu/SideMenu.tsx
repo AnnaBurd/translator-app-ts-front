@@ -3,13 +3,12 @@ import { useState } from "react";
 import NewDocument from "./Buttons/NewDocument";
 import UploadDocument from "./Buttons/UploadDocument";
 import DownloadTranslation from "./Buttons/DownloadTranslation";
-import SearchInDocument from "./Buttons/SearchInDocument";
 import AccountSettings from "./Buttons/AccountSettings";
 import EditorSettings from "./Buttons/EditorSettings";
 
-import NewDocumentModal from "../NewDocument";
-import UploadDocumentModal from "../UploadDocument";
-import { set } from "react-hook-form";
+import NewDocumentModal from "../Modals/NewDocument";
+import UploadDocumentModal from "../Modals/UploadDocument";
+import useDocxManager from "../DocxManager/useDocxManager";
 
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +16,8 @@ const SideMenu = () => {
   const [isNewDocumentModalOpen, setIsNewDocumentModalOpen] = useState(false);
   const [isUploadDocumentModalOpen, setIsUploadDocumentModalOpen] =
     useState(false);
+  const [isRunningDownload, setIsRunningDownload] = useState(false);
+  const { downloadHandler } = useDocxManager();
 
   const toggleSideMenu = () => {
     setIsOpen((prev) => !prev);
@@ -33,6 +34,14 @@ const SideMenu = () => {
   const onUploadDocument = async () => {
     // console.log("Upload document button clicked");
     setIsUploadDocumentModalOpen(true);
+  };
+
+  const onDownloadTranslationDocument = async () => {
+    console.log("Download translation button clicked");
+    setIsRunningDownload(true);
+
+    await downloadHandler();
+    setIsRunningDownload(false);
   };
 
   return (
@@ -103,13 +112,12 @@ const SideMenu = () => {
                       exit={{ opacity: 0 }}
                     >
                       <DownloadTranslation
-                        onDownloadTranslation={async () => {
-                          console.log("Download translation button clicked");
-                        }}
+                        onDownloadTranslation={onDownloadTranslationDocument}
+                        isActive={isRunningDownload}
                       />
                     </motion.li>
 
-                    <motion.li
+                    {/* <motion.li
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -119,7 +127,7 @@ const SideMenu = () => {
                           console.log("onSearchInDocument button clicked");
                         }}
                       />
-                    </motion.li>
+                    </motion.li> */}
                   </ul>
                 </div>
               </div>

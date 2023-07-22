@@ -105,28 +105,25 @@ const getParagraphsContent = (documentContentXMLobj: any) => {
   return paragraphsContent;
 };
 
+const readDocumentContent = async (file: File): Promise<DocxDocument> => {
+  console.log("handleDocumentUpload", file);
+  if (!file) throw new Error("🔥🔥🔥handleDocumentUpload: no file");
+
+  const unzippedFile = await unzipFileContent(file);
+  const documentContentXML = await getXMLContent(unzippedFile);
+  const documentContentXMLobj = representXMLContentAsJS(documentContentXML);
+  const paragraphsContent = getParagraphsContent(documentContentXMLobj);
+
+  return {
+    title: file.name,
+    paragraphs: paragraphsContent,
+    documentContentXMLobj,
+    unzippedFile,
+  };
+};
+
 const useDocxManager = () => {
   const { uploadedDocuments, addDocument } = useContext(Context);
-  // const [zipContent, setZipContent] = useState<JSZip | null>(null);
-  // const [jsXMLContent, setJsXMLContent] = useState<any>(null);
-  // const [paragraphsContent, setParagraphsContent] = useState<Paragraph[]>([]);
-
-  const readDocumentContent = async (file: File): Promise<DocxDocument> => {
-    console.log("handleDocumentUpload", file);
-    if (!file) throw new Error("🔥🔥🔥handleDocumentUpload: no file");
-
-    const unzippedFile = await unzipFileContent(file);
-    const documentContentXML = await getXMLContent(unzippedFile);
-    const documentContentXMLobj = representXMLContentAsJS(documentContentXML);
-    const paragraphsContent = getParagraphsContent(documentContentXMLobj);
-
-    return {
-      title: file.name,
-      paragraphs: paragraphsContent,
-      documentContentXMLobj,
-      unzippedFile,
-    };
-  };
 
   const uploadHandler = async (file: File) => {
     const doc = await readDocumentContent(file);
@@ -135,7 +132,16 @@ const useDocxManager = () => {
     addDocument(doc);
   };
 
-  return { uploadHandler };
+  const downloadHandler = async () => {
+    console.log(
+      "downloadHandler has translations so far: "
+      // translatedParagraphsTexts
+    );
+
+    console.log("downloadHandler has  uploadedDocuments: ", uploadedDocuments);
+  };
+
+  return { uploadHandler, downloadHandler };
 };
 
 export default useDocxManager;

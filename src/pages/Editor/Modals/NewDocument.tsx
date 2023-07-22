@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import UploadDocumentForm from "../UserDashboard/Documents/UploadDocumentForm";
+import NewDocumentForm from "../../UserDashboard/Documents/NewDocumentForm";
 import { useState } from "react";
 
-type UploadDocumentModalProps = {
+type NewDocumentModalProps = {
   onModalClose?: () => void;
 };
 
-const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
+const NewDocumentModal: React.FC<NewDocumentModalProps> = ({
   onModalClose,
 }) => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
   return (
     <div className="fixed left-0 top-0 z-50 mx-8 flex h-screen w-screen flex-col items-center justify-center sm:mx-0">
       <div className="flex w-4/5 max-w-6xl items-center justify-center md:w-3/5">
-        <UploadDocumentForm
+        <NewDocumentForm
           visible={isFormVisible}
           onClose={handleModalClose}
           fullScreen={true}
@@ -39,4 +39,4 @@ const UploadDocumentModal: React.FC<UploadDocumentModalProps> = ({
   );
 };
 
-export default UploadDocumentModal;
+export default NewDocumentModal;

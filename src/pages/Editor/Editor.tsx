@@ -7,12 +7,18 @@ import SideMenu from "./SideMenu/SideMenu";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 import Loader from "../../components/animations/Loader";
 import TextEditor from "./TextEditor/TextEditor";
+import useUploadedDocument from "../../hooks/useUploadedDocument";
 
 export default function Editor() {
-  // Load the document data
+  // Load the document data from the database
   const { docId } = useParams();
   const [document, isLoading, error] = useDataPrivate<Doc>(`docs/${docId}`);
-  console.log("Editor component render:", document, isLoading, error);
+
+  // And, if the document was just uploaded by the user, get that document from the application context
+  const uploadedDocument = useUploadedDocument(document?.title || "");
+
+  // console.log(`🌋🌋 Editor render, uploaded document: `, uploadedDocument);
+  // console.log(`🌋🌋 Editor render, downloaded document: `, document);
 
   if (isLoading) {
     return <Loader />;
@@ -31,10 +37,9 @@ export default function Editor() {
               title={document?.title}
               lang={document?.lang}
               translationLang={document?.translationLang}
-              // isDocumentMenuOpen={isDocumentMenuOpen}
             ></Breadcrumbs>
           </div>
-          <TextEditor document={document} />
+          <TextEditor document={document} uploadedDocument={uploadedDocument} />
         </div>
         <SideMenu></SideMenu>
       </AnimatedPage>

@@ -7,3 +7,5 @@ export const NoMatch = () => {
     </AnimatedPage>
   );
 };
+
+// TODO: nice error page with link to dashboard

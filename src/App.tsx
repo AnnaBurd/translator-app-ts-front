@@ -9,7 +9,7 @@ import AuthProvider from "./auth/AuthProvider";
 import RequireAuth from "./auth/RequireAuth";
 
 import { AnimatePresence } from "framer-motion";
-import NewDocument from "./pages/Editor/NewDocument";
+import NewDocument from "./pages/Editor/Modals/NewDocument";
 import RequireAdmin from "./auth/RequireAdmin";
 import Profile from "./pages/UserProfile/Profile";
 import ContextProvider from "./context/ContextProvider";
