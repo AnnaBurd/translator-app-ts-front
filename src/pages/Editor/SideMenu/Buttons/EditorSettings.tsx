@@ -2,10 +2,12 @@ import MenuButton from "./MenuButton";
 
 type EditorSettingsButtonProps = {
   onEditorSettings: () => Promise<void>;
+  isActive?: boolean;
 };
 
 const EditorSettings: React.FC<EditorSettingsButtonProps> = ({
   onEditorSettings,
+  isActive,
 }) => {
   return (
     <MenuButton
@@ -14,7 +16,7 @@ const EditorSettings: React.FC<EditorSettingsButtonProps> = ({
       }
       iconSize={5}
       onClick={onEditorSettings}
-      isActive={true}
+      isActive={isActive}
     >
       Editor settings
     </MenuButton>

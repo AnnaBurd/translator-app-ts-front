@@ -1,9 +1,9 @@
 import { Variants, AnimatePresence, motion } from "framer-motion";
-import NavigationItem from "../../../UserDashboard/UserProfile/Menu/NavigationItem";
-import SignoutForm from "../../../UserDashboard/UserProfile/Menu/SignoutForm";
-import ProfilePhoto from "../../../UserDashboard/UserProfile/ProfilePhoto";
+import NavigationItem from "../../../../UserDashboard/UserProfile/Menu/NavigationItem";
+import SignoutForm from "../../../../UserDashboard/UserProfile/Menu/SignoutForm";
+import ProfilePhoto from "../../../../UserDashboard/UserProfile/ProfilePhoto";
 import { useContext } from "react";
-import authContext from "../../../../auth/AuthContext";
+import authContext from "../../../../../auth/AuthContext";
 
 type AccountSettingsPanelProps = {
   isOpen: boolean;

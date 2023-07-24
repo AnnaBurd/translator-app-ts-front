@@ -9,7 +9,8 @@ import EditorSettings from "./Buttons/EditorSettings";
 import NewDocumentModal from "../Modals/NewDocument";
 import UploadDocumentModal from "../Modals/UploadDocument";
 import useDocxManager from "../DocxManager/useDocxManager";
-import AccountSettingsPanel from "./Panels/AccountSettings";
+import AccountSettingsPanel from "./Panels/AccountSettings/AccountSettings";
+import EditorSettingsPanel from "./Panels/EditorSettings/EditorSettings";
 
 type SideMenuProps = {
   hasUploadedDocument: boolean;
@@ -28,17 +29,17 @@ const SideMenu: React.FC<SideMenuProps> = ({
   const [isRunningDownload, setIsRunningDownload] = useState(false);
 
   const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
+  const [isEditorSettingsOpen, setIsEditorSettingsOpen] = useState(false);
 
   const toggleSideMenu = () => {
     setIsOpen((prev) => !prev);
   };
 
   const closeSideMenu = () => {
-    if (isAccountSettingsOpen) {
-      setIsAccountSettingsOpen(false);
-    } else {
-      setIsOpen(false);
-    }
+    if (isAccountSettingsOpen) setIsAccountSettingsOpen(false);
+    if (isEditorSettingsOpen) setIsEditorSettingsOpen(false);
+
+    setIsOpen(false);
   };
 
   const onNewDocument = async () => {
@@ -59,8 +60,11 @@ const SideMenu: React.FC<SideMenuProps> = ({
   };
 
   const onAccountSettings = async () => {
-    console.log("onAccountSettings button clicked");
     setIsAccountSettingsOpen((prev) => !prev);
+  };
+
+  const onEditorSettings = async () => {
+    setIsEditorSettingsOpen((prev) => !prev);
   };
 
   return (
@@ -172,12 +176,14 @@ const SideMenu: React.FC<SideMenuProps> = ({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  className="relative"
                 >
                   <EditorSettings
-                    onEditorSettings={async () => {
-                      console.log("onEditorSettings button clicked");
-                    }}
+                    onEditorSettings={onEditorSettings}
+                    isActive={isEditorSettingsOpen}
                   />
+
+                  <EditorSettingsPanel isOpen={isEditorSettingsOpen} />
                 </motion.li>
               </ul>
             </div>

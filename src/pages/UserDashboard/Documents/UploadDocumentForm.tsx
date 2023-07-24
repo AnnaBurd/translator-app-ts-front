@@ -93,6 +93,8 @@ const UploadDocumentForm = ({
 
   console.log("ERRORS", errors);
 
+  // TODO: select option -> allow to store uploaded documents in local storage (for later use)
+
   let selectedFileName = selectedFile?.name?.split(".docx")[0];
   if (selectedFileName && selectedFileName.length > 30) {
     selectedFileName = selectedFileName.slice(0, 30) + "...";
