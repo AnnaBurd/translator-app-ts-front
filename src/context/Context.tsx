@@ -3,7 +3,8 @@ import { DocxDocument } from "../pages/Editor/DocxManager/useDocxManager";
 
 export interface Context {
   uploadedDocuments: DocxDocument[];
-  addDocument: (doc: DocxDocument) => void;
+  addDocument: (doc: DocxDocument) => DocxDocument | null;
+  getDocument: (slug: string) => DocxDocument | null;
 }
 
 /**
@@ -12,6 +13,7 @@ export interface Context {
 const contextDefaults: Context = {
   uploadedDocuments: [],
   addDocument: () => null,
+  getDocument: () => null,
 };
 const context = createContext<Context>(contextDefaults);
 

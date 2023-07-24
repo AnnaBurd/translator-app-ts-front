@@ -3,11 +3,13 @@ import MenuButton from "./MenuButton";
 type DownloadTranslationButtonProps = {
   onDownloadTranslation: () => Promise<void>;
   isActive?: boolean;
+  isDisabled?: boolean;
 };
 
 const DownloadTranslation: React.FC<DownloadTranslationButtonProps> = ({
   onDownloadTranslation,
   isActive = false,
+  isDisabled = false,
 }) => {
   return (
     <MenuButton
@@ -16,6 +18,7 @@ const DownloadTranslation: React.FC<DownloadTranslationButtonProps> = ({
       }
       onClick={onDownloadTranslation}
       isActive={isActive}
+      isDisabled={isDisabled}
     >
       Download translated document
     </MenuButton>

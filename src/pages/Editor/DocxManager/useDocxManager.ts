@@ -44,6 +44,7 @@ export type Paragraph = {
 
 export type DocxDocument = {
   title?: string;
+  slug?: string;
   paragraphs: Paragraph[];
   documentContentXMLobj: any;
   unzippedFile: JSZip;
@@ -144,7 +145,10 @@ const generateUpdatedDocument = async (
     if (updates[paragraphNum]) textNode[0]["#text"] = updates[paragraphNum];
 
     // Clear other nodes with text content (incertion into the first node only for simplicity, but in such case the styles changes within the paragraph are not preserved)
+    console.log("numberOfTextSubNodes: ", numberOfTextSubNodes);
     if (numberOfTextSubNodes > 1) {
+      console.log("numberOfTextSubNodes: ", numberOfTextSubNodes);
+      console.log("paragraph: ", paragraphNode);
       const paragraphNodeCropped = paragraphNode.slice(
         0,
         paragraphChildNum + 1
@@ -171,20 +175,21 @@ const generateUpdatedDocument = async (
 };
 
 const useDocxManager = () => {
-  const { uploadedDocuments, addDocument } = useContext(Context);
+  const { addDocument, getDocument } = useContext(Context);
 
   const uploadHandler = async (file: File) => {
     const doc = await readDocumentContent(file);
 
     // Save document in memory
-    addDocument(doc);
+    return addDocument(doc);
   };
 
-  const downloadHandler = async () => {
+  const downloadHandler = async (title: string) => {
     // TODO: how to identify back paragraphs which were translated?
     // If some paragraphs were deleted the whole order is messed up
     // As of now, the temporary solution is to query content of the editor output and plug out as it is
 
+    // Get the array with translation texts
     const divElementsWithText = document
       .querySelector(".output-editor")
       ?.querySelectorAll(".ce-paragraph");
@@ -193,13 +198,11 @@ const useDocxManager = () => {
       (div) => div.textContent || ""
     );
 
-    console.log("translatedTexts: ", translatedTexts);
+    // console.log("translatedTexts: ", translatedTexts);
 
     // console.log("downloadHandler has  uploadedDocuments: ", uploadedDocuments);
     // TODO: how to identify uploaded documents?
-    const uploadedDoc = uploadedDocuments.find(
-      (doc) => doc.title === "title" || true
-    );
+    const uploadedDoc = getDocument(title);
     if (!uploadedDoc) return;
 
     console.log("uploadedDoc: ", uploadedDoc);

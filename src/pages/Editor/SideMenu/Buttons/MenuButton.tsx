@@ -3,6 +3,7 @@ type MenuButtonProps = {
   iconSize?: number;
   onClick: () => Promise<void>;
   isActive?: boolean;
+  isDisabled?: boolean;
   children: React.ReactNode;
 };
 
@@ -12,14 +13,16 @@ const MenuButton: React.FC<MenuButtonProps> = ({
   iconSize = 6,
   onClick,
   isActive = false,
+  isDisabled = false,
 }) => {
+  let style = "text-slate-500 hover:bg-slate-50 hover:text-slate-700";
+
+  if (isActive) style = "bg-indigo-50 text-indigo-700";
+  if (isDisabled) style = "text-slate-300 cursor-default";
+
   return (
     <button
-      className={`group relative flex w-full justify-center rounded px-2 py-1.5  ${
-        isActive
-          ? "bg-indigo-50 text-indigo-700"
-          : " text-slate-500 hover:bg-slate-50 hover:text-slate-700"
-      }`}
+      className={`group relative flex w-full justify-center rounded px-2 py-1.5  ${style}`}
       onClick={onClick}
     >
       <svg

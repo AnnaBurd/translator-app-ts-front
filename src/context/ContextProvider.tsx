@@ -12,11 +12,21 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
 
   const addUploadedDocument = (doc: DocxDocument) => {
     setUploadedDocuments((prev) => [...prev, doc]);
+    return doc;
+  };
+
+  const getDocument = (slug: string) => {
+    const doc = uploadedDocuments.find((doc) => doc.slug === slug);
+    return doc || null;
   };
 
   return (
     <Context.Provider
-      value={{ uploadedDocuments, addDocument: addUploadedDocument }}
+      value={{
+        uploadedDocuments,
+        addDocument: addUploadedDocument,
+        getDocument,
+      }}
     >
       {children}
     </Context.Provider>

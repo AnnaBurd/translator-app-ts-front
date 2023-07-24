@@ -3,25 +3,23 @@ import { useSearchParams } from "react-router-dom";
 import Context from "../../../context/Context";
 import { DocxDocument } from "./useDocxManager";
 
-const useUploadedDocument = (title: string) => {
+const useUploadedDocument = (slug: string | undefined) => {
   const [searchParams] = useSearchParams();
 
   const [document, setDocument] = useState<DocxDocument | null>(null);
 
-  const { uploadedDocuments } = useContext(Context);
+  const { uploadedDocuments, getDocument } = useContext(Context);
 
   useEffect(() => {
     const hasUploaded =
-      searchParams.get("upload") === "true" && uploadedDocuments.length > 0;
+      searchParams.get("upload") === "true" || uploadedDocuments.length > 0;
 
-    if (!hasUploaded) return;
-
-    // TODO: how to identify uploaded documents?
-    const doc = uploadedDocuments.find((doc) => doc.title === title || true);
+    if (!hasUploaded || !slug) return;
+    const doc = getDocument(slug);
     if (!doc) return;
 
     setDocument(doc);
-  }, [searchParams, title, uploadedDocuments]);
+  }, [getDocument, searchParams, slug, uploadedDocuments]);
 
   return document;
 };

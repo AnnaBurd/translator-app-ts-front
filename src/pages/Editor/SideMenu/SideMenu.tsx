@@ -10,7 +10,15 @@ import NewDocumentModal from "../Modals/NewDocument";
 import UploadDocumentModal from "../Modals/UploadDocument";
 import useDocxManager from "../DocxManager/useDocxManager";
 
-const SideMenu = () => {
+type SideMenuProps = {
+  hasUploadedDocument: boolean;
+  documentSlug?: string;
+};
+
+const SideMenu: React.FC<SideMenuProps> = ({
+  hasUploadedDocument,
+  documentSlug,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isNewDocumentModalOpen, setIsNewDocumentModalOpen] = useState(false);
@@ -37,10 +45,10 @@ const SideMenu = () => {
   };
 
   const onDownloadTranslationDocument = async () => {
-    console.log("Download translation button clicked");
+    if (!documentSlug) return;
     setIsRunningDownload(true);
 
-    await downloadHandler();
+    await downloadHandler(documentSlug);
     setIsRunningDownload(false);
   };
 
@@ -114,6 +122,7 @@ const SideMenu = () => {
                       <DownloadTranslation
                         onDownloadTranslation={onDownloadTranslationDocument}
                         isActive={isRunningDownload}
+                        isDisabled={!hasUploadedDocument || !documentSlug}
                       />
                     </motion.li>
 

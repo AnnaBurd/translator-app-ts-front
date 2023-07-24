@@ -15,7 +15,7 @@ export default function Editor() {
   const [document, isLoading, error] = useDataPrivate<Doc>(`docs/${docId}`);
 
   // And, if the document was just uploaded by the user, get that document from the application context
-  const uploadedDocument = useUploadedDocument(document?.title || "");
+  const uploadedDocument = useUploadedDocument(document?.slug);
 
   // console.log(`🌋🌋 Editor render, uploaded document: `, uploadedDocument);
   // console.log(`🌋🌋 Editor render, downloaded document: `, document);
@@ -41,7 +41,10 @@ export default function Editor() {
           </div>
           <TextEditor document={document} uploadedDocument={uploadedDocument} />
         </div>
-        <SideMenu></SideMenu>
+        <SideMenu
+          hasUploadedDocument={uploadedDocument !== null}
+          documentSlug={document?.slug}
+        ></SideMenu>
       </AnimatedPage>
     </>
   );
