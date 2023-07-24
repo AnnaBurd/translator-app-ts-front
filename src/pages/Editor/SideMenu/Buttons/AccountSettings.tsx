@@ -18,7 +18,7 @@ const AccountSettings: React.FC<AccountSettingsButtonProps> = ({
       onClick={onAccountSettings}
       isActive={isActive}
     >
-      Account settings
+      Account
     </MenuButton>
   );
 };

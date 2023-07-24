@@ -9,6 +9,7 @@ import EditorSettings from "./Buttons/EditorSettings";
 import NewDocumentModal from "../Modals/NewDocument";
 import UploadDocumentModal from "../Modals/UploadDocument";
 import useDocxManager from "../DocxManager/useDocxManager";
+import AccountSettingsPanel from "./Panels/AccountSettings";
 
 type SideMenuProps = {
   hasUploadedDocument: boolean;
@@ -33,7 +34,11 @@ const SideMenu: React.FC<SideMenuProps> = ({
   };
 
   const closeSideMenu = () => {
-    setIsOpen(false);
+    if (isAccountSettingsOpen) {
+      setIsAccountSettingsOpen(false);
+    } else {
+      setIsOpen(false);
+    }
   };
 
   const onNewDocument = async () => {
@@ -55,7 +60,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
 
   const onAccountSettings = async () => {
     console.log("onAccountSettings button clicked");
-    setIsAccountSettingsOpen(true);
+    setIsAccountSettingsOpen((prev) => !prev);
   };
 
   return (
@@ -154,11 +159,13 @@ const SideMenu: React.FC<SideMenuProps> = ({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  className="relative"
                 >
                   <AccountSettings
                     onAccountSettings={onAccountSettings}
                     isActive={isAccountSettingsOpen}
                   />
+                  <AccountSettingsPanel isOpen={isAccountSettingsOpen} />
                 </motion.li>
 
                 <motion.li
@@ -206,18 +213,6 @@ const SideMenu: React.FC<SideMenuProps> = ({
                 setIsUploadDocumentModalOpen(false);
               }}
             />
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {isAccountSettingsOpen && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 1, transition: { duration: 0.2 } }}
-            className="background-red-300"
-          >
-            123
           </motion.div>
         )}
       </AnimatePresence>
