@@ -2,10 +2,12 @@ import MenuButton from "./MenuButton";
 
 type AccountSettingsButtonProps = {
   onAccountSettings: () => Promise<void>;
+  isActive?: boolean;
 };
 
 const AccountSettings: React.FC<AccountSettingsButtonProps> = ({
   onAccountSettings,
+  isActive,
 }) => {
   return (
     <MenuButton
@@ -14,6 +16,7 @@ const AccountSettings: React.FC<AccountSettingsButtonProps> = ({
       }
       iconSize={5}
       onClick={onAccountSettings}
+      isActive={isActive}
     >
       Account settings
     </MenuButton>

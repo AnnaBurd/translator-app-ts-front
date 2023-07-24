@@ -25,7 +25,8 @@ const SideMenu: React.FC<SideMenuProps> = ({
   const [isUploadDocumentModalOpen, setIsUploadDocumentModalOpen] =
     useState(false);
   const [isRunningDownload, setIsRunningDownload] = useState(false);
-  const { downloadHandler } = useDocxManager();
+
+  const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
 
   const toggleSideMenu = () => {
     setIsOpen((prev) => !prev);
@@ -40,16 +41,21 @@ const SideMenu: React.FC<SideMenuProps> = ({
   };
 
   const onUploadDocument = async () => {
-    // console.log("Upload document button clicked");
     setIsUploadDocumentModalOpen(true);
   };
 
+  const { downloadHandler } = useDocxManager();
   const onDownloadTranslationDocument = async () => {
     if (!documentSlug) return;
     setIsRunningDownload(true);
 
     await downloadHandler(documentSlug);
     setIsRunningDownload(false);
+  };
+
+  const onAccountSettings = async () => {
+    console.log("onAccountSettings button clicked");
+    setIsAccountSettingsOpen(true);
   };
 
   return (
@@ -150,9 +156,8 @@ const SideMenu: React.FC<SideMenuProps> = ({
                   exit={{ opacity: 0 }}
                 >
                   <AccountSettings
-                    onAccountSettings={async () => {
-                      console.log("onAccountSettings button clicked");
-                    }}
+                    onAccountSettings={onAccountSettings}
+                    isActive={isAccountSettingsOpen}
                   />
                 </motion.li>
 
@@ -201,6 +206,18 @@ const SideMenu: React.FC<SideMenuProps> = ({
                 setIsUploadDocumentModalOpen(false);
               }}
             />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isAccountSettingsOpen && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 1, transition: { duration: 0.2 } }}
+            className="background-red-300"
+          >
+            123
           </motion.div>
         )}
       </AnimatePresence>

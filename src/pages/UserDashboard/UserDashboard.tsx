@@ -1,7 +1,7 @@
 // import { useContext } from "react";
 // import AuthContext from "../../auth/AuthContext";
 
-import Welcome from "./Welcome";
+import Welcome from "./Welcome/Welcome";
 import UserProfile from "./UserProfile/UserProfile";
 import Documents from "./Documents/Documents";
 import Charts from "./Charts/Charts";
@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import { motion } from "framer-motion";
 import AuthContext from "../../auth/AuthContext";
-import WelcomeModal from "./WelcomeModal";
+import WelcomeModal from "./Welcome/WelcomeModal";
 
 export default function Dashboard() {
   // const { user } = useContext(AuthContext);

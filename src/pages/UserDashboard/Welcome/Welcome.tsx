@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import AuthContext from "../../auth/AuthContext";
+import AuthContext from "../../../auth/AuthContext";
 import { motion } from "framer-motion";
 
 type WelcomeProps = {
