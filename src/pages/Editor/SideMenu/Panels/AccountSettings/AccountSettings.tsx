@@ -36,7 +36,7 @@ const AccountSettingsPanel: React.FC<AccountSettingsPanelProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="absolute -bottom-14 left-16  z-50 mt-2 w-56 min-w-fit divide-y divide-slate-100 rounded-md border border-slate-100 bg-white shadow-lg dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900"
+          className="absolute -bottom-14 left-16  z-50 mt-2 min-w-max max-w-full divide-y divide-slate-100 rounded-md border border-slate-100 bg-white shadow-lg dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="user-menu"

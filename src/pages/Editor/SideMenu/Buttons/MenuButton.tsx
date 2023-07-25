@@ -37,7 +37,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
       </svg>
 
       {!isActive && (
-        <span className="absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-slate-900 px-2 py-1.5 text-left text-xs font-medium text-white opacity-0 group-hover:opacity-100">
+        <span className="pointer-events-none absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded bg-slate-900 px-2 py-1.5 text-left text-xs font-medium text-white opacity-0 group-hover:opacity-100">
           {children}
         </span>
       )}

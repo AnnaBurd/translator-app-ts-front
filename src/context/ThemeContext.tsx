@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { ScreenSize } from "../hooks/useScreenSize";
 
 export type TextEditorSettings = {
   fontSize?: number | string;
@@ -8,6 +9,7 @@ export type TextEditorSettings = {
 export interface ThemeContext {
   textEditorSettings: TextEditorSettings;
   updateNextEditorSettings: (newSettings: TextEditorSettings) => void;
+  screenSize?: ScreenSize;
 }
 
 /**
@@ -16,6 +18,7 @@ export interface ThemeContext {
 const themeContextDefaults: ThemeContext = {
   textEditorSettings: {},
   updateNextEditorSettings: () => null,
+  screenSize: undefined,
 };
 const themeContext = createContext<ThemeContext>(themeContextDefaults);
 
