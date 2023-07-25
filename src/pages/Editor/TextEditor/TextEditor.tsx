@@ -5,7 +5,7 @@ import EditorJS, {
   OutputBlockData,
 } from "@editorjs/editorjs";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { BlockMutationEvent } from "@editorjs/editorjs/types/events/block";
 
@@ -21,18 +21,16 @@ import CopyText from "./Controls/CopyText";
 import { DocxDocument } from "../DocxManager/useDocxManager";
 import ErrorNotification from "./Notifications/ErrorNotification";
 import InfoNotification from "./Notifications/InfoNotification";
-import { TextEditorSettings } from "../Editor";
+import ThemeContext from "../../../context/ThemeContext";
 
 type TextEditorProps = {
   document: Doc | null;
   uploadedDocument?: DocxDocument | null;
-  textEditorSettings: TextEditorSettings;
 };
 
 const TextEditor: React.FC<TextEditorProps> = ({
   document,
   uploadedDocument,
-  textEditorSettings,
 }) => {
   // Reference containers for the input and output EditorJS
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -59,6 +57,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const hasRunOutTokens = errorLoadingTranslation.includes("tokens");
 
   // Text editor view settings
+  const { textEditorSettings } = useContext(ThemeContext);
   const { fontSize, lineHeight } = textEditorSettings;
 
   // console.log(`🧌🧌 Text editor render, uploaded document: `, uploadedDocument);
@@ -359,8 +358,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
           paragraphs
         );
 
-        // const blocks = uploadedDocument?.paragraphs.map(paragraphToOutputBlock);
-        // inputEditorRef.current?.blocks.render({ blocks: blocks || [] });
         paragraphs?.forEach((par, index) => {
           inputEditorRef.current?.blocks.insert(
             "paragraph",

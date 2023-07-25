@@ -13,6 +13,7 @@ import NewDocument from "./pages/Editor/Modals/NewDocument";
 import RequireAdmin from "./auth/RequireAdmin";
 import Profile from "./pages/UserProfile/Profile";
 import ContextProvider from "./context/ContextProvider";
+import ThemeContextProvider from "./context/ThemeContextProvider";
 
 export default function App() {
   const location = useLocation();
@@ -20,24 +21,26 @@ export default function App() {
   return (
     <AuthProvider>
       <ContextProvider>
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            {/* TODO:? add landing page? */}
-            <Route index element={<Navigate to="/dashboard" />} />
-            <Route path="/signin" element={<Signin />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route element={<RequireAuth />}>
-              <Route path="/dashboard" element={<UserDashboard />} />
-              <Route path="/editor/" element={<NewDocument />} />
-              <Route path="/editor/:docId" element={<Editor />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route element={<RequireAdmin />}>
-                <Route path="/users" element={<AdminDashboard />} />
+        <ThemeContextProvider>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              {/* TODO:? add landing page? */}
+              <Route index element={<Navigate to="/dashboard" />} />
+              <Route path="/signin" element={<Signin />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route element={<RequireAuth />}>
+                <Route path="/dashboard" element={<UserDashboard />} />
+                <Route path="/editor/" element={<NewDocument />} />
+                <Route path="/editor/:docId" element={<Editor />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route element={<RequireAdmin />}>
+                  <Route path="/users" element={<AdminDashboard />} />
+                </Route>
               </Route>
-            </Route>
-            <Route path="*" element={<NoMatch />} />
-          </Routes>
-        </AnimatePresence>
+              <Route path="*" element={<NoMatch />} />
+            </Routes>
+          </AnimatePresence>
+        </ThemeContextProvider>
       </ContextProvider>
     </AuthProvider>
   );

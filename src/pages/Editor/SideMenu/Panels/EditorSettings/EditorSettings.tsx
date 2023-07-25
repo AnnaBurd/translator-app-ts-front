@@ -1,12 +1,11 @@
 import { Variants, AnimatePresence, motion } from "framer-motion";
 import Toggle from "./Toggle";
 import QuantityInput from "./QuantityInput";
-import { TextEditorSettings } from "../../../Editor";
+import { useContext } from "react";
+import ThemeContext from "../../../../../context/ThemeContext";
 
 type EditorSettingsPanelProps = {
   isOpen: boolean;
-  textEditorSettings: TextEditorSettings;
-  setTextEditorSettings: (newSettings: TextEditorSettings) => void;
 };
 
 // Framer Motion animation variants for dropdown menu opening and closing
@@ -29,12 +28,14 @@ const menuVariants = {
 
 const EditorSettingsPanel: React.FC<EditorSettingsPanelProps> = ({
   isOpen,
-  textEditorSettings,
-  setTextEditorSettings,
 }) => {
   // TODO: store settings and theme (in local storage per user?)
 
-  const { fontSize, lineHeight } = textEditorSettings;
+  const {
+    textEditorSettings: { fontSize, lineHeight },
+    updateNextEditorSettings,
+  } = useContext(ThemeContext);
+  // const { fontSize, lineHeight } = textEditorSettings;
 
   const lineHeightStep = 0.1;
   const lineHeightMin = 1.0;
@@ -77,7 +78,7 @@ const EditorSettingsPanel: React.FC<EditorSettingsPanelProps> = ({
                   precision: 0,
                 }}
                 onValueChange={(value) => {
-                  setTextEditorSettings({ fontSize: value });
+                  updateNextEditorSettings({ fontSize: value });
                 }}
               />
             </div>
@@ -94,7 +95,7 @@ const EditorSettingsPanel: React.FC<EditorSettingsPanelProps> = ({
                   precision: 1,
                 }}
                 onValueChange={(value) => {
-                  setTextEditorSettings({ lineHeight: value });
+                  updateNextEditorSettings({ lineHeight: value });
                 }}
               />
             </div>
