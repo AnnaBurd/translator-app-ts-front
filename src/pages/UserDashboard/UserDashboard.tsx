@@ -1,6 +1,3 @@
-// import { useContext } from "react";
-// import AuthContext from "../../auth/AuthContext";
-
 import Welcome from "./Welcome/Welcome";
 import UserProfile from "./UserProfile/UserProfile";
 import Documents from "./Documents/Documents";
@@ -11,69 +8,46 @@ import useDataPrivate from "../../hooks/useDataPrivate";
 import Loader from "../../components/animations/Loader";
 import { User, UserProfileStats } from "../../@types/user";
 import { Doc } from "../../@types/doc";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import { motion } from "framer-motion";
 import AuthContext from "../../auth/AuthContext";
 import WelcomeModal from "./Welcome/WelcomeModal";
+import themeContext from "../../context/ThemeContext";
 
 export default function Dashboard() {
-  // const { user } = useContext(AuthContext);
-
   const { user: signedInUser } = useContext(AuthContext);
+  const { screenSize } = useContext(themeContext);
 
   // TODO: refactor animations and remove animations for mobile devices
 
-  const [userProfile, isLoading, error] = useDataPrivate<{
+  const [userProfile, isLoadingUserProfileStats, error] = useDataPrivate<{
     usageStatistics: UserProfileStats;
     user: User;
   }>(`users/profile`);
 
   const {
     data: docs,
-    isFetchingData: isLoadingDocuments,
+    isFetchingData: isLoadingUserDocuments,
     errorFetchingData: errorLoadingDocs,
     fetchNextPage: fetchMoreDocuments,
     deleteDataItem: deleteDocument,
-  } = useDocumentsPrivate<Doc>(`docs`);
-
-  console.log("*** User dash render ***");
-  console.log("*** docs:", docs);
-  console.log("*** isLoadingDocuments:", isLoadingDocuments);
-  console.log("*** errorLoadingDocs:", errorLoadingDocs);
-
-  // console.log("userProfile:", userProfile);
-  // console.log("isLoading:", isLoading);
-  // console.log("error:", error);
-
-  // console.log("USER ROLE", userProfile?.user.role);
+    isFetchingFirstPage: isFetchingFirstPageWithDocuments,
+  } = useDocumentsPrivate<Doc>(`docs`, screenSize);
 
   const isAdmin = userProfile?.user.role === "Admin";
 
-  const [isWide, setIsWide] = useState(false);
-
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 640px)");
-
-    const onChange = () => setIsWide(!!mql.matches);
-    mql.addEventListener("change", onChange);
-    setIsWide(mql.matches);
-
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
   const [isOpenUserProfileMenu, setIsOpenUserProfileMenu] = useState(false);
-
   const toggleUserProfileMenu = () => {
     setIsOpenUserProfileMenu((prevState) => !prevState);
   };
 
-  if (isLoading) {
+  if (isLoadingUserProfileStats || isFetchingFirstPageWithDocuments) {
     return <Loader />;
   }
 
   if (error) {
-    return <div>🔥 Could not load document: {error}</div>;
+    return <div>🔥🤔💥🔥📝 Could not load document: {error}</div>;
   }
 
   const navigateToEditorTab = () => {
@@ -110,7 +84,6 @@ export default function Dashboard() {
             console.log("clicking on dashboard");
             if (isOpenUserProfileMenu) setIsOpenUserProfileMenu(false);
           }}
-          // className="relative"
         >
           <header aria-label="User Dashboard" className="relative z-50">
             <div className=" mx-auto flex max-w-screen-xl flex-col-reverse justify-between px-4 py-4 sm:px-6 md:py-8 lg:flex-row lg:items-center lg:px-4 2xl:max-w-screen-2xl">
@@ -149,7 +122,7 @@ export default function Dashboard() {
                   type="button"
                 >
                   <span className="text-xs font-medium">
-                    {isWide ? "Open Editor" : "Editor"}
+                    {screenSize !== "small" ? "Open Editor" : "Editor"}
                   </span>
 
                   <svg
@@ -174,7 +147,9 @@ export default function Dashboard() {
                     type="button"
                   >
                     <span className="text-xs font-medium">
-                      {isWide ? "Open Admin Dashboard" : "Users"}
+                      {screenSize !== "small"
+                        ? "Open Admin Dashboard"
+                        : "Users"}
                     </span>
 
                     <svg
@@ -210,7 +185,7 @@ export default function Dashboard() {
               <Documents
                 docs={docs}
                 deleteDocument={deleteDocument}
-                isLoading={isLoadingDocuments}
+                isLoading={isLoadingUserDocuments}
                 error={errorLoadingDocs}
                 onEndOfViewport={fetchMoreDocuments}
               ></Documents>
@@ -219,7 +194,7 @@ export default function Dashboard() {
           </div>
         </div>
         {/* {signedInUser.newUser || (true && <WelcomeModal />)} */}
-        {signedInUser.newUser && <WelcomeModal />}
+        {signedInUser && signedInUser.newUser && <WelcomeModal />}
       </AnimatedPage>
     </>
   );

@@ -7,21 +7,7 @@ import DeleteDocumentModal from "./DeleteDocumentModal";
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useIntersection } from "@mantine/hooks";
-
-const localeContains = (str: string, substr: string) => {
-  if (substr === "") return true;
-  if (!substr || !str.length) return false;
-  substr = "" + substr;
-  if (substr.length > str.length) return false;
-
-  const ascii = (s: string) =>
-    s
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
-
-  return ascii(str).includes(ascii(substr));
-};
+import { localeContains } from "./search-helper";
 
 type DocumentsProps = {
   docs: Array<Doc> | null | undefined;
@@ -38,11 +24,6 @@ const Documents: React.FC<DocumentsProps> = ({
   deleteDocument,
   onEndOfViewport,
 }) => {
-  // const [docs, isLoading, error, deleteDocument] =
-  //   useDataPrivate<Array<Doc>>(`docs`);
-
-  // console.log(docs);
-
   const [documentSlugToDelete, setDocumentSlugToDelete] = useState("");
   const [docTitleToDelete, setDocTitleToDelete] = useState("");
 
@@ -55,38 +36,19 @@ const Documents: React.FC<DocumentsProps> = ({
     rootMargin: "800px",
   });
 
-  console.log("DOCUMENTS COMP");
-  console.log(lastDocRef.current);
-  console.log(observedReference);
-  console.log(entry);
-
   if (entry?.isIntersecting) {
-    console.log("💖🎉SHOULD FETCH MORE");
-    console.log(observedReference, entry);
     onEndOfViewport();
   }
-
-  // const handleChange
 
   const handleDelete = async (slug: string) => {
     setDocumentSlugToDelete(slug);
     const docTitle = docs?.find((doc) => doc.slug === slug)?.title;
-
-    console.log(
-      "doc title in documents",
-      docTitle,
-      docTitle?.length,
-      docTitle === "",
-      docTitle ? docTitle : "empty"
-    );
 
     setDocTitleToDelete(docTitle || "");
   };
 
   // Make sure the user wants to delete the document
   const handleDeleteSubmit = async () => {
-    // console.log("SUBMITTED DELETE DOCUMENT");
-
     // Delete document from state and in the database
     // TODO: handle delete error
     try {
@@ -97,13 +59,9 @@ const Documents: React.FC<DocumentsProps> = ({
       //   setDocumentIDToDelete("");
       // }, 1000);
     } catch (error) {
-      console.log("Error deleting document", error);
+      console.log("Error deleting document 📝🔥💥", error);
     }
   };
-
-  // console.log("Documents component body", docs);
-
-  // TODO: pagination!
 
   let filteredDocs;
   if (searchQuery) {
@@ -146,7 +104,7 @@ const Documents: React.FC<DocumentsProps> = ({
       {isLoading && (
         <div>TODO: wait a little bit, your documents are loading</div>
       )}
-      {!isLoading && error && <div>Error: {error}</div>}
+      {!isLoading && error && <div>Error TO HANDLE: {error}</div>}
       {!isLoading && !error && <NewDocument />}
 
       {!isLoading && !error && (
@@ -156,7 +114,7 @@ const Documents: React.FC<DocumentsProps> = ({
           ))}
         </AnimatePresence>
       )}
-      {/* </AnimatePresence> */}
+
       <DeleteDocumentModal
         visible={documentSlugToDelete ? true : false}
         onClose={() => {
@@ -166,11 +124,8 @@ const Documents: React.FC<DocumentsProps> = ({
         documentTitle={
           docTitleToDelete ? `"${docTitleToDelete}"` : "untitled document"
         }
-        // documentIndex={0}
       />
-      {/* <div className="col-span-3 -mt-2 justify-self-end ">
-        <Pagination />
-      </div> */}
+
       <span ref={observedReference} className="h-0 w-0"></span>
     </motion.div>
   );

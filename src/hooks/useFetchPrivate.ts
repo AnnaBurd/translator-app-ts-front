@@ -35,8 +35,6 @@ const useFetchPrivate = () => {
         signal,
       };
 
-      if (url === "docs") console.log("🚀🚀🎈", "fetchPrivate", url);
-
       let requestUrl = `${Config.API_BASE_URL}/${url}`;
       if (page && limit)
         requestUrl = `${requestUrl}?page=${page}&limit=${limit}`;
@@ -45,11 +43,6 @@ const useFetchPrivate = () => {
         options.body = JSON.stringify(data);
       }
 
-      // console.log(
-      //   "useFetchPrivate: fetching data from endpoint - attempt 1",
-      //   url,
-      //   options
-      // );
       // Fetch data from backend using latest access token value
       let response = await fetch(requestUrl, options);
 
@@ -58,11 +51,6 @@ const useFetchPrivate = () => {
         const newAccessToken = await refreshAccessToken();
 
         options.headers.Authorization = `Bearer ${newAccessToken}`;
-        // console.log(
-        //   "useFetchPrivate: fetching data from endpoint - attempt 2 after refreshing access token",
-        //   url,
-        //   options
-        // );
         response = await fetch(requestUrl, options);
       }
 
