@@ -11,15 +11,20 @@ import UploadDocumentModal from "../Modals/UploadDocument";
 import useDocxManager from "../DocxManager/useDocxManager";
 import AccountSettingsPanel from "./Panels/AccountSettings/AccountSettings";
 import EditorSettingsPanel from "./Panels/EditorSettings/EditorSettings";
+import { TextEditorSettings } from "../Editor";
 
 type SideMenuProps = {
   hasUploadedDocument: boolean;
   documentSlug?: string;
+  textEditorSettings: TextEditorSettings;
+  setTextEditorSettings: (newSettings: TextEditorSettings) => void;
 };
 
 const SideMenu: React.FC<SideMenuProps> = ({
   hasUploadedDocument,
   documentSlug,
+  textEditorSettings,
+  setTextEditorSettings,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -183,7 +188,11 @@ const SideMenu: React.FC<SideMenuProps> = ({
                     isActive={isEditorSettingsOpen}
                   />
 
-                  <EditorSettingsPanel isOpen={isEditorSettingsOpen} />
+                  <EditorSettingsPanel
+                    isOpen={isEditorSettingsOpen}
+                    textEditorSettings={textEditorSettings}
+                    setTextEditorSettings={setTextEditorSettings}
+                  />
                 </motion.li>
               </ul>
             </div>

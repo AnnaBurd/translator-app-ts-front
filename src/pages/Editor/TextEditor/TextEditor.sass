@@ -1,4 +1,8 @@
 // Note: Although project uses Tailwind classes, Text Editor is styled with plain css (sass) to easier control appearance of the default Editor JS css classes.
+
+:root
+    --text-editor-line-height: 1.7em
+    --text-editor-font-size: 11pt
     
 /* Hide toolbar */
 .ce-toolbar
@@ -15,7 +19,8 @@
         max-width: 100%
 
 .ce-paragraph
-    line-height: 1.6em !important
+    line-height: var(--text-editor-line-height) !important
+    font-size: var(--text-editor-font-size) !important
     cursor: text
 
 

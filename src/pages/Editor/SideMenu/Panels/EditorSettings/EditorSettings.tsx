@@ -1,9 +1,12 @@
 import { Variants, AnimatePresence, motion } from "framer-motion";
 import Toggle from "./Toggle";
 import QuantityInput from "./QuantityInput";
+import { TextEditorSettings } from "../../../Editor";
 
 type EditorSettingsPanelProps = {
   isOpen: boolean;
+  textEditorSettings: TextEditorSettings;
+  setTextEditorSettings: (newSettings: TextEditorSettings) => void;
 };
 
 // Framer Motion animation variants for dropdown menu opening and closing
@@ -26,8 +29,19 @@ const menuVariants = {
 
 const EditorSettingsPanel: React.FC<EditorSettingsPanelProps> = ({
   isOpen,
+  textEditorSettings,
+  setTextEditorSettings,
 }) => {
   // TODO: store settings and theme (in local storage per user?)
+
+  const { fontSize, lineHeight } = textEditorSettings;
+
+  const lineHeightStep = 0.1;
+  const lineHeightMin = 1.0;
+  const lineHeightMax = 5.0;
+  const fontSizeStep = 1;
+  const fontSizeMin = 5;
+  const fontSizeMax = 24;
 
   return (
     <AnimatePresence>
@@ -54,13 +68,35 @@ const EditorSettingsPanel: React.FC<EditorSettingsPanelProps> = ({
           <div className="p-2 px-4">
             <div className="flex items-center justify-between gap-2 text-sm">
               <span className="">Font Size</span>
-              <QuantityInput />
+              <QuantityInput
+                value={fontSize}
+                props={{
+                  min: fontSizeMin,
+                  max: fontSizeMax,
+                  step: fontSizeStep,
+                  precision: 0,
+                }}
+                onValueChange={(value) => {
+                  setTextEditorSettings({ fontSize: value });
+                }}
+              />
             </div>
           </div>
           <div className="p-2 px-4">
             <div className="flex items-center justify-between gap-2 text-sm">
               <span className="">Line Spacing</span>
-              <QuantityInput />
+              <QuantityInput
+                value={lineHeight}
+                props={{
+                  min: lineHeightMin,
+                  max: lineHeightMax,
+                  step: lineHeightStep,
+                  precision: 1,
+                }}
+                onValueChange={(value) => {
+                  setTextEditorSettings({ lineHeight: value });
+                }}
+              />
             </div>
           </div>
         </motion.div>

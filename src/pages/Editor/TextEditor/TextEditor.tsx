@@ -21,15 +21,18 @@ import CopyText from "./Controls/CopyText";
 import { DocxDocument } from "../DocxManager/useDocxManager";
 import ErrorNotification from "./Notifications/ErrorNotification";
 import InfoNotification from "./Notifications/InfoNotification";
+import { TextEditorSettings } from "../Editor";
 
 type TextEditorProps = {
   document: Doc | null;
   uploadedDocument?: DocxDocument | null;
+  textEditorSettings: TextEditorSettings;
 };
 
 const TextEditor: React.FC<TextEditorProps> = ({
   document,
   uploadedDocument,
+  textEditorSettings,
 }) => {
   // Reference containers for the input and output EditorJS
   const inputContainerRef = useRef<HTMLDivElement>(null);
@@ -54,6 +57,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const [errorLoadingTranslation, setErrorLoadingTranslation] = useState("");
   const [currentlyWorkingOn, setCurrentlyWorkingOn] = useState<string>("");
   const hasRunOutTokens = errorLoadingTranslation.includes("tokens");
+
+  // Text editor view settings
+  const { fontSize, lineHeight } = textEditorSettings;
 
   // console.log(`🧌🧌 Text editor render, uploaded document: `, uploadedDocument);
   // console.log(`🧌🧌 Text editor render, downloaded document: `, document);
@@ -377,9 +383,19 @@ const TextEditor: React.FC<TextEditorProps> = ({
     // TODO: destroy editors before navigating away?
   }, [document, trackEditorJSEvent, uploadedDocument]);
 
+  // TODO : highlignt selected block and corresponding translation block
+
   return (
     <>
-      <div className="grid gap-4 !text-sm max-md:h-[140vh] xl:grid-cols-2 2xl:gap-10">
+      <div
+        className="grid gap-4 !text-sm max-md:h-[140vh] xl:grid-cols-2 2xl:gap-10"
+        style={
+          {
+            "--text-editor-line-height": `${lineHeight}em`,
+            "--text-editor-font-size": `${fontSize}pt`,
+          } as React.CSSProperties
+        }
+      >
         <div
           className="editor input-editor overflow-x-hidden overflow-y-scroll rounded-md bg-slate-50 p-4"
           ref={inputContainerRef}
