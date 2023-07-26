@@ -11,12 +11,10 @@ import { Doc } from "../../@types/doc";
 import { useContext, useState } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import { motion } from "framer-motion";
-import AuthContext from "../../auth/AuthContext";
 import WelcomeModal from "./Welcome/WelcomeModal";
 import themeContext from "../../context/ThemeContext";
 
 export default function Dashboard() {
-  const { user: signedInUser } = useContext(AuthContext);
   const { screenSize } = useContext(themeContext);
 
   // TODO: refactor animations and remove animations for mobile devices
@@ -76,7 +74,6 @@ export default function Dashboard() {
       <AnimatedPage>
         <div
           onClick={() => {
-            console.log("clicking on dashboard");
             if (isOpenUserProfileMenu) setIsOpenUserProfileMenu(false);
           }}
         >
@@ -187,8 +184,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        {/* {signedInUser.newUser || (true && <WelcomeModal />)} */}
-        {signedInUser && signedInUser.newUser && <WelcomeModal />}
+        <WelcomeModal />
       </AnimatedPage>
     </>
   );

@@ -1,20 +1,21 @@
 import { AnimatePresence, motion } from "framer-motion";
-import DotLoader from "../../../components/animations/DotLoader";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AuthContext from "../../../auth/AuthContext";
 
-type WelcomeModalProps = {
-  //   onAccept: () => void;
-};
+// type WelcomeModalProps = {};
 
-const WelcomeModal: React.FC<WelcomeModalProps> = () => {
-  const isLoading = false;
-  const [visible, setIsVisible] = useState(true);
+const WelcomeModal = () => {
+  const { user: signedInUser, updateUserDetails } = useContext(AuthContext);
+
+  const [visible, setIsVisible] = useState(
+    signedInUser && signedInUser.newUser && !signedInUser.hasAcceptedTerms
+  );
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    updateUserDetails({ hasAcceptedTerms: true });
     setIsVisible(false);
-    // onAccept();
   };
 
   return (
@@ -26,15 +27,12 @@ const WelcomeModal: React.FC<WelcomeModalProps> = () => {
             animate={{ opacity: 0.2 }}
             exit={{ opacity: 0 }}
             className="fixed left-0 top-0 z-30 h-screen w-screen bg-slate-400 opacity-20"
-            // onClick={closeFormHandler}
           ></motion.div>
 
           <div className="fixed left-0 top-1/4 z-40 w-full min-w-fit p-4 md:absolute md:left-1/4 md:w-3/5 xl:left-1/3 xl:w-1/3">
             <motion.div
               initial={{
                 opacity: 0,
-                //   translateY: "-40%",
-                //   translateX: "20%",
                 scale: 0.3,
               }}
               animate={{
@@ -46,8 +44,6 @@ const WelcomeModal: React.FC<WelcomeModalProps> = () => {
               }}
               exit={{
                 opacity: 0,
-                //   translateY: "-20%",
-                //   translateX: "20%",
                 scale: 0.7,
                 transition: { duration: 0.15, ease: "easeIn" },
               }}
@@ -77,45 +73,22 @@ const WelcomeModal: React.FC<WelcomeModalProps> = () => {
                   <motion.button
                     layout="preserve-aspect"
                     type="submit"
-                    // disabled={watch("lang") === watch("translationLang")}
-                    //   onClick={deleteDocHandler}
                     className=" inline-block w-fit shrink-0 rounded-lg border border-indigo-400 bg-indigo-400 px-6 py-2 text-xs font-medium text-white transition focus:outline-none focus:ring  disabled:pointer-events-none disabled:border-indigo-200 disabled:bg-indigo-200"
                   >
                     <AnimatePresence mode="wait">
-                      {isLoading && (
-                        <motion.span
-                          key="btn-loading"
-                          initial={{ opacity: 0 }}
-                          animate={{
-                            opacity: 1,
-                            transition: { duration: 4 },
-                          }}
-                        >
-                          Deleting
-                          <DotLoader />
-                        </motion.span>
-                      )}
-                      {!isLoading && (
-                        <motion.span
-                          key="btn-create"
-                          initial={{ opacity: 1 }}
-                          exit={{ opacity: 0, transition: { duration: 0.5 } }}
-                        >
-                          OK
-                        </motion.span>
-                      )}
+                      <motion.span
+                        key="btn-create"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0, transition: { duration: 0.5 } }}
+                      >
+                        OK
+                      </motion.span>
                     </AnimatePresence>
                   </motion.button>
                 </div>
               </form>
             </motion.div>
           </div>
-          {/* <div className="bg-red-300"> */}
-          {/* <p>{errors.title?.message} </p>
-          <p>{errors.lang?.message} </p>
-          <p>{errors.translationLang?.message} </p> */}
-          {/* </div> */}
-          {/* </motion.div> */}
         </>
       ) : null}
     </AnimatePresence>
