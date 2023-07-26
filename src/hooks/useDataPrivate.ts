@@ -62,13 +62,13 @@ const useDataPrivate = <T>(url: string): [T | null, boolean, string] => {
       }
     };
 
-    fetchData();
+    if (data === null) fetchData();
 
     return () => {
       // Cleanup all ongoing fetch requests - they are outdated for a new component render / after component unmounts. The corresponding fetch() call will throw an AbortError exception.
       controller.abort();
     };
-  }, [url, navigate, location, fetchPrivate]);
+  }, [url, navigate, location, fetchPrivate, data]);
 
   return [data, isLoading, error];
 };
