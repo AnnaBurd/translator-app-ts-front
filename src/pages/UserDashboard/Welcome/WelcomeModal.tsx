@@ -29,7 +29,7 @@ const WelcomeModal = () => {
             className="fixed left-0 top-0 z-30 h-screen w-screen bg-slate-400 opacity-20"
           ></motion.div>
 
-          <div className="fixed left-0 top-1/4 z-40 w-full min-w-fit p-4 md:absolute md:left-1/4 md:w-3/5 xl:left-1/3 xl:w-1/3">
+          <div className="fixed left-0 top-0 z-[500] flex h-full w-full items-center justify-center p-4">
             <motion.div
               initial={{
                 opacity: 0,
