@@ -157,7 +157,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
               </div>
             </div>
 
-            <div className="sticky inset-x-12 mb-16 border-t border-slate-100 bg-white px-2">
+            <div className="sticky mb-32 border-t border-slate-100 bg-white px-2 md:mb-16">
               <ul className="space-y-1 border-slate-100 pt-4">
                 <motion.li
                   initial={{ opacity: 0 }}

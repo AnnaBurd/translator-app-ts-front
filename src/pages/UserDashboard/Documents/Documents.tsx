@@ -110,7 +110,7 @@ const Documents: React.FC<DocumentsProps> = ({
       {!isLoading && !error && (
         <AnimatePresence mode="popLayout">
           {(filteredDocs as Array<Doc>)?.map((doc) => (
-            <Document key={doc._id} doc={doc} onDelete={handleDelete} />
+            <Document key={doc.slug} doc={doc} onDelete={handleDelete} />
           ))}
         </AnimatePresence>
       )}

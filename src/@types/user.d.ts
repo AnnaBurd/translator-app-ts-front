@@ -15,8 +15,9 @@ export interface User {
 }
 
 export interface UserProfileStats {
+  limit: number;
   lastEditionAt?: string;
-  numOfParagraphsTranslatedThisMonth?: number;
+  numOfDocumentsChangedThisMonth?: number;
   numberOfDocuments?: number;
   numberOfWordsTranslatedThisMonth?: number;
   totalTokens: number;
@@ -25,5 +26,4 @@ export interface UserProfileStats {
   tokensUsageStats: number[];
   wordsUsageStats: number[];
   lastSixMonths: string[];
-  limit: number;
 }

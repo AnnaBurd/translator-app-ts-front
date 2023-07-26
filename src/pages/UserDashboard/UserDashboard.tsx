@@ -59,11 +59,6 @@ export default function Dashboard() {
           : current
       );
 
-    console.log(
-      "Opening last changed document in Editor (new tab)",
-      lastChangedDoc
-    );
-
     if (lastChangedDoc)
       window.open(`/editor/${lastChangedDoc?.slug}`, "_blank", "noreferrer");
 
@@ -92,9 +87,8 @@ export default function Dashboard() {
                   words:
                     userProfile?.usageStatistics
                       .numberOfWordsTranslatedThisMonth,
-                  paragraphs:
-                    userProfile?.usageStatistics
-                      .numOfParagraphsTranslatedThisMonth,
+                  documentsChanged:
+                    userProfile?.usageStatistics.numOfDocumentsChangedThisMonth,
                 }}
               ></Welcome>
               <motion.div
@@ -189,7 +183,7 @@ export default function Dashboard() {
                 error={errorLoadingDocs}
                 onEndOfViewport={fetchMoreDocuments}
               ></Documents>
-              <Charts stats={userProfile?.usageStatistics}></Charts>
+              <Charts stats={userProfile?.usageStatistics} />
             </div>
           </div>
         </div>

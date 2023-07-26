@@ -1,25 +1,16 @@
 import { motion } from "framer-motion";
 import { UserProfileStats } from "../../../@types/user";
 import Barchart from "./Barchart";
-import Semidonut from "./Semidonut";
+import UsageSemidonut from "./UsageSemidonut";
+import { useContext } from "react";
+import AuthContext from "../../../auth/AuthContext";
 
 type ChartsProps = {
   stats?: UserProfileStats;
 };
 
 const Charts: React.FC<ChartsProps> = ({ stats }) => {
-  console.log("Charts usagestats", stats);
-
-  // const tokensUsedThisMonth = stats?.tokensUsageStats
-  //   ? stats?.tokensUsageStats[4]
-  //   : 0;
-  const tokensUsedThisMonth = stats?.tokensUsedMonth || 0;
-
-  const tokensUsageLimit = stats?.limit || 0;
-
-  let tokensUsagePercent = (tokensUsedThisMonth / tokensUsageLimit) * 100;
-  if (tokensUsagePercent > 100) tokensUsagePercent = 100;
-  if (tokensUsageLimit === 0) tokensUsagePercent = 0;
+  const { user } = useContext(AuthContext);
 
   return (
     <motion.aside
@@ -42,34 +33,18 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
         transition: { duration: 1, ease: "backOut" },
       }}
     >
-      <div className="border-slate-150 relative mb-4 block h-full w-full rounded-2xl border-[1px] p-6 shadow-md transition-shadow duration-300 hover:shadow-xl md:px-4 lg:p-6">
+      <div className="border-slate-150 relative mb-4 block h-full w-full overflow-hidden rounded-2xl border-[1px] p-6 shadow-md transition-shadow duration-300 hover:shadow-xl md:px-4 lg:p-6">
         <h2 className="mb-2 text-base font-bold text-slate-600">Tokens</h2>
-        <Semidonut fillPercent={tokensUsagePercent} />
-        <div className="m-auto mb-1 mt-2 flex w-52 justify-between">
-          <div className="flex flex-col items-center justify-center text-base font-semibold text-slate-700">
-            <span className="-mb-1.5">
-              <span className="text-lg font-bold text-slate-800">
-                {tokensUsageLimit.toLocaleString()}
-              </span>{" "}
-              tk
-            </span>
-            <span className="text-xs font-normal text-slate-500 ">
-              monthly limit
-            </span>
+        {stats && stats.limit > 0 && <UsageSemidonut stats={stats} />}
+        {!stats || stats.limit === 0 ? (
+          <div className="text-xs font-normal text-slate-500">
+            {user?.newUser
+              ? "Administator is reviewing your account and will  open access soon."
+              : "You have no tokens left, to extend usage please contact your administrator."}
           </div>
-          <span className="w-[1px] rounded-xl bg-slate-200"></span>
-          <div className="flex flex-col items-center justify-center text-base font-semibold text-slate-700">
-            <span className="-mb-1.5">
-              <span className="text-lg font-bold text-slate-800">
-                {tokensUsedThisMonth.toLocaleString()}
-              </span>{" "}
-              tk
-            </span>
-            <span className="text-xs font-normal text-slate-500 ">
-              already used
-            </span>
-          </div>
-        </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="border-slate-150 relative block h-full w-full rounded-2xl border-[1px] p-6 shadow-md transition-shadow duration-300 hover:shadow-xl md:px-4 lg:p-6">
