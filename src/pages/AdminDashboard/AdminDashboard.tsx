@@ -1,31 +1,46 @@
 import { motion } from "framer-motion";
-import { User } from "../../@types/user";
+import { TotalUsageStats, User } from "../../@types/user";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 import UserProfile from "../UserDashboard/UserProfile/UserProfile";
-import { useState, useEffect, MouseEvent } from "react";
+import { useState, useContext } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import useDataPrivate from "../../hooks/useDataPrivate";
-import UserRow from "./UserRow";
-import UserCard from "./UserCard";
+import UserCard from "./Users/UserCard";
 import Loader from "../../components/animations/Loader";
 import Pagination from "./Controls/Pagination";
 import BlockUserModal from "./Modals/BlockUserModal";
 import useFetchPrivate from "../../hooks/useFetchPrivate";
-import { set } from "react-hook-form";
 import UnblockUserModal from "./Modals/UnblockUserModal";
 import LimitTokensForm from "./Modals/LimitTokensForm";
+import NavigationBtn from "../UserDashboard/NavigationBtn";
+import themeContext from "../../context/ThemeContext";
+import Button from "./Filter/Button";
+import Table from "./Users/Table";
+import UsageStats from "./UsageStats";
+
+const USERS_PER_PAGE = 6;
 
 export default function AdminDashboard() {
-  const usersPerPage = 6;
+  const { screenSize } = useContext(themeContext);
+
   const {
     data: users,
-    isFetchingData,
     errorFetchingData,
     fetchNextPage,
     totalPages,
-  } = useDocumentsPrivate<User>("users", usersPerPage);
+    isFetchingFirstPage,
+  } = useDocumentsPrivate<User>("users", undefined, USERS_PER_PAGE);
+
+  const [usageStats, isLoadingUsageStats, isErrorLoadingUsageStats] =
+    useDataPrivate<TotalUsageStats>("users/usagestatistics");
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const currentlyLoadedPage =
+    users.length > (currentPage - 1) * USERS_PER_PAGE
+      ? currentPage
+      : currentPage - 1;
+  const isLoadingPage = currentPage !== currentlyLoadedPage;
 
   const fetchPrivate = useFetchPrivate();
 
@@ -60,47 +75,57 @@ export default function AdminDashboard() {
   const [userToSetTokensLimit, setUserToSetTokensLimit] = useState("");
 
   const usersOnPage = filteredUsers.slice(
-    currentPage * usersPerPage - usersPerPage,
-    currentPage * usersPerPage
+    currentlyLoadedPage * USERS_PER_PAGE - USERS_PER_PAGE,
+    currentlyLoadedPage * USERS_PER_PAGE
   );
 
-  const [usageStats, isLoadingUsageStats, isErrorLoadingUsageStats] =
-    useDataPrivate<{
-      activeUsers: number;
-      tokensUsedMonth: number;
-      inactiveUsers: number;
-      blockedUsers: number;
-    }>("users/usagestatistics");
+  console.log(" 🧌  currentPage", currentPage);
+  console.log(" 🧌  currentlyLoadedPage", currentlyLoadedPage);
+  // console.log(" 🧌  isFetching", isFetchingData);
 
-  // For wide screens show table
-  // For narrow screens show cards
-  const [isWideScreen, setIsWideScreen] = useState(false);
+  const navigateToUserDashboardTab = () => {
+    window.open(`/dashboard`, "_blank", "noreferrer");
+  };
 
-  useEffect(() => {
-    const mql = window.matchMedia("(min-width: 1024px)");
+  const toggleFilter = (filter: string) => {
+    if (filterUsersBy === filter) {
+      setFilterUsersBy("");
+    } else {
+      setFilterUsersBy(filter);
+    }
+  };
 
-    const onChange = () => setIsWideScreen(!!mql.matches);
-    mql.addEventListener("change", onChange);
-    setIsWideScreen(mql.matches);
+  const toggleFilterByActive = () => {
+    toggleFilter("active");
+  };
 
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
+  const toggleFilterByInactive = () => {
+    toggleFilter("inactive");
+  };
 
-  console.log("Usage stats", usageStats, isLoadingUsageStats);
+  const toggleFilterByBlocked = () => {
+    toggleFilter("blocked");
+  };
 
-  if (isFetchingData || isLoadingUsageStats) {
+  console.log(" 🧌  Admin dashboard");
+  console.log(" 🧌  users", users);
+
+  if (isFetchingFirstPage || isLoadingUsageStats) {
     return <Loader />;
   }
 
-  if (errorFetchingData) {
-    return <div>🔥 Error loading users: {errorFetchingData}</div>;
+  if (errorFetchingData || isErrorLoadingUsageStats) {
+    return (
+      <div>
+        🔥 Error loading users: {errorFetchingData || isErrorLoadingUsageStats}
+      </div>
+    );
   }
 
   return (
     <AnimatedPage>
       <div
         onClick={() => {
-          console.log("clicking on dashboard");
           if (isOpenUserProfileMenu) setIsOpenUserProfileMenu(false);
         }}
       >
@@ -114,81 +139,29 @@ export default function AdminDashboard() {
                 Users
               </h2>
               <div className="flex justify-start gap-2 sm:gap-4">
-                <button
-                  className={`group inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-emerald-50 hover:text-emerald-500 focus:outline-none focus:ring active:bg-emerald-50 ${
-                    filterUsersBy === "active"
-                      ? "bg-emerald-50 text-emerald-500"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (filterUsersBy === "active") {
-                      setFilterUsersBy("");
-                    } else {
-                      setFilterUsersBy("active");
-                    }
-                  }}
+                <Button
+                  isActive={filterUsersBy === "active"}
+                  onClick={toggleFilterByActive}
+                  value={usageStats?.activeUsers}
+                  color="green"
                 >
-                  <span
-                    className={`mr-1.5 rounded-sm bg-slate-300 px-[.25rem] py-[.1rem] text-[.6rem] group-hover:bg-emerald-300 group-hover:text-white ${
-                      filterUsersBy === "active"
-                        ? "bg-emerald-300 text-white"
-                        : ""
-                    }`}
-                  >
-                    {usageStats?.activeUsers || 0}
-                  </span>
                   Active
-                </button>
-                <button
-                  className={`group inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-200 hover:text-slate-500 focus:outline-none focus:ring active:bg-slate-50 ${
-                    filterUsersBy === "inactive"
-                      ? "bg-slate-200 text-slate-500"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (filterUsersBy === "inactive") {
-                      setFilterUsersBy("");
-                    } else {
-                      setFilterUsersBy("inactive");
-                    }
-                  }}
+                </Button>
+                <Button
+                  isActive={filterUsersBy === "inactive"}
+                  onClick={toggleFilterByInactive}
+                  value={usageStats?.inactiveUsers}
                 >
-                  <span
-                    className={`mr-1.5 rounded-sm bg-slate-300 px-[.25rem] py-[.1rem] text-[.6rem] group-hover:bg-slate-400 group-hover:text-white ${
-                      filterUsersBy === "inactive"
-                        ? "bg-slate-400 text-white"
-                        : ""
-                    }`}
-                  >
-                    {usageStats?.inactiveUsers || 0}
-                  </span>
                   Inactive
-                </button>
-                <button
-                  className={`group mr-4 inline-block rounded border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-500 focus:outline-none focus:ring active:bg-rose-50 ${
-                    filterUsersBy === "blocked"
-                      ? "bg-rose-50 text-rose-500"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (filterUsersBy === "blocked") {
-                      setFilterUsersBy("");
-                    } else {
-                      setFilterUsersBy("blocked");
-                    }
-                  }}
+                </Button>
+                <Button
+                  isActive={filterUsersBy === "blocked"}
+                  onClick={toggleFilterByBlocked}
+                  value={usageStats?.blockedUsers}
+                  color="red"
                 >
-                  <span
-                    className={`mr-1.5 rounded-sm bg-slate-300 px-[.25rem] py-[.1rem] text-[.6rem] group-hover:bg-rose-300 group-hover:text-white ${
-                      filterUsersBy === "blocked"
-                        ? "bg-rose-300 text-white"
-                        : ""
-                    }`}
-                  >
-                    {usageStats?.blockedUsers || 0}
-                  </span>
                   Blocked
-                </button>
+                </Button>
               </div>
             </div>
             <motion.div
@@ -197,7 +170,6 @@ export default function AdminDashboard() {
               animate={{
                 opacity: 1,
                 y: 0,
-                // x: 0,
                 transition: {
                   opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
                   y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
@@ -209,35 +181,12 @@ export default function AdminDashboard() {
                 transition: { duration: 1, ease: "backOut" },
               }}
             >
-              <div className="flex items-center gap-4"></div>
+              <NavigationBtn onClick={navigateToUserDashboardTab}>
+                {screenSize === "large"
+                  ? "Open User Dashboard"
+                  : "User Dashboard"}
+              </NavigationBtn>
 
-              <button
-                onClick={() => {
-                  window.open(`/dashboard`, "_blank", "noreferrer");
-                }}
-                className="-ml-2 mr-1 inline-flex items-center justify-center gap-1.5 rounded-lg  border border-slate-300 px-5 py-3 text-slate-500 transition hover:text-slate-700 focus:outline-none focus:ring"
-                type="button"
-              >
-                <span className="text-xs font-medium">
-                  {isWideScreen ? "Open User Dashboard" : "User Dashboard"}
-                </span>
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-[0.85rem] w-[0.85rem]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </button>
-              {/* )} */}
               <span
                 aria-hidden="true"
                 className="block h-6 w-px rounded-full bg-slate-300"
@@ -251,58 +200,30 @@ export default function AdminDashboard() {
           </div>
         </header>
         <div className="mx-auto max-w-screen-xl px-4 py-0 sm:px-4 lg:px-10 2xl:max-w-screen-2xl">
-          {isWideScreen && users && users?.length > 0 && (
-            <table className="w-full border-separate border-spacing-0">
-              <colgroup>
-                <col style={{ width: "30%" }}></col>
-                <col style={{ width: "8%" }}></col>
-                <col style={{ width: "10%" }}></col>
-                <col style={{ width: "14%" }}></col>
-                <col style={{ width: "10%" }}></col>
-                <col style={{ width: "10%" }}></col>
-                <col style={{}}></col>
-              </colgroup>
-              <thead className="border-separate border-spacing-0 overflow-hidden rounded-lg">
-                <tr className="text-md bg-[--color-primary] text-left text-xs tracking-widest text-white">
-                  {[
-                    "User",
-                    "Role",
-                    "Registration date",
-                    "Monthly Tokens Usage",
-                    "Total Tokens Usage",
-                    "Status",
-                    "Administer",
-                  ].map((title) => (
-                    <th
-                      key={title}
-                      className="px-5 py-3 font-semibold first:rounded-ss-lg last:rounded-se-lg"
-                    >
-                      {title}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="text-[--color-dark]">
-                {usersOnPage?.map((user) => (
-                  <UserRow
-                    key={user.email}
-                    user={user}
-                    onBlockAccess={(email) => {
-                      setUserToBlockAccess(email);
-                    }}
-                    onUnblockAccess={(email) => {
-                      setUserToUnblockAccess(email);
-                    }}
-                    onSetTokensLimit={(email) => {
-                      setUserToSetTokensLimit(email);
-                    }}
-                  />
-                ))}
-              </tbody>
-            </table>
+          {screenSize === "large" && users && users?.length > 0 && (
+            <Table
+              users={usersOnPage}
+              onBlockUser={(email) => {
+                setUserToBlockAccess(email);
+              }}
+              onUnblockUser={(email) => {
+                setUserToUnblockAccess(email);
+              }}
+              onSetTokensLimit={(email) => {
+                setUserToSetTokensLimit(email);
+              }}
+              isLoading={isLoadingPage}
+              hasPreloaded={
+                users.length > currentPage * USERS_PER_PAGE ||
+                users.length ===
+                  (usageStats?.activeUsers || 0) +
+                    (usageStats?.inactiveUsers || 0) +
+                    (usageStats?.blockedUsers || 0)
+              }
+            />
           )}
 
-          {!isWideScreen && users && users?.length > 0 && (
+          {!(screenSize === "large") && users && users?.length > 0 && (
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {usersOnPage.map((user) => (
                 <UserCard
@@ -320,6 +241,11 @@ export default function AdminDashboard() {
                 />
               ))}
             </div>
+          )}
+
+          {/* TODO: fix styles for no users */}
+          {(!users || users?.length === 0) && (
+            <div>No registered users found</div>
           )}
 
           <BlockUserModal
@@ -405,31 +331,27 @@ export default function AdminDashboard() {
             }}
           />
 
-          {!users ||
-            (users?.length === 0 && <div>No registered users found</div>)}
-          {/* TODO: fix styles for no users */}
-          <div className="my-2 flex flex-col items-center rounded-2xl border-[1px] border-t border-slate-200 bg-white px-5 py-5 sm:flex-row sm:justify-between lg:my-0 lg:rounded-none lg:rounded-b-lg lg:border-none">
-            <span className="text-xs text-slate-600 sm:text-sm">
-              {usageStats && usageStats?.activeUsers > 0
-                ? `Total ${usageStats?.activeUsers} active user${
-                    usageStats?.activeUsers > 1 ? "s" : ""
-                  }`
-                : "No active users this month"}
-              {usageStats && usageStats?.tokensUsedMonth > 0
-                ? `, over ${usageStats?.tokensUsedMonth.toLocaleString()} monthly tokens
-            usage.`
-                : "."}
-            </span>
+          <motion.div
+            className="my-2 flex flex-col items-center rounded-2xl border-[1px] border-t border-slate-200 bg-white px-5 py-5 sm:flex-row sm:justify-between lg:my-0 lg:rounded-none lg:rounded-b-lg lg:border-none"
+            layout
+          >
+            <UsageStats usageStats={usageStats} />
+
             {/* TODO: fix pages when users are filtered */}
             {/* TODO: fix active- inactive-blocked counts as well when users change status */}
             <Pagination
               totalPages={totalPages}
-              currentPage={currentPage}
+              currentPage={currentlyLoadedPage}
               onNextPage={() => {
+                console.log("NEXT PAGE", currentPage);
+                console.log("users", users.length);
+
+                if (isLoadingPage) return;
+
                 setCurrentPage((prev) => prev + 1);
 
                 // Trigger load of next page (if not yet loaded)
-                if (users.length === currentPage * usersPerPage)
+                if (users.length === currentPage * USERS_PER_PAGE)
                   fetchNextPage();
               }}
               onPreviousPage={() => {
@@ -437,7 +359,7 @@ export default function AdminDashboard() {
                 setCurrentPage((prev) => prev - 1);
               }}
             />
-          </div>
+          </motion.div>
         </div>
       </div>
     </AnimatedPage>

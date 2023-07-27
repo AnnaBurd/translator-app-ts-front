@@ -14,7 +14,7 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
 
   return (
     <motion.aside
-      className="z-0 h-fit w-full flex-auto md:ml-5 md:w-1/3 lg:w-1/4"
+      className="z-0 h-fit w-full flex-auto md:sticky md:top-4 md:ml-5 md:w-1/3 lg:w-1/4"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{
         opacity: 1,

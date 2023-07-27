@@ -13,6 +13,7 @@ import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import { motion } from "framer-motion";
 import WelcomeModal from "./Welcome/WelcomeModal";
 import themeContext from "../../context/ThemeContext";
+import NavigationBtn from "./NavigationBtn";
 
 export default function Dashboard() {
   const { screenSize } = useContext(themeContext);
@@ -94,7 +95,6 @@ export default function Dashboard() {
                 animate={{
                   opacity: 1,
                   y: 0,
-                  // x: 0,
                   transition: {
                     opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
                     y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
@@ -106,59 +106,16 @@ export default function Dashboard() {
                   transition: { duration: 1, ease: "backOut" },
                 }}
               >
-                <div className="flex items-center gap-4"></div>
-                <button
-                  onClick={navigateToEditorTab}
-                  className="mr-1 inline-flex items-center justify-center gap-1.5 rounded-lg border  border-slate-300 px-5 py-3 text-slate-500 transition hover:text-slate-700 focus:outline-none focus:ring"
-                  type="button"
-                >
-                  <span className="text-xs font-medium">
-                    {screenSize !== "small" ? "Open Editor" : "Editor"}
-                  </span>
-
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-[0.85rem] w-[0.85rem]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </button>
+                {/* <div className="flex items-center gap-4"></div> */}
+                <NavigationBtn onClick={navigateToEditorTab}>
+                  {screenSize !== "small" ? "Open Editor" : "Editor"}
+                </NavigationBtn>
                 {isAdmin && (
-                  <button
-                    onClick={navigateToAdminDashboardTab}
-                    className="-ml-2 mr-1 inline-flex items-center justify-center gap-1.5 rounded-lg  border border-slate-300 px-5 py-3 text-slate-500 transition hover:text-slate-700 focus:outline-none focus:ring"
-                    type="button"
-                  >
-                    <span className="text-xs font-medium">
-                      {screenSize !== "small"
-                        ? "Open Admin Dashboard"
-                        : "Users"}
-                    </span>
-
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-[0.85rem] w-[0.85rem]"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                      />
-                    </svg>
-                  </button>
+                  <NavigationBtn onClick={navigateToAdminDashboardTab}>
+                    {screenSize !== "small" ? "Open Admin Dashboard" : "Users"}
+                  </NavigationBtn>
                 )}
+
                 <span
                   aria-hidden="true"
                   className="block h-6 w-px rounded-full bg-slate-300"

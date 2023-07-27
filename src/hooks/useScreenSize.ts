@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export type ScreenSize = "small" | "medium" | "large";
 const breakpoints = {
   small: 640,
-  large: 1280,
+  large: 1024,
 };
 
 const useScreenSize = () => {

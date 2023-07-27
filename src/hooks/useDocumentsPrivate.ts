@@ -10,10 +10,11 @@ type Slugified = {
 
 const useDocumentsPrivate = <T extends Slugified>(
   url: string,
-  screenSize?: ScreenSize
+  screenSize?: ScreenSize,
+  limitPerPage?: number
 ): {
   data: T[];
-  isFetchingData: boolean;
+  // isFetchingData: boolean;
   errorFetchingData: string;
   deleteDataItem: (slug: string) => Promise<void>;
   fetchNextPage: () => void;
@@ -21,7 +22,7 @@ const useDocumentsPrivate = <T extends Slugified>(
   isFetchingFirstPage: boolean;
 } => {
   const [data, setData] = useState<T[]>([]);
-  const [isFetchingData, setIsFetching] = useState(false);
+  // const [isFetchingData, setIsFetching] = useState(false);
   const [isFetchingFirstPage, setIsFetchingFirstPage] = useState(true);
   const [errorFetchingData, setErrorFetchingData] = useState("");
 
@@ -30,11 +31,12 @@ const useDocumentsPrivate = <T extends Slugified>(
   const [currentPage, setCurrentPage] = useState(1);
 
   // TODO: adjust
-  const maxDocuments =
+  let maxDocuments =
     screenSize === "large" ? 100 : screenSize === "medium" ? 50 : 30;
-  const itemsPerPage =
+  let itemsPerPage =
     screenSize === "large" ? 9 : screenSize === "medium" ? 6 : 3;
-  // if (documentsPerPage) itemsPerPage = documentsPerPage;
+  if (limitPerPage) itemsPerPage = limitPerPage;
+  if (limitPerPage) maxDocuments = limitPerPage * 10000;
 
   const fetchPrivate = useFetchPrivate();
 
@@ -44,6 +46,11 @@ const useDocumentsPrivate = <T extends Slugified>(
   const fetchNextPage = () => {
     // Workaround to avoid setting state while component renders
     // TODO: reconsider after refactoring
+
+    console.log("🤔🤔 Fetch next page, fetch more = ", fetchMore);
+    console.log("🤔🤔 totalPages", totalPages);
+    console.log("🤔🤔 currentPage", currentPage);
+
     if (!fetchMore) {
       setTimeout(() => setFetchMore(true), 0);
     }
@@ -65,11 +72,20 @@ const useDocumentsPrivate = <T extends Slugified>(
   };
 
   const shouldBeFetching =
-    !isFetchingData &&
+    // !isFetchingData &&
     !errorFetchingData &&
     (currentPage <= totalPages || totalPages < 0) &&
     fetchMore &&
     data.length < maxDocuments;
+
+  console.log("🤔🌋 shouldBeFetching", shouldBeFetching);
+  // console.log("🤔🌋 isFetchingData", isFetchingData);
+  console.log("🤔🌋 errorFetchingData", errorFetchingData);
+  console.log("🤔🌋 currentPage", currentPage);
+  console.log("🤔🌋 totalPages", totalPages);
+  console.log("🤔🌋 fetchMore", fetchMore);
+  console.log("🤔🌋 data.length", data.length);
+  console.log("🤔🌋 maxDocuments", maxDocuments);
 
   useEffect(() => {
     // Controller is used to cancel repeating requests during use Effect cleanup call
@@ -79,6 +95,7 @@ const useDocumentsPrivate = <T extends Slugified>(
     const fetchAndAddPageData = async () => {
       try {
         if (!shouldBeFetching) return;
+        // setIsFetching(true);
 
         const [fetchedData, currPage, totalPages] = await fetchPrivate(
           `${url}`,
@@ -92,7 +109,7 @@ const useDocumentsPrivate = <T extends Slugified>(
         setTotalPages(+totalPages);
         setCurrentPage(+currPage + 1);
         setData((prevData) => [...prevData, ...fetchedData]);
-        setIsFetching(false);
+        // setIsFetching(false);
         setFetchMore(false);
         setIsFetchingFirstPage(false);
       } catch (error) {
@@ -113,7 +130,7 @@ const useDocumentsPrivate = <T extends Slugified>(
           // TODO: manage errors and display them to the user
           // console.log("UNHANDLED Error fetching data", error);
           setErrorFetchingData("🌋🌋🌋🔍 UNHANDLED Error fetching data");
-          setIsFetching(false);
+          // setIsFetching(false);
         }
       }
     };
@@ -131,7 +148,6 @@ const useDocumentsPrivate = <T extends Slugified>(
     fetchPrivate,
     currentPage,
     data,
-    isFetchingData,
     errorFetchingData,
     shouldBeFetching,
     itemsPerPage,
@@ -139,7 +155,7 @@ const useDocumentsPrivate = <T extends Slugified>(
 
   return {
     data,
-    isFetchingData,
+    // isFetchingData,
     errorFetchingData,
     deleteDataItem,
     fetchNextPage,

@@ -49,7 +49,7 @@ const GenerateControl: React.FC<GenerateControlProps> = ({
                 transition: { duration: 4 },
               }}
             >
-              {isDisabled ? "DISABLED OUT OF TOKENS?" : "Retry"}
+              {isDisabled ? "Out of tokens" : "Retry"}
             </motion.span>
           )}
           {!isLoading && !errorLoadingMessage && (

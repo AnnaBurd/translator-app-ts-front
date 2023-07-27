@@ -28,3 +28,10 @@ export interface UserProfileStats {
   wordsUsageStats: number[];
   lastSixMonths: string[];
 }
+
+export interface TotalUsageStats {
+  activeUsers: number;
+  tokensUsedMonth: number;
+  inactiveUsers: number;
+  blockedUsers: number;
+}
