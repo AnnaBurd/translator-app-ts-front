@@ -47,10 +47,6 @@ const useDocumentsPrivate = <T extends Slugified>(
     // Workaround to avoid setting state while component renders
     // TODO: reconsider after refactoring
 
-    console.log("🤔🤔 Fetch next page, fetch more = ", fetchMore);
-    console.log("🤔🤔 totalPages", totalPages);
-    console.log("🤔🤔 currentPage", currentPage);
-
     if (!fetchMore) {
       setTimeout(() => setFetchMore(true), 0);
     }
@@ -77,15 +73,6 @@ const useDocumentsPrivate = <T extends Slugified>(
     (currentPage <= totalPages || totalPages < 0) &&
     fetchMore &&
     data.length < maxDocuments;
-
-  console.log("🤔🌋 shouldBeFetching", shouldBeFetching);
-  // console.log("🤔🌋 isFetchingData", isFetchingData);
-  console.log("🤔🌋 errorFetchingData", errorFetchingData);
-  console.log("🤔🌋 currentPage", currentPage);
-  console.log("🤔🌋 totalPages", totalPages);
-  console.log("🤔🌋 fetchMore", fetchMore);
-  console.log("🤔🌋 data.length", data.length);
-  console.log("🤔🌋 maxDocuments", maxDocuments);
 
   useEffect(() => {
     // Controller is used to cancel repeating requests during use Effect cleanup call

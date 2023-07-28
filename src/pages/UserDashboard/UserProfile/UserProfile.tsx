@@ -1,41 +1,55 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../../auth/AuthContext";
 import Menu from "./Menu/Menu";
 import ProfilePreview from "./ProfilePreview";
 import DropdownBtn from "./DropdownBtn";
+import { createPortal } from "react-dom";
 
-type UserProfileProps = {
-  isOpenMenu: boolean;
-  toggleOpenMenu: () => void;
-};
+type UserProfileProps = Record<string, never>;
 
-const UserProfile: React.FC<UserProfileProps> = ({
-  isOpenMenu,
-  toggleOpenMenu,
-}) => {
+const UserProfile: React.FC<UserProfileProps> = () => {
   const { user } = useContext(AuthContext);
 
+  const [isOpenUserProfileMenu, setIsOpenUserProfileMenu] = useState(false);
+  const toggleUserProfileMenu = () => {
+    setIsOpenUserProfileMenu((prevState) => !prevState);
+  };
+  const closeUserProfileMenu = () => {
+    setIsOpenUserProfileMenu(false);
+  };
+
   const handleToggleMenu = () => {
-    toggleOpenMenu();
+    toggleUserProfileMenu();
   };
 
   if (!user) return null;
 
   return (
-    <div className="relative z-50 flex flex-col items-center justify-center">
-      <button
-        onClick={handleToggleMenu}
-        type="button"
-        className="group flex shrink-0 items-center rounded-lg transition"
-      >
-        <span className="sr-only">Menu</span>
+    <>
+      <div className="relative z-[60] flex flex-col items-center justify-center">
+        <button
+          onClick={handleToggleMenu}
+          type="button"
+          className="group flex shrink-0 items-center rounded-lg transition"
+        >
+          <span className="sr-only">Menu</span>
 
-        <ProfilePreview user={user} />
+          <ProfilePreview user={user} />
 
-        <DropdownBtn isOpen={isOpenMenu} />
-      </button>
-      <Menu isOpen={isOpenMenu} />
-    </div>
+          <DropdownBtn isOpen={isOpenUserProfileMenu} />
+        </button>
+        <Menu isOpen={isOpenUserProfileMenu} />
+        {isOpenUserProfileMenu &&
+          createPortal(
+            <div
+              aria-roledescription="overlay"
+              className="fixed left-0 top-0 z-30 h-screen w-screen  opacity-50"
+              onClick={closeUserProfileMenu}
+            ></div>,
+            document.getElementById("overlays") as HTMLElement
+          )}
+      </div>
+    </>
   );
 };
 

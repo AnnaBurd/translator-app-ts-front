@@ -8,7 +8,7 @@ import useDataPrivate from "../../hooks/useDataPrivate";
 import Loader from "../../components/animations/Loader";
 import { User, UserProfileStats } from "../../@types/user";
 import { Doc } from "../../@types/doc";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import useDocumentsPrivate from "../../hooks/useDocumentsPrivate";
 import { motion } from "framer-motion";
 import WelcomeModal from "./Welcome/WelcomeModal";
@@ -27,7 +27,6 @@ export default function Dashboard() {
 
   const {
     data: docs,
-    isFetchingData: isLoadingUserDocuments,
     errorFetchingData: errorLoadingDocs,
     fetchNextPage: fetchMoreDocuments,
     deleteDataItem: deleteDocument,
@@ -35,11 +34,6 @@ export default function Dashboard() {
   } = useDocumentsPrivate<Doc>(`docs`, screenSize);
 
   const isAdmin = userProfile?.user.role === "Admin";
-
-  const [isOpenUserProfileMenu, setIsOpenUserProfileMenu] = useState(false);
-  const toggleUserProfileMenu = () => {
-    setIsOpenUserProfileMenu((prevState) => !prevState);
-  };
 
   if (isLoadingUserProfileStats || isFetchingFirstPageWithDocuments) {
     return <Loader />;
@@ -73,74 +67,65 @@ export default function Dashboard() {
   return (
     <>
       <AnimatedPage>
-        <div
-          onClick={() => {
-            if (isOpenUserProfileMenu) setIsOpenUserProfileMenu(false);
-          }}
-        >
-          <header aria-label="User Dashboard" className="relative z-50">
-            <div className=" mx-auto flex max-w-screen-xl flex-col-reverse justify-between px-4 py-4 sm:px-6 md:py-8 lg:flex-row lg:items-center lg:px-4 2xl:max-w-screen-2xl">
-              <Welcome
-                stats={{
-                  words:
-                    userProfile?.usageStatistics
-                      .numberOfWordsTranslatedThisMonth,
-                  documentsChanged:
-                    userProfile?.usageStatistics.numOfDocumentsChangedThisMonth,
-                }}
-              ></Welcome>
-              <motion.div
-                className="mb-4 flex items-center justify-end gap-4"
-                initial={{ opacity: 0, y: "-20vh" }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
-                    y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
-                  },
-                }}
-                exit={{
-                  opacity: 0,
-                  y: "-20vh",
-                  transition: { duration: 1, ease: "backOut" },
-                }}
-              >
-                {/* <div className="flex items-center gap-4"></div> */}
-                <NavigationBtn onClick={navigateToEditorTab}>
-                  {screenSize !== "small" ? "Open Editor" : "Editor"}
+        <header aria-label="User Dashboard" className="relative z-50">
+          <div className=" mx-auto flex max-w-screen-xl flex-col-reverse justify-between px-4 py-4 sm:px-6 md:py-8 lg:flex-row lg:items-center lg:px-4 2xl:max-w-screen-2xl">
+            <Welcome
+              stats={{
+                words:
+                  userProfile?.usageStatistics.numberOfWordsTranslatedThisMonth,
+                documentsChanged:
+                  userProfile?.usageStatistics.numOfDocumentsChangedThisMonth,
+              }}
+            ></Welcome>
+            <motion.div
+              className="mb-4 flex items-center justify-end gap-4"
+              initial={{ opacity: 0, y: "-20vh" }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: {
+                  opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+                  y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+                },
+              }}
+              exit={{
+                opacity: 0,
+                y: "-20vh",
+                transition: { duration: 1, ease: "backOut" },
+              }}
+            >
+              {/* <div className="flex items-center gap-4"></div> */}
+              <NavigationBtn onClick={navigateToEditorTab}>
+                {screenSize !== "small" ? "Open Editor" : "Editor"}
+              </NavigationBtn>
+              {isAdmin && (
+                <NavigationBtn onClick={navigateToAdminDashboardTab}>
+                  {screenSize !== "small" ? "Open Admin Dashboard" : "Users"}
                 </NavigationBtn>
-                {isAdmin && (
-                  <NavigationBtn onClick={navigateToAdminDashboardTab}>
-                    {screenSize !== "small" ? "Open Admin Dashboard" : "Users"}
-                  </NavigationBtn>
-                )}
+              )}
 
-                <span
-                  aria-hidden="true"
-                  className="block h-6 w-px rounded-full bg-slate-300"
-                ></span>
+              <span
+                aria-hidden="true"
+                className="block h-6 w-px rounded-full bg-slate-300"
+              ></span>
 
-                <UserProfile
-                  isOpenMenu={isOpenUserProfileMenu}
-                  toggleOpenMenu={toggleUserProfileMenu}
-                ></UserProfile>
-              </motion.div>
-            </div>
-          </header>
-          <div className="z-0 mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4 2xl:max-w-screen-2xl ">
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row 2xl:gap-16">
-              <Documents
-                docs={docs}
-                deleteDocument={deleteDocument}
-                isLoading={isLoadingUserDocuments}
-                error={errorLoadingDocs}
-                onEndOfViewport={fetchMoreDocuments}
-              ></Documents>
-              <Charts stats={userProfile?.usageStatistics} />
-            </div>
+              <UserProfile />
+            </motion.div>
+          </div>
+        </header>
+        <div className="z-0 mx-auto max-w-screen-xl px-4 py-4 sm:px-6 md:px-4 2xl:max-w-screen-2xl ">
+          <div className="flex flex-col items-start justify-between gap-4 md:flex-row 2xl:gap-16">
+            <Documents
+              docs={docs}
+              deleteDocument={deleteDocument}
+              isLoading={isFetchingFirstPageWithDocuments}
+              error={errorLoadingDocs}
+              onEndOfViewport={fetchMoreDocuments}
+            ></Documents>
+            <Charts stats={userProfile?.usageStatistics} />
           </div>
         </div>
+
         <WelcomeModal />
       </AnimatedPage>
     </>

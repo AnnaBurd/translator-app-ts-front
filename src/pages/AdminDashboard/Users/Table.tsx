@@ -9,7 +9,8 @@ const variants = {
   closed: {
     transition: { staggerChildren: 0.05, staggerDirection: -1 },
   },
-  test: { transition: { staggerChildren: 0.05, staggerDirection: 1 } },
+  preloaded: { transition: { staggerChildren: 0, staggerDirection: 1 } },
+  // exit: { transition: { staggerChildren: 0.05, staggerDirection: 1 } },
 };
 
 type TableProps = {
@@ -32,7 +33,7 @@ const Table: React.FC<TableProps> = ({
   hasPreloaded,
 }) => {
   return (
-    <table className="relative z-[100] w-full border-separate border-spacing-0">
+    <table className="relative z-[10] w-full border-separate border-spacing-0">
       <colgroup>
         <col style={{ width: "30%" }}></col>
         <col style={{ width: "8%" }}></col>
@@ -42,7 +43,7 @@ const Table: React.FC<TableProps> = ({
         <col style={{ width: "10%" }}></col>
         <col style={{}}></col>
       </colgroup>
-      <thead className="relative z-[100] border-separate border-spacing-0 overflow-hidden rounded-lg">
+      <thead className="relative z-[20] border-separate border-spacing-0 overflow-hidden rounded-lg">
         <tr className="text-md bg-[--color-primary] text-left text-xs tracking-widest text-white">
           {[
             "User",
@@ -62,12 +63,14 @@ const Table: React.FC<TableProps> = ({
           ))}
         </tr>
       </thead>
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence mode={"popLayout"}>
         <motion.tbody
-          className={`z-[0] bg-white text-[--color-dark]`}
+          className={`relative z-[0] bg-white text-[--color-dark]`}
           variants={variants}
           initial="initial"
-          animate={hasPreloaded ? "test" : isLoading ? "closed" : "open"}
+          // exit={hasPreloaded ? "exit" : ""}
+          animate={isLoading ? "closed" : hasPreloaded ? "preloaded" : "open"}
+          // onAnimationStart={() => console.log("start")}
           // animate={"closed"}
           // custom={}
           // layout

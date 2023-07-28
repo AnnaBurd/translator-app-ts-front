@@ -12,19 +12,21 @@ const Pagination: React.FC<PaginationProps> = ({
   onPreviousPage,
 }) => {
   const nextPageHandler = () => {
-    console.log("nextPageHandler");
     if (currentPage >= totalPages) return;
     onNextPage();
   };
 
   const prevPageHandler = () => {
-    console.log("prevPageHandler");
     if (currentPage <= 1) return;
     onPreviousPage();
   };
 
   return (
-    <div className="inline-flex items-center justify-center gap-3">
+    <div
+      className={`inline-flex items-center justify-center gap-3 ${
+        totalPages <= 0 ? "invisible " : ""
+      }`}
+    >
       <button
         className={`inline-flex h-8 w-8 items-center justify-center rounded border border-slate-100 bg-white text-slate-900 rtl:rotate-180 dark:border-slate-800 dark:bg-slate-900 dark:text-white ${
           totalPages <= 1 ? "invisible " : ""

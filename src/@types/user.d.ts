@@ -1,3 +1,5 @@
+export type UserStatusType = "active" | "inactive" | "blocked" | "";
+
 export interface User {
   photo?: string;
   email?: string;

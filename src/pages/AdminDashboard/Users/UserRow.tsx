@@ -24,12 +24,17 @@ const variants = {
     opacity: 0,
     transition: { y: { stiffness: 1000 } },
   },
-  test: {
+  preloaded: {
     scale: 1,
     y: 0,
-    transition: { y: { duration: 0 }, opacity: { duration: 0.5 } },
+    transition: { y: { duration: 0 }, opacity: { duration: 0 } },
     opacity: 1,
   },
+  // exit: {
+  //   scale: 4.5,
+  //   x: 100,
+  //   transition: { duration: 2.5 },
+  // },
 };
 
 type UserRowProps = {
@@ -49,7 +54,9 @@ const UserRow: React.FC<UserRowProps> = ({
     <motion.tr
       key={user.email}
       variants={variants}
-      className="relative z-[10]"
+      // className="relative z-[10]"
+      // exit={"exit"}
+
       // initial={variants.closed}
       // animate={variants.open}
       // exit={variants.closed}
