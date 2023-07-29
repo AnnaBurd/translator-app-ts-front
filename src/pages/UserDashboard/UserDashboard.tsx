@@ -5,7 +5,7 @@ import Charts from "./Charts/Charts";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 
 import useDataPrivate from "../../hooks/useDataPrivate";
-import Loader from "../../components/animations/Loader";
+import Loader from "../../components/Loaders/Loader";
 import { User, UserProfileStats } from "../../@types/user";
 import { Doc } from "../../@types/doc";
 import { useContext } from "react";

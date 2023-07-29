@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import useFetchPrivate from "../../../hooks/useFetchPrivate";
 import { AnimatePresence, motion } from "framer-motion";
-import DotLoader from "../../../components/animations/DotLoader";
+import DotLoader from "../../../components/Loaders/DotLoader";
 import { Doc } from "../../../@types/doc";
 
 enum LanguageOptions {

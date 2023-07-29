@@ -1,7 +1,7 @@
 import { MouseEventHandler, useState } from "react";
 
 import { AnimatePresence, motion } from "framer-motion";
-import DotLoader from "../../../components/animations/DotLoader";
+import DotLoader from "../../../components/Loaders/DotLoader";
 
 // TODO: add localization for form labels/error messages
 

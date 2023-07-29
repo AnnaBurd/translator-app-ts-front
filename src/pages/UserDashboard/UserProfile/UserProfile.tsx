@@ -3,7 +3,6 @@ import AuthContext from "../../../auth/AuthContext";
 import Menu from "./Menu/Menu";
 import ProfilePreview from "./ProfilePreview";
 import DropdownBtn from "./DropdownBtn";
-import { createPortal } from "react-dom";
 
 type UserProfileProps = Record<string, never>;
 
@@ -26,7 +25,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
 
   return (
     <>
-      <div className="relative z-[60] flex flex-col items-center justify-center">
+      <div className="relative flex flex-col items-center justify-center">
         <button
           onClick={handleToggleMenu}
           type="button"
@@ -38,16 +37,8 @@ const UserProfile: React.FC<UserProfileProps> = () => {
 
           <DropdownBtn isOpen={isOpenUserProfileMenu} />
         </button>
-        <Menu isOpen={isOpenUserProfileMenu} />
-        {isOpenUserProfileMenu &&
-          createPortal(
-            <div
-              aria-roledescription="overlay"
-              className="fixed left-0 top-0 z-30 h-screen w-screen  opacity-50"
-              onClick={closeUserProfileMenu}
-            ></div>,
-            document.getElementById("overlays") as HTMLElement
-          )}
+
+        <Menu isOpen={isOpenUserProfileMenu} onClose={closeUserProfileMenu} />
       </div>
     </>
   );

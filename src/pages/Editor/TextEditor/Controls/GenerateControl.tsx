@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import DotLoader from "../../../../components/animations/DotLoader";
+import DotLoader from "../../../../components/Loaders/DotLoader";
 
 type GenerateControlProps = {
   onClick: () => void;

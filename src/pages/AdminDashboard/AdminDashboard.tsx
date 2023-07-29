@@ -5,11 +5,9 @@ import UserProfile from "../UserDashboard/UserProfile/UserProfile";
 import { useState, useContext } from "react";
 import useDataPrivate from "../../hooks/useDataPrivate";
 import UserCard from "./Users/UserCard";
-import Loader from "../../components/animations/Loader";
+import Loader from "../../components/Loaders/Loader";
 import Pagination from "./Pagination/Pagination";
-import BlockUserModal from "./Modals/BlockUserModal";
 import useFetchPrivate from "../../hooks/useFetchPrivate";
-import UnblockUserModal from "./Modals/UnblockUserModal";
 import LimitTokensForm from "./Modals/LimitTokensForm";
 import NavigationBtn from "../UserDashboard/NavigationBtn";
 import themeContext from "../../context/ThemeContext";
@@ -17,6 +15,8 @@ import Button from "./Filter/Button";
 import Table from "./Users/Table";
 import UsageStats from "./UsageStats";
 import useUsersPages from "./Pagination/useUsersPages";
+import UnblockUserModal from "./Modals/UnblockUser";
+import BlockUserModal from "./Modals/BlockUser";
 
 const USERS_PER_PAGE = 6;
 
@@ -89,8 +89,6 @@ export default function AdminDashboard() {
     hasAlreadyLoadedPage,
     currentPage,
   } = useUsersPages(totalUsers, USERS_PER_PAGE);
-
-  const fetchPrivate = useFetchPrivate();
 
   // Handle users filter selection
   // Filter options: "", "active", "inactive", "blocked"
@@ -276,71 +274,6 @@ export default function AdminDashboard() {
           <div>No registered users found</div>
         )}
 
-        <BlockUserModal
-          visible={userToBlockAccess.length > 0}
-          onClose={() => {
-            setUserToBlockAccess("");
-          }}
-          onAction={async () => {
-            console.log("block user", userToBlockAccess);
-
-            try {
-              const resp = await fetchPrivate(
-                `users/${userToBlockAccess}`,
-                "PATCH",
-                {
-                  isBlocked: true,
-                }
-              );
-
-              // Update user in current state
-
-              users.filter((u) => u.email === userToBlockAccess)[0].isBlocked =
-                true;
-
-              setUserToBlockAccess("");
-            } catch (e) {
-              console.log("error", e);
-            }
-
-            // return Promise.resolve();
-          }}
-          userEmail={userToBlockAccess}
-        />
-
-        <UnblockUserModal
-          visible={userToUnblockAccess.length > 0}
-          onClose={() => {
-            setUserToUnblockAccess("");
-          }}
-          onAction={async () => {
-            console.log("block user", userToUnblockAccess);
-
-            try {
-              const resp = await fetchPrivate(
-                `users/${userToUnblockAccess}`,
-                "PATCH",
-                {
-                  isBlocked: false,
-                }
-              );
-
-              // Update user in current state
-
-              users.filter(
-                (u) => u.email === userToUnblockAccess
-              )[0].isBlocked = false;
-
-              setUserToUnblockAccess("");
-            } catch (e) {
-              console.log("error", e);
-            }
-
-            // return Promise.resolve();
-          }}
-          userEmail={userToUnblockAccess}
-        />
-
         <LimitTokensForm
           visible={userToSetTokensLimit.length > 0}
           email={userToSetTokensLimit}
@@ -375,6 +308,49 @@ export default function AdminDashboard() {
           />
         </motion.div>
       </div>
+
+      <BlockUserModal
+        email={userToBlockAccess}
+        onClose={() => setUserToBlockAccess("")}
+        onSuccess={() => {
+          // Update current state to reflect the changes in the database
+          const user = users.find((u) => u.email === userToBlockAccess);
+
+          if (!user || !usageStats) throw new Error("User not found");
+
+          user.isBlocked = true;
+          usageStats.blockedUsers++;
+
+          if (user.tokensUsedMonth && user.tokensUsedMonth > 0) {
+            usageStats?.activeUsers && usageStats.activeUsers--;
+          } else {
+            usageStats?.inactiveUsers && usageStats.inactiveUsers--;
+          }
+
+          setUserToBlockAccess("");
+        }}
+      ></BlockUserModal>
+      <UnblockUserModal
+        email={userToUnblockAccess}
+        onClose={() => setUserToUnblockAccess("")}
+        onSuccess={() => {
+          // Update current state to reflect the changes in the database
+          const user = users.find((u) => u.email === userToUnblockAccess);
+
+          if (!user || !usageStats) throw new Error("User not found");
+
+          user.isBlocked = false;
+          usageStats?.blockedUsers && usageStats.blockedUsers--;
+
+          if (user.tokensUsedMonth && user.tokensUsedMonth > 0) {
+            usageStats.activeUsers++;
+          } else {
+            usageStats.inactiveUsers++;
+          }
+
+          setUserToUnblockAccess("");
+        }}
+      ></UnblockUserModal>
     </AnimatedPage>
   );
 }

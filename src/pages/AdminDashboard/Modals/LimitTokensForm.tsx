@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import useFetchPrivate from "../../../hooks/useFetchPrivate";
 import { AnimatePresence, motion } from "framer-motion";
-import DotLoader from "../../../components/animations/DotLoader";
+import DotLoader from "../../../components/Loaders/DotLoader";
 
 const tokensUsagePlanOptions = ["Standard", "Premium", "Enterprise"];
 // TODO: add localization for form labels/error messages

@@ -9,7 +9,7 @@ const notificationVariants = {
     opacity: 0,
     y: -10,
     scale: 0.7,
-    transition: { duration: 0.2 },
+    transition: { duration: 0.3 },
   },
   animate: {
     opacity: 1,
@@ -37,7 +37,7 @@ const ErrorNotification: React.FC<ErrorNotificationProps> = ({ message }) => {
           exit="exit"
           role="alert"
           layout
-          className="absolute w-fit rounded-l rounded-r-lg border-s-4 border-rose-500 bg-white p-1.5 pr-3"
+          className="h-fit w-fit rounded-l rounded-r-lg border-s-4 border-rose-500 bg-white p-1.5 pr-3"
         >
           <div className="flex items-center gap-2 text-rose-800">
             <svg

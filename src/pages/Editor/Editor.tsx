@@ -5,7 +5,7 @@ import { Doc } from "../../@types/doc";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs";
 import SideMenu from "./SideMenu/SideMenu";
 import AnimatedPage from "../../components/animations/AnimatedPage";
-import Loader from "../../components/animations/Loader";
+import Loader from "../../components/Loaders/Loader";
 import TextEditor from "./TextEditor/TextEditor";
 import useUploadedDocument from "./DocxManager/useUploadedDocument";
 

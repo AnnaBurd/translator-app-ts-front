@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import { useContext } from "react";
 import useSilentSignin from "./useSilentSignin";
-import LogoLoader from "../components/animations/LogoLoader";
+import LogoLoader from "../components/Loaders/LogoLoader";
 
 /**
  * Parent element for private react-router-dom routes. Checks if user has signed in, otherwise attempts a silent sign in / redirects to sign up route.
