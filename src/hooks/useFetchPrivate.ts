@@ -54,13 +54,20 @@ const useFetchPrivate = () => {
         response = await fetch(requestUrl, options);
       }
 
-      // If second attempt to fetch data fails - throw error
-      if (!response.ok) {
-        if (response.status === 402)
-          throw new Error(
-            "You have run out of tokens. Contact administrator to expand monthly limit."
-          );
+      // If all attempts to fetch data fail - throw error
+      if (response.status === 402)
+        throw new Error(
+          "You have run out of tokens. Contact administrator to expand monthly limit."
+        );
 
+      if (response.status === 403)
+        throw new Error(
+          "Your account has been blocked. Contact administrator to unblock your account."
+        );
+
+      if (response.status === 426)
+        throw new Error("Your account is not yet activated.");
+      if (!response.ok) {
         throw new Error(
           `useFetchPrivate: Failed second attempt to fetch data from endpoint ${url}.}`
         );

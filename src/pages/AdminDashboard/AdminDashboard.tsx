@@ -7,8 +7,6 @@ import useDataPrivate from "../../hooks/useDataPrivate";
 import UserCard from "./Users/UserCard";
 import Loader from "../../components/Loaders/Loader";
 import Pagination from "./Pagination/Pagination";
-import useFetchPrivate from "../../hooks/useFetchPrivate";
-import LimitTokensForm from "./Modals/LimitTokensForm";
 import NavigationBtn from "../UserDashboard/NavigationBtn";
 import themeContext from "../../context/ThemeContext";
 import Button from "./Filter/Button";
@@ -17,6 +15,7 @@ import UsageStats from "./UsageStats";
 import useUsersPages from "./Pagination/useUsersPages";
 import UnblockUserModal from "./Modals/UnblockUser";
 import BlockUserModal from "./Modals/BlockUser";
+import IncreaseTokensLimitModal from "./Modals/IncreaseTokensLimit";
 
 const USERS_PER_PAGE = 6;
 
@@ -274,23 +273,6 @@ export default function AdminDashboard() {
           <div>No registered users found</div>
         )}
 
-        <LimitTokensForm
-          visible={userToSetTokensLimit.length > 0}
-          email={userToSetTokensLimit}
-          currentPlan={
-            users.find((u) => u.email === userToSetTokensLimit)?.tokensLimit ||
-            0
-          }
-          onClose={() => {
-            setUserToSetTokensLimit("");
-          }}
-          onSubmit={(newLimit) => {
-            console.log("new limit", newLimit);
-            const user = users.find((u) => u.email === userToSetTokensLimit);
-            if (user) user.tokensLimit = newLimit;
-          }}
-        />
-
         <motion.div
           className="my-2 flex flex-col items-center rounded-2xl border-[1px] border-t border-slate-200 bg-white px-5 py-5 sm:flex-row sm:justify-between lg:my-0 lg:rounded-none lg:rounded-b-lg lg:border-none"
           layout
@@ -314,6 +296,7 @@ export default function AdminDashboard() {
         onClose={() => setUserToBlockAccess("")}
         onSuccess={() => {
           // Update current state to reflect the changes in the database
+          // (note - state mutation)
           const user = users.find((u) => u.email === userToBlockAccess);
 
           if (!user || !usageStats) throw new Error("User not found");
@@ -335,6 +318,7 @@ export default function AdminDashboard() {
         onClose={() => setUserToUnblockAccess("")}
         onSuccess={() => {
           // Update current state to reflect the changes in the database
+          // (note - state mutation)
           const user = users.find((u) => u.email === userToUnblockAccess);
 
           if (!user || !usageStats) throw new Error("User not found");
@@ -351,6 +335,20 @@ export default function AdminDashboard() {
           setUserToUnblockAccess("");
         }}
       ></UnblockUserModal>
+
+      <IncreaseTokensLimitModal
+        email={userToSetTokensLimit}
+        onClose={() => setUserToSetTokensLimit("")}
+        onSuccess={(newLimit) => {
+          // Update current state to reflect changes
+          // (note - state mutation)
+          console.log("new limit", newLimit);
+          const user = users.find((u) => u.email === userToSetTokensLimit);
+          if (user) user.tokensLimit = newLimit;
+
+          setUserToSetTokensLimit("");
+        }}
+      />
     </AnimatedPage>
   );
 }

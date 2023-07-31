@@ -30,11 +30,6 @@ const variants = {
     transition: { y: { duration: 0 }, opacity: { duration: 0 } },
     opacity: 1,
   },
-  // exit: {
-  //   scale: 4.5,
-  //   x: 100,
-  //   transition: { duration: 2.5 },
-  // },
 };
 
 type UserRowProps = {
@@ -51,21 +46,8 @@ const UserRow: React.FC<UserRowProps> = ({
   onSetTokensLimit,
 }) => {
   return (
-    <motion.tr
-      key={user.email}
-      variants={variants}
-      // className="relative z-[10]"
-      // exit={"exit"}
-
-      // initial={variants.closed}
-      // animate={variants.open}
-      // exit={variants.closed}
-      // initial={{ scale: 0.8, opacity: 0 }}
-      // animate={{ scale: 1, opacity: 1 }}
-      // exit={{ scale: 0.8, opacity: 0 }}
-      // transition={{ type: "spring" }}
-    >
-      <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
+    <motion.tr key={user.email} variants={variants}>
+      <td className=" overflow-hidden border-b border-slate-200 bg-white px-5 py-5 text-sm">
         <div className="flex items-center">
           <div className="h-10 w-10 flex-shrink-0">
             <img
@@ -89,45 +71,59 @@ const UserRow: React.FC<UserRowProps> = ({
           </div>
         </div>
       </td>
-      <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
+      <td className=" overflow-hidden border-b border-slate-200 bg-white px-5 py-5 text-center text-sm">
         <p className="whitespace-no-wrap">{user.role}</p>
       </td>
-      <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
+      <td className=" overflow-hidden border-b border-slate-200 bg-white px-5 py-5 text-right text-sm">
         <p className="whitespace-no-wrap">
-          {/* Sep 28, 2022{user.registrationDate} */}
           {new Date(user.registrationDate || "").toLocaleDateString("en-US", {
             dateStyle: "medium",
           })}
         </p>
       </td>
-      <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
-        <p className="whitespace-no-wrap">
-          {(user.tokensUsedMonth || 0).toLocaleString()}/
-          {(user.tokensLimit || 0).toLocaleString()}
+      <td className=" overflow-hidden border-b border-slate-200 bg-white px-5 py-5 text-sm">
+        <p className="whitespace-no-wrap text-right">
+          {user.tokensUsedMonth && user.tokensUsedMonth > 0
+            ? user.tokensUsedMonth?.toLocaleString()
+            : "-"}
         </p>
-        <span
-          role="progressbar"
-          aria-labelledby="ProgressLabel"
-          // aria-valuenow="75"
-          className="mt-1 block w-3/4 rounded-full bg-slate-200"
-        >
+      </td>
+      <td className=" overflow-hidden border-b border-slate-200 bg-white px-5 py-5 text-right text-sm">
+        <p className="whitespace-no-wrap text-xs">
           <span
-            className="block h-2 rounded-full bg-[--color-dark]"
-            style={{
-              width: `${
-                ((user.tokensUsedMonth || 0) / (user.tokensLimit || 0)) * 100 ||
-                0
-              }%`,
-            }}
-          ></span>
-        </span>
-      </td>
-      <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
-        <p className="whitespace-no-wrap">
-          {user.tokensUsedTotal?.toLocaleString()}
+            className={`font-semibold ${
+              user.tokensUsedTotal && user.tokensUsedTotal > 0
+                ? "text-indigo-800 opacity-70"
+                : ""
+            }`}
+          >
+            {(user.tokensUsedTotal || 0).toLocaleString()}
+          </span>{" "}
+          / {(user.tokensLimit || 0).toLocaleString()}
         </p>
+        <div className="flex justify-end">
+          <span
+            role="progressbar"
+            aria-labelledby="ProgressLabel"
+            aria-valuenow={
+              ((user.tokensUsedTotal || 0) / (user.tokensLimit || 0)) * 100 || 0
+            }
+            className="mt-1 block w-4/5 rounded-full bg-slate-200"
+          >
+            <span
+              className="block h-2 rounded-full bg-[--color-dark]"
+              style={{
+                width: `${
+                  ((user.tokensUsedTotal || 0) / (user.tokensLimit || 0)) *
+                    100 || 0
+                }%`,
+              }}
+            ></span>
+          </span>
+        </div>
       </td>
-      <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
+
+      <td className=" overflow-hidden border-b border-slate-200 bg-white px-5 py-5 text-left text-sm">
         <StatusBadge
           status={
             user.isBlocked
@@ -138,7 +134,7 @@ const UserRow: React.FC<UserRowProps> = ({
           }
         />
       </td>
-      <td className="border-b border-slate-200 bg-white px-5 py-5 text-sm">
+      <td className=" border-b border-slate-200 bg-white px-5 py-5 text-center text-sm">
         <span className="inline-flex rounded-md border bg-white shadow-sm ">
           <TokensUsageBtn
             onAction={() => {

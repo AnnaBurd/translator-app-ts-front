@@ -52,20 +52,22 @@ const UserCard: React.FC<UserCardProps> = ({
 
       <div className="px-0 pt-3 text-xs">
         <p className="whitespace-no-wrap">
-          Tokens Usage: {(user.tokensUsedMonth || 0).toLocaleString()}/
+          Tokens Usage: {(user.tokensUsedTotal || 0).toLocaleString()}/
           {(user.tokensLimit || 0).toLocaleString()}
         </p>
         <span
           role="progressbar"
           aria-labelledby="ProgressLabel"
-          // aria-valuenow="75"
+          aria-valuenow={
+            ((user.tokensUsedTotal || 0) / (user.tokensLimit || 0)) * 100 || 0
+          }
           className="mt-1 block w-full rounded-full bg-slate-200"
         >
           <span
             className="block h-2 rounded-full bg-[--color-dark]"
             style={{
               width: `${
-                ((user.tokensUsedMonth || 0) / (user.tokensLimit || 0)) * 100 ||
+                ((user.tokensUsedTotal || 0) / (user.tokensLimit || 0)) * 100 ||
                 0
               }%`,
             }}
