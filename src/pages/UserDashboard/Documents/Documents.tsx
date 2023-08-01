@@ -12,7 +12,7 @@ import { localeContains } from "./search-helper";
 type DocumentsProps = {
   docs: Array<Doc> | null | undefined;
   isLoading?: boolean;
-  error?: string;
+  errorLoading?: string;
   deleteDocument: (slug: string) => Promise<void>;
   onEndOfViewport: () => void;
 };
@@ -20,49 +20,39 @@ type DocumentsProps = {
 const Documents: React.FC<DocumentsProps> = ({
   docs,
   isLoading,
-  error,
+  errorLoading,
   deleteDocument,
   onEndOfViewport,
 }) => {
-  const [documentSlugToDelete, setDocumentSlugToDelete] = useState("");
-  const [docTitleToDelete, setDocTitleToDelete] = useState("");
-
-  const [searchQuery, setSearchQuery] = useState("");
-
+  // Listen when user scrolls past the last loaded document and
+  // trigger loading more documents
   const lastDocRef = useRef<HTMLSpanElement>(null);
   const { ref: observedReference, entry } = useIntersection({
     root: lastDocRef.current,
     threshold: 1,
     rootMargin: "800px",
   });
+  if (entry?.isIntersecting) onEndOfViewport();
 
-  if (entry?.isIntersecting) {
-    onEndOfViewport();
-  }
+  // Keep track of which document user wants to delete
+  const [documentSlugToDelete, setDocumentSlugToDelete] = useState("");
+  const [docTitleToDelete, setDocTitleToDelete] = useState("");
 
   const handleDelete = async (slug: string) => {
-    setDocumentSlugToDelete(slug);
     const docTitle = docs?.find((doc) => doc.slug === slug)?.title;
-
+    setDocumentSlugToDelete(slug);
     setDocTitleToDelete(docTitle || "");
   };
 
-  // Make sure the user wants to delete the document
+  // Ask user confirmation before deleting document
   const handleDeleteSubmit = async () => {
     // Delete document from state and in the database
-    // TODO: handle delete error
-    try {
-      await deleteDocument(documentSlugToDelete);
-      setDocumentSlugToDelete("");
-
-      // setTimeout(() => {
-      //   setDocumentIDToDelete("");
-      // }, 1000);
-    } catch (error) {
-      console.log("Error deleting document 📝🔥💥", error);
-    }
+    await deleteDocument(documentSlugToDelete);
+    setDocumentSlugToDelete("");
   };
 
+  // Filter documents according to the entered search query
+  const [searchQuery, setSearchQuery] = useState("");
   let filteredDocs;
   if (searchQuery) {
     filteredDocs = docs?.filter((doc) =>
@@ -95,19 +85,15 @@ const Documents: React.FC<DocumentsProps> = ({
     >
       <Search
         onSearch={(query) => {
-          console.log("Searching", query);
-
           searchQuery !== query && setSearchQuery(query);
         }}
         searchQuery={searchQuery}
       ></Search>
-      {isLoading && (
-        <div>TODO: wait a little bit, your documents are loading</div>
-      )}
-      {!isLoading && error && <div>Error TO HANDLE: {error}</div>}
-      {!isLoading && !error && <NewDocument />}
 
-      {!isLoading && !error && (
+      {!isLoading && errorLoading && <div>Error TO HANDLE: {errorLoading}</div>}
+      {!isLoading && !errorLoading && <NewDocument />}
+
+      {!isLoading && !errorLoading && (
         <AnimatePresence mode="popLayout">
           {(filteredDocs as Array<Doc>)?.map((doc) => (
             <Document key={doc.slug} doc={doc} onDelete={handleDelete} />

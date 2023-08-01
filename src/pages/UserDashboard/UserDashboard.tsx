@@ -40,7 +40,7 @@ export default function Dashboard() {
   }
 
   if (error) {
-    return <div>🔥🤔💥🔥📝 Could not load document: {error}</div>;
+    return <div>🔥🤔💥🔥📝 Could not load usage statistics: {error}</div>;
   }
 
   const navigateToEditorTab = () => {
@@ -119,7 +119,7 @@ export default function Dashboard() {
               docs={docs}
               deleteDocument={deleteDocument}
               isLoading={isFetchingFirstPageWithDocuments}
-              error={errorLoadingDocs}
+              errorLoading={errorLoadingDocs}
               onEndOfViewport={fetchMoreDocuments}
             ></Documents>
             <Charts stats={userProfile?.usageStatistics} />

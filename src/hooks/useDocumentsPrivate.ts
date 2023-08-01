@@ -53,18 +53,13 @@ const useDocumentsPrivate = <T extends Slugified>(
   };
 
   const deleteDataItem = async (slug: string) => {
+    // Try to delete the item
+    await fetchPrivate(`${url}/${slug}`, "DELETE", null);
+
+    // And remove the item from the state
     setData((prevData) => {
       return prevData.filter((item) => item.slug !== slug);
     });
-
-    // Save changes to the database
-    try {
-      console.log("DELETING DATA", slug);
-      await fetchPrivate(`${url}/${slug}`, "DELETE", null);
-    } catch (error) {
-      // TODO: manage errors and display them to the user
-      console.log("Error deleting data", error);
-    }
   };
 
   const shouldBeFetching =
