@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, Variants, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 
 type ModalProps = {
@@ -7,6 +7,30 @@ type ModalProps = {
   onClose: () => void;
   titleElement?: React.ReactNode;
   children: React.ReactNode;
+  animationVariants?: Variants;
+};
+
+const animationVariantsDefault: Variants = {
+  initial: {
+    opacity: 0,
+    translateY: "-40%",
+    translateX: "10%",
+    scale: 0.3,
+  },
+  animate: {
+    opacity: 1,
+    translateY: 0,
+    translateX: 0,
+    scale: 1,
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
+  exit: {
+    opacity: 0,
+    translateY: "-20%",
+    translateX: "10%",
+    scale: 0.7,
+    transition: { duration: 0.15, ease: "easeIn" },
+  },
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -15,6 +39,7 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   titleElement,
   children,
+  animationVariants,
 }) => {
   const closeModalHandler = () => {
     isClosable && onClose && onClose();
@@ -34,26 +59,10 @@ const Modal: React.FC<ModalProps> = ({
           ></motion.div>
 
           <motion.div
-            initial={{
-              opacity: 0,
-              translateY: "-40%",
-              translateX: "10%",
-              scale: 0.3,
-            }}
-            animate={{
-              opacity: 1,
-              translateY: 0,
-              translateX: 0,
-              scale: 1,
-              transition: { duration: 0.3, ease: "easeOut" },
-            }}
-            exit={{
-              opacity: 0,
-              translateY: "-20%",
-              translateX: "10%",
-              scale: 0.7,
-              transition: { duration: 0.15, ease: "easeIn" },
-            }}
+            variants={animationVariants || animationVariantsDefault}
+            initial="initial"
+            animate="animate"
+            exit="exit"
             layout
             className="z-[600] mb-[8vh] w-full max-w-full content-center justify-center rounded-2xl border border-blue-100 bg-white p-3 shadow-lg sm:w-fit sm:p-4"
             role="alert"

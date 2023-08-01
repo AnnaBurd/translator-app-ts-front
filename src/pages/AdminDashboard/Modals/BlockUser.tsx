@@ -7,8 +7,6 @@ import ErrorNotification from "../../Editor/TextEditor/Notifications/ErrorNotifi
 
 // TODO: also fix positioning of the delete document modal and new document modal
 
-// TODO: also fix the closing of the user profile modal!!!
-
 type BlockUserModalProps = {
   email: string;
   onClose: () => void;
