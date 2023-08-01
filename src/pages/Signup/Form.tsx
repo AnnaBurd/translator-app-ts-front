@@ -2,12 +2,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import useSignup from "../../auth/useSignup";
 import Button from "../../components/UI/Button";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 type FormData = {
   firstName: string | undefined;
@@ -34,8 +34,6 @@ const inputValidationSchema = yup
 const Form = () => {
   const signup = useSignup();
 
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -53,10 +51,8 @@ const Form = () => {
       await signup(data);
       setIsLoading(false);
     } catch (error) {
-      console.log("Error signing up", error);
       setIsLoading(false);
       setError((error as Error)?.message || "Something went wrong");
-      navigate("/error");
     }
   };
 
@@ -74,7 +70,7 @@ const Form = () => {
           advanced editing features to ease your translation workflow.
         </p>
 
-        {(isLoading || error) && (
+        {isLoading && (
           <motion.div
             className="absolute z-30 h-[100%] w-[100%] bg-gradient-to-r from-[--color-secondary] "
             initial={{ opacity: 0 }}
@@ -242,16 +238,43 @@ const Form = () => {
               Create an account
             </Button>
 
-            <p className="mt-4 text-sm text-slate-500 sm:mt-0">
-              Already have an account?{" "}
-              <Link to="/signin" className="text-slate-700 underline">
-                Sign in
-              </Link>
-              .
-            </p>
+            <AnimatePresence mode="wait">
+              {!error && (
+                <motion.p
+                  initial={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: 0, transition: { duration: 0.7 } }}
+                  exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+                  key="signin-link"
+                  className="mt-4 text-sm text-slate-500 sm:mt-0"
+                >
+                  Already have an account?{" "}
+                  <Link to="/signin" className="text-slate-700 underline">
+                    Sign in
+                  </Link>
+                  .
+                </motion.p>
+              )}
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0, transition: { duration: 0.7 } }}
+                  exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+                  key="signin-link-onerror"
+                  className="mt-4 text-sm leading-4 text-slate-500 sm:mt-0"
+                >
+                  <span className="text-rose-400 opacity-80">
+                    Ups! Could not signup with these credentials.
+                  </span>{" "}
+                  <br></br>Do you want to{" "}
+                  <Link to="/signin" className="text-slate-700 underline">
+                    sign in
+                  </Link>
+                  ?
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
         </form>
-        {/* </motion.div> */}
 
         {/* <OAuth></OAuth> */}
       </div>

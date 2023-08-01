@@ -29,12 +29,11 @@ export default function Signin() {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const signin = useSignin();
-  // const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    // reset,
+
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(inputValidationSchema),
@@ -44,19 +43,13 @@ export default function Signin() {
   const [errorSigningIn, setErrorSigningIn] = useState("");
 
   const onSubmit = async (data: FormData) => {
-    // e.preventDefault();
-
-    console.log("data", data);
-
     try {
       setIsLoading(true);
       await signin(data);
-      // setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log("Error signing in", error);
+
       setErrorSigningIn("Could not signin with these credentials.");
-      // navigate("/error");
     }
   };
 

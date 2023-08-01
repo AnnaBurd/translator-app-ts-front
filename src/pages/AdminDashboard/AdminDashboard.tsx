@@ -16,6 +16,7 @@ import useUsersPages from "./Pagination/useUsersPages";
 import UnblockUserModal from "./Modals/UnblockUser";
 import BlockUserModal from "./Modals/BlockUser";
 import IncreaseTokensLimitModal from "./Modals/IncreaseTokensLimit";
+import { Navigate } from "react-router-dom";
 
 const USERS_PER_PAGE = 6;
 
@@ -151,18 +152,13 @@ export default function AdminDashboard() {
   };
 
   // Render loading circle while fetching total usage stats / first page
-  if (isFetchingFirstPage || isLoadingUsageStats) {
-    return <Loader />;
-  }
+  if (isFetchingFirstPage || isLoadingUsageStats) return <Loader />;
 
   // Render error if could not load data
-  if (errorFetchingData || isErrorLoadingUsageStats) {
+  if (errorFetchingData || isErrorLoadingUsageStats)
     return (
-      <div>
-        🔥 Error loading users: {errorFetchingData || isErrorLoadingUsageStats}
-      </div>
+      <Navigate to="/error?type=server-error" state={{ from: location }} />
     );
-  }
 
   return (
     <AnimatedPage>

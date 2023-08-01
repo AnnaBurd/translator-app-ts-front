@@ -1,6 +1,6 @@
 import useDataPrivate from "../../hooks/useDataPrivate";
 
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Doc } from "../../@types/doc";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs";
 import SideMenu from "./SideMenu/SideMenu";
@@ -17,16 +17,15 @@ export default function Editor() {
   // And, if the document was just uploaded by the user, get that document from the application context
   const uploadedDocument = useUploadedDocument(document?.slug);
 
-  // console.log(`🌋🌋 Editor render, uploaded document: `, uploadedDocument);
-  // console.log(`🌋🌋 Editor render, downloaded document: `, document);
+  if (isLoading) return <Loader />;
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <div>🔥 Could not load document: {error}</div>;
-  }
+  if (error)
+    return (
+      <Navigate
+        to="/error?type=document-not-found"
+        state={{ from: location }}
+      />
+    );
 
   return (
     <>

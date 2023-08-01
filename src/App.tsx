@@ -4,7 +4,7 @@ import Signup from "./pages/Signup/Signup";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import Editor from "./pages/Editor/Editor";
 import UserDashboard from "./pages/UserDashboard/UserDashboard";
-import { NoMatch } from "./pages/Error/NoMatch";
+import { ErrorPage } from "./pages/Error/ErrorPage";
 import AuthProvider from "./auth/AuthProvider";
 import RequireAuth from "./auth/RequireAuth";
 
@@ -37,7 +37,7 @@ export default function App() {
                   <Route path="/users" element={<AdminDashboard />} />
                 </Route>
               </Route>
-              <Route path="*" element={<NoMatch />} />
+              <Route path="*" element={<ErrorPage />} />
             </Routes>
           </AnimatePresence>
         </ThemeContextProvider>

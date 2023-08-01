@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import WelcomeModal from "./Welcome/WelcomeModal";
 import themeContext from "../../context/ThemeContext";
 import NavigationBtn from "./NavigationBtn";
+import { Navigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { screenSize } = useContext(themeContext);
@@ -35,13 +36,14 @@ export default function Dashboard() {
 
   const isAdmin = userProfile?.user.role === "Admin";
 
-  if (isLoadingUserProfileStats || isFetchingFirstPageWithDocuments) {
+  if (isLoadingUserProfileStats || isFetchingFirstPageWithDocuments)
     return <Loader />;
-  }
 
-  if (error) {
-    return <div>🔥🤔💥🔥📝 Could not load usage statistics: {error}</div>;
-  }
+  // Render error if could not load data
+  if (error)
+    return (
+      <Navigate to="/error?type=server-error" state={{ from: location }} />
+    );
 
   const navigateToEditorTab = () => {
     const lastChangedDoc =

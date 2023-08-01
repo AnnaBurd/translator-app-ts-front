@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import { useContext } from "react";
 
@@ -11,12 +11,7 @@ const RequireAdmin = () => {
   // TODO: style error pages
   if (!signedInUser || signedInUser.role !== "Admin")
     return (
-      <div>
-        {" "}
-        // TODO: You are not authorized (this page is only for admins){" "}
-        <Link to={"/dashboard"}>Go back to dashboard</Link>
-        If there is some mistake, please contact us at{" "}
-      </div>
+      <Navigate to="/error?type=not-authorized" state={{ from: location }} />
     );
 
   return <Outlet />;

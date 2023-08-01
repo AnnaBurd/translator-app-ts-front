@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import useFetchPrivate from "../../../hooks/useFetchPrivate";
 import { AnimatePresence, motion } from "framer-motion";
 import DotLoader from "../../../components/Loaders/DotLoader";
-import { Doc } from "../../../@types/doc";
 
 enum LanguageOptions {
   vn = "vn",
@@ -132,30 +131,7 @@ const NewDocumentForm = ({
             className="fixed left-0 top-0 z-50 h-screen w-screen bg-slate-400 opacity-20"
             onClick={closeFormHandler}
           ></motion.div>
-          {/* 
-          <motion.div
-            initial={{
-              opacity: 0,
-              translateY: "-40%",
-              translateX: "-10%",
-              scale: 0.3,
-            }}
-            animate={{
-              opacity: 1,
-              translateY: 0,
-              translateX: 0,
-              scale: 1,
-              transition: { duration: 0.3, ease: "easeOut" },
-            }}
-            exit={{
-              opacity: 0,
-              translateY: "-20%",
-              translateX: "-10%",
-              scale: 0.7,
-              transition: { duration: 0.15, ease: "easeIn" },
-            }}
-            className="absolute inset-0 right-0 top-0  flex select-none overflow-y-visible"
-          > */}
+
           <motion.div
             initial={{
               opacity: 0,
@@ -373,13 +349,6 @@ const NewDocumentForm = ({
               </button>
             </form>
           </motion.div>
-          {/* TODO: error handling?  */}
-          {/* <div className="bg-red-300">
-            <p>{errors.title?.message} </p>
-            <p>{errors.lang?.message} </p>
-            <p>{errors.translationLang?.message} </p>
-          </div> */}
-          {/* </motion.div> */}
         </>
       ) : null}
     </AnimatePresence>
