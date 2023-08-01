@@ -2,7 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 
 export const ErrorPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const errorType = searchParams.get("type");
 
