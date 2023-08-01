@@ -1,5 +1,6 @@
 import { AnimatePresence, Variants, motion } from "framer-motion";
 import { createPortal } from "react-dom";
+import { useDisableBodyScroll } from "../../hooks/useDisableBodyScroll";
 
 type ModalProps = {
   isVisible: boolean;
@@ -41,6 +42,8 @@ const Modal: React.FC<ModalProps> = ({
   children,
   animationVariants,
 }) => {
+  useDisableBodyScroll(isVisible);
+
   const closeModalHandler = () => {
     isClosable && onClose && onClose();
   };

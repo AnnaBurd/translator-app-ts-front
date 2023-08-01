@@ -44,6 +44,35 @@ But not now, because it is not ready yet.  */
 
 /* Prevent scrollbar from repositioning page content */
 html {
-  padding-left: calc(100vw - 100%);
-  overflow-x: hidden;
+  padding-left: calc(100vw - 100%) !important;
+  overflow-x: hidden !important;
+}
+
+/* Style application scrollbars */
+/* Firefox */
+html {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--color-primary) var(--color-light) !important;
+}
+
+/* Chrome */
+/* Width */
+html::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+/* Track */
+html::-webkit-scrollbar-track {
+  background: var(--color-light);
+  border-radius: 10px;
+}
+/* Handle */
+html::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark);
 }
