@@ -200,20 +200,28 @@ export default function AdminDashboard() {
           </div>
           <motion.div
             className="mb-4 flex items-center justify-end gap-4"
-            initial={{ opacity: 0, y: "-20vh" }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              transition: {
-                opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
-                y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
-              },
-            }}
-            exit={{
-              opacity: 0,
-              y: "-20vh",
-              transition: { duration: 1, ease: "backOut" },
-            }}
+            initial={screenSize === "small" ? "" : { opacity: 0, y: "-20vh" }}
+            animate={
+              screenSize === "small"
+                ? ""
+                : {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      opacity: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+                      y: { duration: 1.4, ease: "backInOut", delay: 0.1 },
+                    },
+                  }
+            }
+            exit={
+              screenSize === "small"
+                ? ""
+                : {
+                    opacity: 0,
+                    y: "-20vh",
+                    transition: { duration: 1, ease: "backOut" },
+                  }
+            }
           >
             <NavigationBtn onClick={navigateToUserDashboardTab}>
               {screenSize === "large"
@@ -268,13 +276,12 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* TODO: fix styles for no users */}
-        {(!users || users?.length === 0) && (
-          <div>No registered users found</div>
-        )}
-
         <motion.div
-          className="my-2 flex flex-col items-center rounded-2xl border-[1px] border-t border-slate-200 bg-white px-5 py-5 sm:flex-row sm:justify-between lg:my-0 lg:rounded-none lg:rounded-b-lg lg:border-none"
+          className={`my-2 flex flex-col items-center rounded-2xl border-[1px] border-t border-slate-200 bg-white px-5 py-5 sm:flex-row sm:justify-between lg:my-0   lg:border-none ${
+            !users || users?.length === 0
+              ? "lg:rounded-lg"
+              : "lg:rounded-none lg:rounded-b-lg"
+          }`}
           layout
         >
           <UsageStats
@@ -342,7 +349,6 @@ export default function AdminDashboard() {
         onSuccess={(newLimit) => {
           // Update current state to reflect changes
           // (note - state mutation)
-          console.log("new limit", newLimit);
           const user = users.find((u) => u.email === userToSetTokensLimit);
           if (user) user.tokensLimit = newLimit;
 

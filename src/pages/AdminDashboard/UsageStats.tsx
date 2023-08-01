@@ -50,6 +50,7 @@ const UsageStats: React.FC<UsageStatsProps> = ({
         (usageStats?.activeUsers || 0) +
         (usageStats?.inactiveUsers || 0) +
         (usageStats?.blockedUsers || 0);
+
       if (totalUsers) {
         message = `Total ${totalUsers} user${totalUsers > 1 ? "s" : ""}`;
         if (usageStats?.tokensUsedMonth) {
@@ -58,6 +59,8 @@ const UsageStats: React.FC<UsageStatsProps> = ({
         } else {
           message += ".";
         }
+      } else {
+        message = "No application users yet.";
       }
     }
   }

@@ -99,7 +99,7 @@ const UserCard: React.FC<UserCardProps> = ({
               />
             </svg>
 
-            <span className="   text-xs">Set Usage Limit</span>
+            <span className="   text-xs">Increase tokens limit</span>
           </button>
 
           {user.isBlocked && (

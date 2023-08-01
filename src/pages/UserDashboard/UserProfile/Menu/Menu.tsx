@@ -1,5 +1,5 @@
 import { AnimatePresence, Variants, motion } from "framer-motion";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import AuthContext from "../../../../auth/AuthContext";
 import NavigationItem from "./NavigationItem";
@@ -8,6 +8,7 @@ import SignoutForm from "./SignoutForm";
 type MenuProps = {
   isOpen: boolean;
   onClose: () => void;
+  parentContainerRef: React.RefObject<HTMLDivElement>;
 };
 
 // Framer Motion animation variants for dropdown menu opening and closing
@@ -28,7 +29,7 @@ const menuVariants = {
   },
 } satisfies Variants;
 
-const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
+const Menu: React.FC<MenuProps> = ({ isOpen, onClose, parentContainerRef }) => {
   // Currently signed in user (depending on user, different menu options are availiable)
   const { user: signedInUser } = useContext(AuthContext);
   const isAdmin = signedInUser && signedInUser?.role === "Admin";
@@ -37,16 +38,53 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
+  {
+    /* Note: Position fixed does not work.
+        Reason: Framer motion sets transform:0 on the parent element, and fixed position thus is relative to the parent, not to the view window
+        
+        Solution: Use absolute position and manually position the overlay
+
+        Other options: 
+        
+        Apply event listener to ansector div - more effective, but mixes component and parents logic
+
+        Portal both overlay and menu to the modals div and manually calculate position of the menu - breaks animations on the pages navigation
+ 
+        */
+  }
+
+  // Window size and parent container size
+  const [parentContainerRect, setParentContainerRect] =
+    useState<DOMRect | null>(null);
+  const [isWaitingForAnimation, setIsWaitingForAnimation] = useState(true);
+
+  // Wait until parent takes its position on the page
+  useEffect(() => {
+    setTimeout(() => setIsWaitingForAnimation(false), 2000);
+  }, []);
+
+  // Get parent container bounding rect (size and position)
+  useEffect(() => {
+    if (isWaitingForAnimation || parentContainerRect) return;
+
+    const parentContainer = parentContainerRef.current;
+    const rect = parentContainer?.getBoundingClientRect() || null;
+    if (!rect) return;
+    setParentContainerRect(rect);
+  }, [parentContainerRect, parentContainerRef, isWaitingForAnimation]);
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Note: Position fixed does not work.
-        Reason: Framer motion sets transform:0 on the parent element, and fixed position thus is relative to the parent, not to the view window */}
           <div
             aria-roledescription="overlay"
-            className="absolute -left-[100vw] -top-[100vh] z-30 h-[200vh] w-[200vw]  "
+            className="absolute z-30 h-[99.5vh] w-[99.5vw]  "
             onClick={onClose}
+            style={{
+              left: parentContainerRect ? -parentContainerRect.x + 1 : 0,
+              top: parentContainerRect ? -parentContainerRect.y + 1 : 0,
+            }}
           ></div>
           <motion.div
             key="user-profile-menu"

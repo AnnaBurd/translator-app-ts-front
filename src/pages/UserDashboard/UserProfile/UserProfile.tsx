@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import AuthContext from "../../../auth/AuthContext";
 import Menu from "./Menu/Menu";
 import ProfilePreview from "./ProfilePreview";
@@ -21,11 +21,16 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     toggleUserProfileMenu();
   };
 
+  const parentContainerRef = useRef<HTMLDivElement>(null);
+
   if (!user) return null;
 
   return (
     <>
-      <div className="relative flex flex-col items-center justify-center">
+      <div
+        className="relative flex flex-col items-center justify-center"
+        ref={parentContainerRef}
+      >
         <button
           onClick={handleToggleMenu}
           type="button"
@@ -38,7 +43,11 @@ const UserProfile: React.FC<UserProfileProps> = () => {
           <DropdownBtn isOpen={isOpenUserProfileMenu} />
         </button>
 
-        <Menu isOpen={isOpenUserProfileMenu} onClose={closeUserProfileMenu} />
+        <Menu
+          isOpen={isOpenUserProfileMenu}
+          onClose={closeUserProfileMenu}
+          parentContainerRef={parentContainerRef}
+        />
       </div>
     </>
   );
