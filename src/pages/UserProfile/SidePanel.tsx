@@ -16,7 +16,7 @@ const SidePanel: React.FC<SidePanelProps> = ({
   return (
     <div className="flex h-full flex-col items-center justify-between gap-12">
       <div className="flex flex-col items-center justify-start">
-        <p className="whitespace-no-wrap -mb-.5 text-2xl font-bold tracking-tight text-slate-700">
+        <p className="whitespace-no-wrap -mb-.5 text-center text-2xl font-bold tracking-tight text-slate-700">
           {firstName} {lastName}
         </p>
         <span className="mb-8 text-xs font-light tracking-wide text-[--color-primary]">

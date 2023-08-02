@@ -30,6 +30,7 @@ const useSignout = () => {
       }
     } catch (error) {
       console.log("😶‍🌫️", error);
+      // TODO: Handle error
     } finally {
       updateAccessToken("");
       updateUserDetails(null);

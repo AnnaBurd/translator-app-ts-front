@@ -10,6 +10,7 @@ import PasswordManagement from "./Tabs/PasswordManagement";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useFetchPrivate from "../../hooks/useFetchPrivate";
 
 const initialTabs: Tab[] = [
   { label: "profile-settings", title: "Profile Info" },
@@ -64,7 +65,11 @@ const inputValidationSchema = yup.object({
 });
 
 const Profile = () => {
-  const { user: signedInUser } = useContext(AuthContext);
+  const {
+    user: signedInUser,
+    updateUserDetails,
+    updateAccessToken,
+  } = useContext(AuthContext);
 
   const [selectedTab, setSelectedTab] = useState(initialTabs[0]);
 
@@ -76,8 +81,45 @@ const Profile = () => {
     resolver: yupResolver(inputValidationSchema),
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorSubmitting, setErrorSubmitting] = useState("");
+  const fetchPrivate = useFetchPrivate();
+
   const onSubmit = async (data: FormData) => {
     console.log("submitted form data", data);
+
+    // Handle profile deletion
+    if (data.confirmDelete?.toLowerCase() === "delete profile") {
+      try {
+        setIsSubmitting(true);
+
+        const responseData = await fetchPrivate("users/profile", "DELETE", {
+          confirmDelete: true,
+        });
+
+        console.log("response data", responseData);
+        setIsSubmitting(false);
+      } catch (error) {
+        setErrorSubmitting((error as Error).message || "An error occurred");
+        setIsSubmitting(false);
+      }
+      updateAccessToken("");
+      updateUserDetails(null);
+      return navigate("/signup");
+    }
+
+    // Handle profile update
+    try {
+      setIsSubmitting(true);
+
+      const responseData = await fetchPrivate("users/profile", "PATCH", data);
+
+      console.log("response data", responseData);
+      setIsSubmitting(false);
+    } catch (error) {
+      setErrorSubmitting((error as Error).message || "An error occurred");
+      setIsSubmitting(false);
+    }
   };
 
   // Go back to previous page
