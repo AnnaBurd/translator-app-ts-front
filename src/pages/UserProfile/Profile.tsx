@@ -1,10 +1,21 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../auth/AuthContext";
 import { Navigate } from "react-router-dom";
 import SidePanel from "./SidePanel";
+import Tabs, { Tab } from "./Tabs/Tabs";
+import { AnimatePresence, motion } from "framer-motion";
+import AccountManagement from "./Tabs/AccountManagement";
+import ProfileSettings from "./Tabs/ProfileSettings";
+
+const initialTabs: Tab[] = [
+  { label: "profile-settings", title: "Profile Settings" },
+  { label: "account-management", title: "Delete Profile" },
+];
 
 const Profile = () => {
   const { user: signedInUser } = useContext(AuthContext);
+
+  const [selectedTab, setSelectedTab] = useState(initialTabs[0]);
 
   if (!signedInUser)
     return (
@@ -20,7 +31,7 @@ const Profile = () => {
       // layout
     >
       <form className="w-full max-w-5xl rounded-2xl border border-b-0 border-indigo-100 bg-white shadow-lg">
-        <div className="flex w-full flex-col overflow-hidden rounded-lg rounded-b-none bg-[white] lg:flex-row">
+        <div className="flex w-full flex-col overflow-hidden rounded-lg rounded-b-none bg-[white] lg:h-[28rem] lg:flex-row">
           <div className="w-full bg-[--color-light] px-8 pb-4 pt-10  lg:w-1/3 ">
             <SidePanel
               firstName={signedInUser.firstName || ""}
@@ -39,98 +50,45 @@ const Profile = () => {
               }
             />
           </div>
-          <div className="grid grid-cols-6 gap-2.5 px-4 pb-4 pt-6  md:gap-4 md:px-8 md:pt-11 lg:w-2/3">
-            <h2 className="col-span-6 text-base font-medium tracking-wide text-slate-700 lg:text-lg">
+          <div className="px-4 pb-12 pt-6 md:px-8 lg:w-2/3 lg:pt-10">
+            <h2 className="lg:text2xl mb-4 hidden text-xl font-bold text-slate-600 lg:block">
+              Edit Profile
+            </h2>
+            <div className="">
+              <Tabs
+                initialTabs={initialTabs}
+                selectedTab={selectedTab}
+                onSelectTab={(tab) => setSelectedTab(tab)}
+              />
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedTab ? selectedTab.label : "empty"}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -10, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {!selectedTab && (
+                  <span className="block w-full p-6 text-center text-sm text-slate-400">
+                    No tab selected
+                  </span>
+                )}
+                {selectedTab === initialTabs[0] && <ProfileSettings />}
+                {selectedTab === initialTabs[1] && <AccountManagement />}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* <h2 className="col-span-6 text-base font-medium tracking-wide text-slate-700 lg:text-lg">
               Profile Settings
-            </h2>
-            <p className="col-span-6 -mt-2 mb-1 text-xs font-normal tracking-tight text-slate-400 lg:text-sm">
-              Update your basic profile information such as email address, name,
-              and password.
-            </p>
+            </h2> */}
 
-            <div className="col-span-3">
-              <label
-                htmlFor="firstName"
-                className={`block pb-1 pt-0.5 text-xs text-slate-700 transition-colors duration-300 lg:pb-1.5 lg:text-sm`}
-              >
-                First Name
-              </label>
-              <input
-                id="firstName"
-                className={` h-9 w-full rounded-md border-2 border-slate-200 bg-white p-2  text-sm text-slate-700 shadow-inner transition-colors duration-300 focus-within:outline-1`}
-                autoComplete="given-name"
-                // aria-invalid={errors.firstName ? "true" : "false"}
-              />
-            </div>
-
-            <div className="col-span-3">
-              <label
-                htmlFor="firstName"
-                className={`block pb-1 pt-0.5 text-xs text-slate-700 transition-colors duration-300 lg:pb-1.5 lg:text-sm`}
-              >
-                Last Name
-              </label>
-              <input
-                className={` h-9 w-full rounded-md border-2 border-slate-200 bg-white p-2  text-sm text-slate-700 shadow-inner transition-colors duration-300 focus-within:outline-1`}
-                autoComplete="given-name"
-                // aria-invalid={errors.firstName ? "true" : "false"}
-              />
-            </div>
-
-            <div className="col-span-6">
-              <label
-                htmlFor="firstName"
-                className={`block pb-1 pt-0.5 text-xs text-slate-700 transition-colors duration-300 lg:pb-1.5 lg:text-sm`}
-              >
-                New Email
-              </label>
-              <input
-                className={` h-9 w-full rounded-md border-2 border-slate-200 bg-white p-2  text-sm text-slate-700 shadow-inner transition-colors duration-300 focus-within:outline-1`}
-                autoComplete="given-name"
-                // aria-invalid={errors.firstName ? "true" : "false"}
-              />
-            </div>
-
-            <div className="col-span-6">
-              <label
-                htmlFor="firstName"
-                className={`block pb-1 pt-0.5 text-xs text-slate-700 transition-colors duration-300 lg:pb-1.5 lg:text-sm`}
-              >
-                New Password
-              </label>
-              <input
-                className={` h-9 w-full rounded-md border-2 border-slate-200 bg-white p-2  text-sm text-slate-700 shadow-inner transition-colors duration-300 focus-within:outline-1`}
-                autoComplete="given-name"
-                // aria-invalid={errors.firstName ? "true" : "false"}
-              />
-            </div>
-
-            <hr className="col-span-6 my-3 border-slate-200 md:my-6" />
-            <h2 className="col-span-6 text-base font-medium tracking-wide text-slate-700 lg:text-lg">
-              Delete Profile
-            </h2>
-            <p className="col-span-6 -mt-2 mb-1 text-xs font-normal tracking-tight text-rose-900 opacity-80 lg:text-sm">
-              Danger! You will lose all account data and tokens.
-            </p>
-            <div className="col-span-6 md:col-span-3">
-              <label
-                htmlFor="firstName"
-                className={`block pb-1 text-xs text-slate-700 transition-colors duration-300 lg:pb-1.5 lg:text-sm`}
-              >
-                Please type{" "}
-                <span className="font-bold tracking-tight">delete</span> to
-                delete your profile:
-              </label>
-              <input
-                className={` h-9 w-full rounded-md border-2 border-slate-200 bg-white p-2  text-sm text-slate-700 shadow-inner transition-colors duration-300 focus-within:outline-1`}
-                autoComplete="given-name"
-                // aria-invalid={errors.firstName ? "true" : "false"}
-              />
-            </div>
+            <hr className="my-3 border-slate-100 md:my-6" />
           </div>
         </div>
         <div className="flex w-full flex-col items-center justify-between gap-2 rounded-b-xl border-t border-slate-200 bg-slate-300 px-8 py-3 sm:flex-row">
-          <p className=" text-sm tracking-tight text-slate-500">
+          <p className=" text-xs tracking-tight text-slate-500 lg:text-sm">
             Click on Submit to update your Profile Info
           </p>
           <div>
