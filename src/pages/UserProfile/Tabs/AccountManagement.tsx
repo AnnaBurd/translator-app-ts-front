@@ -1,4 +1,15 @@
-const AccountManagement = () => {
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FormData } from "../Profile";
+
+type AccountManagementProps = {
+  registerFormFields: UseFormRegister<FormData>;
+  formErrors: FieldErrors<FormData>;
+};
+
+const AccountManagement: React.FC<AccountManagementProps> = ({
+  registerFormFields,
+  formErrors,
+}) => {
   return (
     <div className="grid grid-cols-6 gap-2.5  md:gap-4">
       {/* <h2 className="col-span-6 text-base font-medium tracking-wide text-slate-700 lg:text-lg">
@@ -9,17 +20,19 @@ const AccountManagement = () => {
       </p>
       <div className="col-span-6 md:col-span-3">
         <label
-          htmlFor="firstName"
-          className={`block pb-1 text-xs text-slate-700 transition-colors duration-300 lg:pb-1.5 lg:text-sm`}
+          htmlFor="confirmDelete"
+          className={`block pb-1 text-xs text-slate-700 transition-colors duration-300 lg:pb-1.5 `}
         >
           Please type{" "}
           <span className="font-bold tracking-tight">delete profile</span> to
           confirm:
         </label>
         <input
+          {...registerFormFields("confirmDelete")}
+          id="confirmDelete"
           className={` h-9 w-full rounded-md border-2 border-slate-200 bg-white p-2  text-sm text-slate-700 shadow-inner transition-colors duration-300 focus-within:outline-1`}
           autoComplete="given-name"
-          // aria-invalid={errors.firstName ? "true" : "false"}
+          aria-invalid={formErrors.confirmDelete ? "true" : "false"}
         />
       </div>
     </div>
