@@ -9,7 +9,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const accessTokenRef = useRef<string | null>(null);
 
-  const updateUserDetails = useCallback((user: User) => {
+  const updateUserDetails = useCallback((user: User | null) => {
+    if (!user) {
+      setUser(null);
+      return;
+    }
+
     setUser((prev) => {
       return { ...prev, ...user };
     });

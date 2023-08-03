@@ -118,7 +118,7 @@ const Form = () => {
             <input
               {...register("firstName")}
               id="firstName"
-              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors focus-within:outline-1 duration-300${
+              className={` mt-1 h-10 w-full rounded-md border-slate-200 bg-white p-2 text-sm  shadow-sm transition-colors duration-300 focus-within:outline-1 ${
                 errors.firstName
                   ? "text-rose-600 focus-within:outline-rose-400"
                   : "text-slate-700 focus-within:outline-slate-400"

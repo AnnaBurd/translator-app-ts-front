@@ -8,6 +8,7 @@ export interface Tab {
 type TabsProps = {
   initialTabs: Tab[];
   selectedTab: Tab;
+  tabsWithErrors: string[];
   onSelectTab: (tab: Tab) => void;
 };
 
@@ -15,6 +16,7 @@ const Tabs: React.FC<TabsProps> = ({
   initialTabs,
   selectedTab,
   onSelectTab,
+  tabsWithErrors,
 }) => {
   return (
     <div className="border-b border-slate-100 dark:border-slate-700">
@@ -24,8 +26,12 @@ const Tabs: React.FC<TabsProps> = ({
             <li
               key={tab.label}
               onClick={() => onSelectTab(tab)}
-              className={`relative cursor-pointer pb-2 text-sm font-medium  hover:text-slate-700 ${
-                tab === selectedTab ? "text-slate-700" : "text-slate-500"
+              className={`relative cursor-pointer pb-2 text-sm font-medium   ${
+                tab === selectedTab
+                  ? "text-slate-700"
+                  : tabsWithErrors.includes(tab.label)
+                  ? "text-rose-500 hover:text-rose-700"
+                  : "text-slate-500 hover:text-slate-700"
               } ${index === 0 ? "pl-0 pr-1.5" : "px-1.5"}}`}
               aria-current="page"
             >

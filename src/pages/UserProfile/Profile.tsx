@@ -2,15 +2,21 @@ import { useContext, useState } from "react";
 import AuthContext from "../../auth/AuthContext";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import SidePanel from "./SidePanel";
-import Tabs, { Tab } from "./Tabs/Tabs";
+import Tabs, { Tab } from "./Form/Tabs";
 import { AnimatePresence, motion } from "framer-motion";
-import AccountManagement from "./Tabs/AccountManagement";
-import ProfileSettings from "./Tabs/ProfileSettings";
-import PasswordManagement from "./Tabs/PasswordManagement";
-import * as yup from "yup";
+import AccountManagement from "./Form/AccountManagement";
+import ProfileInfo from "./Form/ProfileInfo";
+import PasswordManagement from "./Form/PasswordManagement";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useFetchPrivate from "../../hooks/useFetchPrivate";
+
+import { FormData } from "./Form/FormDataType";
+import useDataPrivate from "../../hooks/useDataPrivate";
+import { User } from "../../@types/user";
+import Loader from "../../components/Loaders/Loader";
+import { inputValidationSchema } from "./Form/FormDataValidation";
 
 const initialTabs: Tab[] = [
   { label: "profile-settings", title: "Profile Info" },
@@ -18,58 +24,18 @@ const initialTabs: Tab[] = [
   { label: "account-management", title: "Delete Profile" },
 ];
 
-export type FormData = {
-  firstName: string | undefined;
-  lastName: string | undefined;
-  newEmail: string | undefined;
-  currentPassword: string | undefined;
-  newPassword: string | undefined;
-  confirmDelete: string | undefined;
-};
-
-const inputValidationSchema = yup.object({
-  firstName: yup.string().trim().max(30),
-  lastName: yup.string().trim().max(30),
-  newEmail: yup
-    .string()
-    .email("Please enter a valid email address (e.g. email@example.com)"),
-  currentPassword: yup
-    .string()
-    .test(
-      "is-not-empty-when-new-password",
-      "Previous password is required when changing password",
-      function (value) {
-        const { newPassword } = this.parent;
-        if (!newPassword) return true;
-
-        return value !== undefined && value !== null && value !== "";
-      }
-    ),
-  newPassword: yup
-    .string()
-    .test(
-      "is-not-current-password",
-      "New password cannot be the same as current password",
-      function (value) {
-        const { currentPassword } = this.parent;
-        if (!currentPassword) return true;
-        return value !== this.parent.currentPassword;
-      }
-    ),
-  confirmDelete: yup
-    .string()
-    .oneOf(
-      ["", "delete profile"],
-      "Please type 'delete profile' to confirm deletion, or leave blank"
-    ),
-});
-
 const Profile = () => {
   const {
     user: signedInUser,
     updateUserDetails,
     updateAccessToken,
   } = useContext(AuthContext);
+
+  const [
+    userProfile,
+    isLoadingUserProfileDetails,
+    errorLoadingUserProfileDetails,
+  ] = useDataPrivate<User>(`users/profile/details`);
 
   const [selectedTab, setSelectedTab] = useState(initialTabs[0]);
 
@@ -81,23 +47,31 @@ const Profile = () => {
     resolver: yupResolver(inputValidationSchema),
   });
 
+  const tabsWithErrors = new Set<string>();
+  Object.keys(errors).forEach((key) => {
+    if (key === "confirmDelete") tabsWithErrors.add("account-management");
+
+    if (key === "currentPassword" || key === "newPassword")
+      tabsWithErrors.add("password-management");
+
+    if (key === "firstName" || key === "lastName" || key === "email")
+      tabsWithErrors.add("profile-settings");
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorSubmitting, setErrorSubmitting] = useState("");
   const fetchPrivate = useFetchPrivate();
 
   const onSubmit = async (data: FormData) => {
-    console.log("submitted form data", data);
-
     // Handle profile deletion
     if (data.confirmDelete?.toLowerCase() === "delete profile") {
       try {
         setIsSubmitting(true);
 
-        const responseData = await fetchPrivate("users/profile", "DELETE", {
+        await fetchPrivate("users/profile", "DELETE", {
           confirmDelete: true,
         });
 
-        console.log("response data", responseData);
         setIsSubmitting(false);
       } catch (error) {
         setErrorSubmitting((error as Error).message || "An error occurred");
@@ -109,12 +83,19 @@ const Profile = () => {
     }
 
     // Handle profile update
+
+    // Check if any data has changed
+    const hasNonEmptyData = Object.values(data).some((value) => value);
+    if (!hasNonEmptyData) return;
+
     try {
       setIsSubmitting(true);
 
       const responseData = await fetchPrivate("users/profile", "PATCH", data);
 
-      console.log("response data", responseData);
+      // Update current view with new data
+      updateUserDetails(responseData.user);
+
       setIsSubmitting(false);
     } catch (error) {
       setErrorSubmitting((error as Error).message || "An error occurred");
@@ -140,6 +121,14 @@ const Profile = () => {
       />
     );
 
+  if (isLoadingUserProfileDetails) return <Loader />;
+
+  // Render error if could not load data
+  if (errorLoadingUserProfileDetails)
+    return (
+      <Navigate to="/error?type=server-error" state={{ from: location }} />
+    );
+
   return (
     <div className="flex w-screen items-center justify-center px-4 py-6 lg:h-screen">
       <form
@@ -159,8 +148,8 @@ const Profile = () => {
                 }`
               }
               registeredSince={
-                signedInUser.registrationDate
-                  ? new Date(Date.parse(signedInUser.registrationDate))
+                userProfile?.registrationDate
+                  ? new Date(Date.parse(userProfile.registrationDate))
                   : new Date()
               }
             />
@@ -174,6 +163,7 @@ const Profile = () => {
                 initialTabs={initialTabs}
                 selectedTab={selectedTab}
                 onSelectTab={(tab) => setSelectedTab(tab)}
+                tabsWithErrors={Array.from(tabsWithErrors)}
               />
             </div>
 
@@ -191,7 +181,7 @@ const Profile = () => {
                   </span>
                 )}
                 {selectedTab === initialTabs[0] && (
-                  <ProfileSettings
+                  <ProfileInfo
                     registerFormFields={register}
                     formErrors={errors}
                   />
@@ -246,6 +236,10 @@ const Profile = () => {
         <div>currentPassword: {errors.currentPassword?.message}</div>
         <div>newPassword: {errors.newPassword?.message}</div>
         <div>confirm delete: {errors.confirmDelete?.message}</div>
+        <br></br>
+        SUBMISSION STATUS:
+        <div>isSubmitting: {isSubmitting.toString()}</div>
+        <div>errorSubmitting: {errorSubmitting}</div>
       </div>
     </div>
   );

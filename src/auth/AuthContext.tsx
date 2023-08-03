@@ -4,7 +4,7 @@ import { User } from "../@types/user";
 export interface AuthContext {
   getAccessToken: () => string | null;
   user: User | null;
-  updateUserDetails: (user: User) => void;
+  updateUserDetails: (user: User | null) => void;
   updateAccessToken: (token: string) => void;
 }
 

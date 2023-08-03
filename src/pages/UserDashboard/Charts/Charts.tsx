@@ -38,7 +38,7 @@ const Charts: React.FC<ChartsProps> = ({ stats }) => {
         {stats && stats.limit > 0 && <UsageSemidonut stats={stats} />}
         {!stats || stats.limit === 0 ? (
           <div className="text-xs font-normal text-slate-500">
-            {user?.newUser
+            {user?.newUser || !stats?.limit
               ? "Administator is reviewing your account and will  open access soon."
               : "You have no tokens left, to extend usage please contact your administrator."}
           </div>
