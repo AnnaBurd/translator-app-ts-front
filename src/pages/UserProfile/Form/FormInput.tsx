@@ -1,15 +1,10 @@
 import { UseFormRegister } from "react-hook-form";
 import { FormData } from "./FormDataType";
+import { InputValidationField } from "./FormDataValidation";
 
 type FormInputProps = {
   title: string | React.ReactNode;
-  id:
-    | "firstName"
-    | "lastName"
-    | "newEmail"
-    | "currentPassword"
-    | "newPassword"
-    | "confirmDelete";
+  id: InputValidationField;
   registerFormFields: UseFormRegister<FormData>;
   errorMessage?: string;
   autocomplete?: string;

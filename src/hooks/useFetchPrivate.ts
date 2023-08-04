@@ -7,9 +7,11 @@ type RequestMethod = "POST" | "GET" | "PATCH" | "DELETE";
 
 type RequestOptions = {
   method: RequestMethod;
-  headers: HeadersInit & { Authorization: string };
+  headers: HeadersInit & { Authorization: string } & {
+    "Content-Type"?: string | undefined;
+  };
   signal?: AbortSignal;
-  body?: string;
+  body?: BodyInit | string;
 };
 
 const useFetchPrivate = () => {
@@ -23,25 +25,34 @@ const useFetchPrivate = () => {
       data: unknown,
       signal?: AbortSignal,
       page?: number,
-      limit?: number
+      limit?: number,
+      hasFiles?: boolean
     ) => {
+      console.log("useFetchPrivate data: ", data);
+
       const options: RequestOptions = {
         method,
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
+          Accept: hasFiles ? "*/*" : "application/json",
         },
         signal,
       };
+
+      if (!hasFiles) options.headers["Content-Type"] = "application/json";
+
+      // const reqHeaders = new Headers(options.headers);
+      // options.headers = reqHeaders;
 
       let requestUrl = `${Config.API_BASE_URL}/${url}`;
       if (page && limit)
         requestUrl = `${requestUrl}?page=${page}&limit=${limit}`;
 
       if (data !== null) {
-        options.body = JSON.stringify(data);
+        options.body = hasFiles ? (data as FormData) : JSON.stringify(data);
       }
+
+      console.log("useFetchPrivate: options", options);
 
       // Fetch data from backend using latest access token value
       let response = await fetch(requestUrl, options);
@@ -49,6 +60,8 @@ const useFetchPrivate = () => {
       // If server replies that access token has expired - try to refresh token and repeat request
       if (!response.ok && response.status === 401) {
         const newAccessToken = await refreshAccessToken();
+
+        // options.headers?.set("Authorization", `Bearer ${newAccessToken}`);
 
         options.headers.Authorization = `Bearer ${newAccessToken}`;
         response = await fetch(requestUrl, options);

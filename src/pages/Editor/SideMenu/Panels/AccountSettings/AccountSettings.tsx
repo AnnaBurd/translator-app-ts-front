@@ -48,7 +48,10 @@ const AccountSettingsPanel: React.FC<AccountSettingsPanelProps> = ({
           <div className="p-2">
             <NavigationItem path="/profile">
               <div className="-ml-2 flex items-center justify-start gap-1.5">
-                <ProfilePhoto photoUrl={user?.photo} name={user?.firstName} />
+                <ProfilePhoto
+                  photoUrl={user?.photoUrl}
+                  name={user?.firstName}
+                />
                 <p className="text-left text-xs sm:block">
                   <strong className="block font-medium">
                     {user?.firstName} {user?.lastName}

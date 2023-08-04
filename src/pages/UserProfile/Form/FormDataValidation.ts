@@ -1,17 +1,29 @@
 import * as yup from "yup";
 
+export type InputValidationField =
+  | "firstName"
+  | "lastName"
+  | "newEmail"
+  | "currentPassword"
+  | "newPassword"
+  | "confirmDelete"
+  | "selectedImage";
+
 export const inputValidationSchema = yup.object({
   firstName: yup
     .string()
     .trim()
     .max(40, "First name must be 40 characters or less."),
+
   lastName: yup
     .string()
     .trim()
     .max(40, "Last name must be 40 characters or less."),
+
   newEmail: yup
     .string()
     .email("Please enter a valid email address (e.g. email@example.com)."),
+
   currentPassword: yup
     .string()
     .test(
@@ -24,6 +36,7 @@ export const inputValidationSchema = yup.object({
         return value !== undefined && value !== null && value !== "";
       }
     ),
+
   newPassword: yup
     .string()
     .test(
@@ -44,10 +57,20 @@ export const inputValidationSchema = yup.object({
         return value !== this.parent.currentPassword;
       }
     ),
+
   confirmDelete: yup
     .string()
     .oneOf(
       ["", "delete profile"],
       "Please type 'delete profile' to confirm deletion, or leave blank."
     ),
+
+  selectedImage: yup
+    .mixed<File>()
+    .transform((value) => (value as File[])[0])
+    .test("fileSize", "Image file size must be less than 1MB", (value) => {
+      if (!value) return true; // attachment is optional
+
+      return value.size <= 1000000;
+    }),
 });

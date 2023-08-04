@@ -8,7 +8,7 @@ type ProfilePreviewProps = {
 const ProfilePreview: React.FC<ProfilePreviewProps> = ({ user }) => {
   return (
     <>
-      <ProfilePhoto photoUrl={user.photo} name={user?.firstName} />
+      <ProfilePhoto photoUrl={user.photoUrl} name={user?.firstName} />
       <p className="mr-2 ms-2 hidden text-left text-xs sm:block">
         <strong className="block font-medium">
           {user.firstName} {user.lastName}
