@@ -1,20 +1,26 @@
+import { lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import Signin from "./pages/Signin/Signin";
-import Signup from "./pages/Signup/Signup";
-import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
-import Editor from "./pages/Editor/Editor";
-import UserDashboard from "./pages/UserDashboard/UserDashboard";
-import { ErrorPage } from "./pages/Error/ErrorPage";
-import AuthProvider from "./auth/AuthProvider";
-import RequireAuth from "./auth/RequireAuth";
 
 import { AnimatePresence } from "framer-motion";
-import NewDocument from "./pages/Editor/Modals/NewDocument";
+
+const Signin = lazy(() => import("./pages/Signin/Signin"));
+const Signup = lazy(() => import("./pages/Signup/Signup"));
+const Restore = lazy(() => import("./pages/Restore/Restore"));
+const AdminDashboard = lazy(
+  () => import("./pages/AdminDashboard/AdminDashboard")
+);
+const UserDashboard = lazy(() => import("./pages/UserDashboard/UserDashboard"));
+const Editor = lazy(() => import("./pages/Editor/Editor"));
+const NewDocument = lazy(() => import("./pages/Editor/Modals/NewDocument"));
+const Profile = lazy(() => import("./pages/UserProfile/Profile"));
+const ErrorPage = lazy(() => import("./pages/Error/ErrorPage"));
+
+import AuthProvider from "./auth/AuthProvider";
+import RequireAuth from "./auth/RequireAuth";
 import RequireAdmin from "./auth/RequireAdmin";
-import Profile from "./pages/UserProfile/Profile";
+
 import ContextProvider from "./context/ContextProvider";
 import ThemeContextProvider from "./context/ThemeContextProvider";
-import Restore from "./pages/Restore/Restore";
 
 export default function App() {
   const location = useLocation();

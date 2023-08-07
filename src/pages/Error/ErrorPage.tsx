@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 
-export const ErrorPage = () => {
+const ErrorPage = () => {
   const [searchParams] = useSearchParams();
 
   const errorType = searchParams.get("type");
@@ -62,3 +62,5 @@ export const ErrorPage = () => {
     </AnimatedPage>
   );
 };
+
+export default ErrorPage;
