@@ -1,11 +1,11 @@
 import { UseFormRegister } from "react-hook-form";
-import { FormData } from "./FormDataType";
+import { FormDataType } from "./FormDataType";
 import { InputValidationField } from "./FormDataValidation";
 
 type FormInputProps = {
   title: string | React.ReactNode;
   id: InputValidationField;
-  registerFormFields: UseFormRegister<FormData>;
+  registerFormFields: UseFormRegister<FormDataType>;
   errorMessage?: string;
   autocomplete?: string;
   type?: string;

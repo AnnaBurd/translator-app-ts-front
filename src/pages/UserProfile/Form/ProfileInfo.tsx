@@ -1,10 +1,10 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { FormData } from "./FormDataType";
+import { FormDataType } from "./FormDataType";
 import FormInput from "./FormInput";
 
 type ProfileInfoProps = {
-  registerFormFields: UseFormRegister<FormData>;
-  formErrors: FieldErrors<FormData>;
+  registerFormFields: UseFormRegister<FormDataType>;
+  formErrors: FieldErrors<FormDataType>;
 };
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({

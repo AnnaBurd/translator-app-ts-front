@@ -53,7 +53,7 @@ const UserRow: React.FC<UserRowProps> = ({
             <img
               className="h-full w-full rounded-full"
               src={
-                user.photo ||
+                user.photoUrl ||
                 `https://ui-avatars.com/api/?size=64&font-size=0.4&bold=true&background=deeeff&color=718398&name=${
                   (user.firstName && user.firstName[0]) || ""
                 }`

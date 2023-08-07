@@ -64,13 +64,7 @@ const NewDocumentForm = ({
   onClose: MouseEventHandler<HTMLElement>;
   fullScreen?: boolean;
 }) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<FormData>({
+  const { register, handleSubmit, watch, reset } = useForm<FormData>({
     defaultValues: {
       title: "",
       lang: LanguageOptions.vn,

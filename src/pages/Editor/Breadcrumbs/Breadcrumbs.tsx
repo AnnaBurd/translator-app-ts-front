@@ -1,9 +1,7 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import Menu from "./Dropdown/Menu";
 import Separator from "./Separator";
 import Home from "./NavigationItems/Home";
-import DropdownBtn from "../../UserDashboard/UserProfile/DropdownBtn";
 import themeContext from "../../../context/ThemeContext";
 
 // TODO: uncomment dropdown btn menu and add functionality
