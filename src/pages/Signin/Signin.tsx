@@ -318,7 +318,7 @@ export default function Signin() {
             {errorSigningIn && (
               <p className="mb-1 text-center text-sm text-slate-500">
                 {errorSigningIn}{" "}
-                <Link className="underline" to="#TODO">
+                <Link className="underline" to="/restore">
                   Restore password
                 </Link>
                 ?

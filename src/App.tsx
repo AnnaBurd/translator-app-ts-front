@@ -14,6 +14,7 @@ import RequireAdmin from "./auth/RequireAdmin";
 import Profile from "./pages/UserProfile/Profile";
 import ContextProvider from "./context/ContextProvider";
 import ThemeContextProvider from "./context/ThemeContextProvider";
+import Restore from "./pages/Restore/Restore";
 
 export default function App() {
   const location = useLocation();
@@ -28,6 +29,7 @@ export default function App() {
               <Route index element={<Navigate to="/dashboard" />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/restore" element={<Restore />} />
               <Route element={<RequireAuth />}>
                 <Route path="/dashboard" element={<UserDashboard />} />
                 <Route path="/editor/" element={<NewDocument />} />
