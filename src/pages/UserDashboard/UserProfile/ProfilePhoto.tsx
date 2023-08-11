@@ -6,10 +6,14 @@ type ProfilePhotoProps = {
 import Config from "../../../../config.json";
 
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({ photoUrl, name }) => {
+  const isUrlFull = photoUrl?.includes("http");
+
   const imgUrl = photoUrl
-    ? `${Config.STATIC_URL}/${photoUrl}`
+    ? isUrlFull
+      ? photoUrl
+      : `${Config.STATIC_URL}/${photoUrl}`
     : `https://ui-avatars.com/api/?size=64&font-size=0.4&bold=true&background=deeeff&color=718398&name=${
-        name ? name[0] : "A"
+        name ? name[0] : ""
       }`;
 
   return (

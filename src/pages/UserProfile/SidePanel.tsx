@@ -55,9 +55,12 @@ const SidePanel: React.FC<SidePanelProps> = ({
   // };
 
   // console.log("SidePanel - uploaded photo", uploadedPhotos);
+  const isUrlFull = photoUrl?.includes("http");
 
   const currentPhotoUrl = photoUrl
-    ? `${Config.STATIC_URL}/${photoUrl}`
+    ? isUrlFull
+      ? photoUrl
+      : `${Config.STATIC_URL}/${photoUrl}`
     : `https://ui-avatars.com/api/?size=64&font-size=0.4&bold=true&background=ffffff&color=718398&name=${
         (firstName && firstName[0]) || ""
       }`;
