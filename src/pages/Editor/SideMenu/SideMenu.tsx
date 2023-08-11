@@ -79,7 +79,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
           >
             <img
               className="h-full w-full p-1.5"
-              src={"/public/icon.svg"}
+              src={"/icon.svg"}
               alt="App Logo"
             />
           </span>

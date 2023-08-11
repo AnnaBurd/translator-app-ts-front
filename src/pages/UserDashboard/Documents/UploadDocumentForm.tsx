@@ -86,12 +86,12 @@ const UploadDocumentForm = ({
 
   const selectedFileList = watch("file");
 
-  console.log("FILE SELECTED", selectedFileList);
+  // console.log("FILE SELECTED", selectedFileList);
 
   const selectedFile = selectedFileList?.[0];
-  console.log("SELECTED FILE");
+  // console.log("SELECTED FILE");
 
-  console.log("ERRORS", errors);
+  // console.log("ERRORS", errors);
 
   // TODO: select option -> allow to store uploaded documents in local storage (for later use)
 
@@ -168,7 +168,7 @@ const UploadDocumentForm = ({
       // On success -> navigate to the editor page with new document
       navigate(`/editor/${responseData.slug}?upload=true`);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setIsLoading(false);
       setError((error as Error).message || "Error uploading document");
 
@@ -289,7 +289,7 @@ const UploadDocumentForm = ({
                   <button
                     type="button"
                     onClick={() => {
-                      console.log("button clicked");
+                      // console.log("button clicked");
                       document.getElementById("file-input")?.click();
                     }}
                     className="inline-block shrink-0 rounded-lg border border-indigo-400 bg-indigo-400 px-6 py-2.5 text-xs font-medium text-white transition focus:outline-none focus:ring  disabled:pointer-events-none disabled:border-indigo-200 disabled:bg-indigo-200"

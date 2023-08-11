@@ -160,7 +160,7 @@ export default function Restore() {
   };
 
   const handleNewPasswordSubmit = async (data: FormDataType) => {
-    console.log("handleNewPasswordSubmit: ", data);
+    // console.log("handleNewPasswordSubmit: ", data);
 
     try {
       if (!data.newPassword || !data.confirmPassword) return;
@@ -222,12 +222,12 @@ export default function Restore() {
         break;
 
       case "enter-new-password":
-        console.log("enter-new-password");
+        // console.log("enter-new-password");
         handleNewPasswordSubmit(data);
         break;
 
       case "reset-successful":
-        console.log("reset-successful");
+        // console.log("reset-successful");
         break;
     }
   };

@@ -33,8 +33,6 @@ const useRefreshAccessToken = () => {
 
       return newAccessToken;
     } catch (error) {
-      console.log("Error refreshing access token", error);
-
       // Skip errors caused by controller.abort() fetch signal api, because either component was dismounted, or a new request is already fired
       if ((error as DOMException)?.name !== "AbortError") {
         // Clear in-memory signed in user state

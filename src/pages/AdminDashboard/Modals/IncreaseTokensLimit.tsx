@@ -56,17 +56,12 @@ const IncreaseTokensLimitModal: React.FC<IncreaseTokensLimitModalProps> = ({
   const [errorAddingTokens, setErrorAddingTokens] = useState("");
 
   const increaseLimitHandler = async (data: FormData) => {
-    console.log("form data", data);
     try {
       setIsFetching(true);
       setErrorAddingTokens("");
       const responseData = await fetchPrivate(`users/${email}`, "PATCH", data);
 
-      console.log("response data", responseData);
-
       const { tokensLimit: newTokensLimit } = responseData;
-
-      console.log("new tokens limit", newTokensLimit, parseInt(newTokensLimit));
 
       onSuccess(parseInt(newTokensLimit));
 

@@ -33,12 +33,6 @@ const useDataPrivate = <T>(url: string): [T | null, boolean, string] => {
 
         setData(data);
         setIsLoading(false);
-
-        // console.log(
-        //   "useDataPrivate: successfully fetched and set data from url ",
-        //   url,
-        //   data
-        // );
       } catch (error) {
         // Access token has expired and can not be refreshed - redirect to signin page
         if (
@@ -55,7 +49,6 @@ const useDataPrivate = <T>(url: string): [T | null, boolean, string] => {
           // );
         } else {
           // TODO: manage errors and display them to the user
-          // console.log("UNHANDLED Error fetching data", error);
           setError("UNHANDLED Error fetching data");
           setIsLoading(false);
         }

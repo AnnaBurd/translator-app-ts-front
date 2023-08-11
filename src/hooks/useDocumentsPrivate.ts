@@ -110,7 +110,6 @@ const useDocumentsPrivate = <T extends Slugified>(
           // );
         } else {
           // TODO: manage errors and display them to the user
-          // console.log("UNHANDLED Error fetching data", error);
           setErrorFetchingData("🌋🌋🌋🔍 UNHANDLED Error fetching data");
           // setIsFetching(false);
         }

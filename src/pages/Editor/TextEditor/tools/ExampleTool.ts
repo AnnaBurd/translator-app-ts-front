@@ -14,7 +14,7 @@ class Regenerate implements InlineTool {
     this.button = null;
     this.state = false;
 
-    console.log("INLINE GTOOL API", api);
+    // console.log("INLINE GTOOL API", api);
   }
 
   render() {
@@ -29,7 +29,7 @@ class Regenerate implements InlineTool {
   }
 
   wrap(range: Range) {
-    console.log("WRAP RANGE", range);
+    // console.log("WRAP RANGE", range);
 
     const selectedText = range.extractContents();
 

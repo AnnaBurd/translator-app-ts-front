@@ -60,16 +60,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const { textEditorSettings } = useContext(ThemeContext);
   const { fontSize, lineHeight } = textEditorSettings;
 
-  // console.log(`🧌🧌 Text editor render, uploaded document: `, uploadedDocument);
-  // console.log(`🧌🧌 Text editor render, downloaded document: `, document);
-
   // TODO: fix error of new document not having title(should be untitled-xvxcv)
 
   // Listen to the events of the input editor to track changes in input blocks since the last save
   const trackEditorJSEvent = useCallback(
     (event: BlockMutationEvent) => {
-      console.log("🎈 trackEditorJSEvent: BlockMutationEvent", event.type);
-
       const handleBlockAdded = (event: BlockAddedEvent) => {
         newBlocksAdded.current.push(event.detail.target.id);
       };
@@ -142,7 +137,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           handleBlockRemoved(event as BlockRemovedEvent);
           break;
         default:
-          console.log("🎈 trackEditorJSEvent: Unhandled event", event.type);
+        // console.log("🎈 trackEditorJSEvent: Unhandled event", event.type);
       }
     },
     [document]
@@ -150,10 +145,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
   // Given the list of current changes (new blocks, changed blocks, deleted blocks), correspondingly update the document in the database and render the output results. Finally, clear list of changes and update the state snapshot.
   const applyChangesHandler = async () => {
-    console.log("🚀😶‍🌫️ APPLY CURRENT CHANGES");
-    console.log("Blocks added", newBlocksAdded.current);
-    console.log("Blocks changed", blocksChanged.current);
-    console.log("Blocks deleted", blocksDeleted.current);
+    // console.log("🚀😶‍🌫️ APPLY CURRENT CHANGES");
+    // console.log("Blocks added", newBlocksAdded.current);
+    // console.log("Blocks changed", blocksChanged.current);
+    // console.log("Blocks deleted", blocksDeleted.current);
 
     const newBlocks = newBlocksAdded.current;
     const changedBlocks = blocksChanged.current;
@@ -191,7 +186,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         });
         blocksDeleted.current = [];
       } catch (e) {
-        console.log("Could not remove blocks from the database", e);
+        // console.log("Could not remove blocks from the database", e);
         errorApplyingChanges = "Could not remove blocks from the database";
       }
     }
@@ -297,13 +292,13 @@ const TextEditor: React.FC<TextEditorProps> = ({
         !isNewBlock && blocksChanged.current.includes(block.id as string);
       if (!isNewBlock && !isUpdatedBlock) continue;
 
-      console.log("📝 Applying changes to block", block, " at index ", index);
+      // console.log("📝 Applying changes to block", block, " at index ", index);
 
       try {
         if (isNewBlock) await applyChangesToNewBlock(block, index);
         if (isUpdatedBlock) await applyChangesToUpdatedBlock(block, index);
       } catch (e) {
-        console.log("💥Could not apply changes to new block or edit block", e);
+        // console.log("💥Could not apply changes to new block or edit block", e);
         errorApplyingChanges =
           (e as Error).message || "Could not apply changes to block";
         break;
@@ -352,11 +347,11 @@ const TextEditor: React.FC<TextEditorProps> = ({
         const paragraphs = uploadedDocument?.paragraphs;
 
         await inputEditorRef.current?.isReady;
-        console.log("🎉🎉 Input Editor is ready to work");
-        console.log(
-          "🎉🎉 And there are uploaded paragraphs to add",
-          paragraphs
-        );
+        // console.log("🎉🎉 Input Editor is ready to work");
+        // console.log(
+        //   "🎉🎉 And there are uploaded paragraphs to add",
+        //   paragraphs
+        // );
 
         paragraphs?.forEach((par, index) => {
           inputEditorRef.current?.blocks.insert(

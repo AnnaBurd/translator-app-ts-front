@@ -16,7 +16,7 @@ const CopyTranslation: React.FC<CopyTranslationProps> = ({
       .map((div) => div.textContent)
       .join("\n");
 
-    console.log(text);
+    // console.log(text);
 
     // const cleanText = text ? decodeHtmlCharCodes(text) : "";
 

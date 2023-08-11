@@ -6,7 +6,7 @@ const ErrorPage = () => {
 
   const errorType = searchParams.get("type");
 
-  console.log("ErrorPage: error type", errorType);
+  // console.log("ErrorPage: error type", errorType);
 
   let errorMessage;
   let errorStatus;

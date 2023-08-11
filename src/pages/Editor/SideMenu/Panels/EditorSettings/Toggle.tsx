@@ -4,7 +4,7 @@ const Toggle = () => {
   const [enabled, setEnabled] = useState(false);
 
   const handleClick = () => {
-    console.log("clicked on toggle", " enabled = ", enabled);
+    // console.log("clicked on toggle", " enabled = ", enabled);
     setEnabled((prev) => !prev);
   };
 

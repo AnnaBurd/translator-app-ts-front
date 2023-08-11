@@ -10,8 +10,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const accessTokenRef = useRef<string | null>(null);
 
   const updateUserDetails = useCallback((user: User | null) => {
-    console.log("updateUserDetails", user);
-
     if (!user) {
       setUser(null);
       return;

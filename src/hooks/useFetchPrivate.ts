@@ -28,8 +28,6 @@ const useFetchPrivate = () => {
       limit?: number,
       hasFiles?: boolean
     ) => {
-      console.log("useFetchPrivate data: ", data);
-
       const options: RequestOptions = {
         method,
         headers: {
@@ -51,8 +49,6 @@ const useFetchPrivate = () => {
       if (data !== null) {
         options.body = hasFiles ? (data as FormData) : JSON.stringify(data);
       }
-
-      console.log("useFetchPrivate: options", options);
 
       // Fetch data from backend using latest access token value
       let response = await fetch(requestUrl, options);

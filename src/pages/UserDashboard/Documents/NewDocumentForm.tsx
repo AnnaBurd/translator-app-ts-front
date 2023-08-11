@@ -91,7 +91,7 @@ const NewDocumentForm = ({
   };
 
   const onSubmit = async (data: FormData) => {
-    console.log("Submitting form", data);
+    // console.log("Submitting form", data);
 
     // Show loading indicator
 
@@ -105,7 +105,7 @@ const NewDocumentForm = ({
       // On success -> navigate to the editor page with new document
       navigate(`/editor/${responseData.slug}`);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setIsLoading(false);
       setError((error as Error).message || "Error creating document");
 

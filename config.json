@@ -1,7 +1,4 @@
 {
-  "API_BASE_URL_5": "https://translator-app-ts-api-production.up.railway.app/api",
-  "API_BASE_URL_0": "http://localhost:8000/api",
-  "API_BASE_URL": "http://192.168.1.8:8000/api",
-  "API_BASE_URL_6": "http://192.168.1.2:8000/api",
-  "STATIC_URL": "http://192.168.1.8:8000/"
+  "API_BASE_URL": "https://translator-app-api.azurewebsites.net/api",
+  "STATIC_URL": "https://translator-app-api.azurewebsites.net/"
 }

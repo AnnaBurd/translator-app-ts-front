@@ -11,7 +11,7 @@ const Search: React.FC<SearchProps> = ({ onSearch, searchQuery }) => {
   const ref = useRef<HTMLInputElement>(null);
 
   const handleSearchClick = () => {
-    console.log("clicked on magnifying glass / cross");
+    // console.log("clicked on magnifying glass / cross");
 
     if (!searchQuery) ref.current?.focus();
 

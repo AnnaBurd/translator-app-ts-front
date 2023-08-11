@@ -88,7 +88,7 @@ const Profile = () => {
   const onSubmit = async (data: FormDataType) => {
     setErrorSubmitting("");
 
-    console.log("onSubmitData: ", data);
+    // console.log("onSubmitData: ", data);
 
     // Handle profile deletion
     if (data.confirmDelete?.toLowerCase() === "delete profile") {
@@ -121,14 +121,14 @@ const Profile = () => {
 
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
-        console.log("key: ", key);
-        console.log("value: ", value, value === undefined);
+        // console.log("key: ", key);
+        // console.log("value: ", value, value === undefined);
         if (value !== undefined && value !== "") formData.append(key, value);
         // formData.append(key, value);
       });
 
-      console.log("formData: ", formData, formData.get("firstName"));
-      console.log("formData: ", formData, formData.get("selectedImage"));
+      // console.log("formData: ", formData, formData.get("firstName"));
+      // console.log("formData: ", formData, formData.get("selectedImage"));
 
       // const dataToUpload = { ...data, img: imgToUpload };
 
@@ -142,7 +142,7 @@ const Profile = () => {
         true
       );
 
-      console.log("responseData: ", responseData);
+      // console.log("responseData: ", responseData);
       // Update current view with new data
       updateUserDetails(responseData.user);
 

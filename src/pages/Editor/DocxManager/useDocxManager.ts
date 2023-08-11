@@ -108,7 +108,6 @@ const getParagraphsContent = (documentContentXMLobj: any) => {
 };
 
 const readDocumentContent = async (file: File): Promise<DocxDocument> => {
-  console.log("handleDocumentUpload", file);
   if (!file) throw new Error("🔥🔥🔥handleDocumentUpload: no file");
 
   const unzippedFile = await unzipFileContent(file);
@@ -145,10 +144,8 @@ const generateUpdatedDocument = async (
     if (updates[paragraphNum]) textNode[0]["#text"] = updates[paragraphNum];
 
     // Clear other nodes with text content (incertion into the first node only for simplicity, but in such case the styles changes within the paragraph are not preserved)
-    console.log("numberOfTextSubNodes: ", numberOfTextSubNodes);
+
     if (numberOfTextSubNodes > 1) {
-      console.log("numberOfTextSubNodes: ", numberOfTextSubNodes);
-      console.log("paragraph: ", paragraphNode);
       const paragraphNodeCropped = paragraphNode.slice(
         0,
         paragraphChildNum + 1
@@ -204,8 +201,6 @@ const useDocxManager = () => {
     // TODO: how to identify uploaded documents?
     const uploadedDoc = getDocument(title);
     if (!uploadedDoc) return;
-
-    console.log("uploadedDoc: ", uploadedDoc);
 
     // Generate updated docx file
     const newDocument = await generateUpdatedDocument(
