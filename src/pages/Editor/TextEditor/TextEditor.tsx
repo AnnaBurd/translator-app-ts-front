@@ -105,6 +105,13 @@ const TextEditor: React.FC<TextEditorProps> = ({
           return;
         }
 
+        // Handle corner case of copy-pasting on place of placeholder paragraph, which faulsly fires "block-removed" event
+        if (
+          document?.content?.length === 0 &&
+          newBlocksAdded.current.length === 0
+        )
+          return;
+
         // For not new blocks, add block to the list of deleted blocks and immediately remove corresponding output block
         blocksDeleted.current.push(event.detail.target.id);
 
@@ -149,6 +156,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     // console.log("Blocks added", newBlocksAdded.current);
     // console.log("Blocks changed", blocksChanged.current);
     // console.log("Blocks deleted", blocksDeleted.current);
+    // return;
 
     const newBlocks = newBlocksAdded.current;
     const changedBlocks = blocksChanged.current;
@@ -299,8 +307,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
         if (isUpdatedBlock) await applyChangesToUpdatedBlock(block, index);
       } catch (e) {
         // console.log("💥Could not apply changes to new block or edit block", e);
-        errorApplyingChanges =
-          (e as Error).message || "Could not apply changes to block";
+        errorApplyingChanges = `Could not fetch translation to paragraph ${
+          index + 1
+        }`;
         break;
       }
     }
