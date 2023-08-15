@@ -24,8 +24,8 @@ import InfoNotification from "./Notifications/InfoNotification";
 import ThemeContext from "../../../context/ThemeContext";
 
 type TextEditorProps = {
-  document: Doc | null;
-  uploadedDocument?: DocxDocument | null;
+  document: Doc | null; // Document from the database
+  uploadedDocument?: DocxDocument | null; // Docx file uploaded by the user
 };
 
 const TextEditor: React.FC<TextEditorProps> = ({
@@ -49,7 +49,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
   const blocksChanged = useRef<Array<string>>([]);
   const blocksDeleted = useRef<Array<string>>([]);
 
-  // State of translation running
+  // State of translation fetch running
   const fetchPrivate = useFetchPrivate();
   const [isLoadingTranslation, setIsLoadingTranslation] = useState(false);
   const [errorLoadingTranslation, setErrorLoadingTranslation] = useState("");
@@ -59,8 +59,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
   // Text editor view settings
   const { textEditorSettings } = useContext(ThemeContext);
   const { fontSize, lineHeight } = textEditorSettings;
-
-  // TODO: fix error of new document not having title(should be untitled-xvxcv)
 
   // Listen to the events of the input editor to track changes in input blocks since the last save
   const trackEditorJSEvent = useCallback(
@@ -350,41 +348,45 @@ const TextEditor: React.FC<TextEditorProps> = ({
         outputContainerRef.current as HTMLDivElement,
         outputBlocks
       );
-
-      // If the document was just uploaded, fill the input editor with the uploaded document content
-      const addUploadedBlocks = async () => {
-        const paragraphs = uploadedDocument?.paragraphs;
-
-        await inputEditorRef.current?.isReady;
-        // console.log("🎉🎉 Input Editor is ready to work");
-        // console.log(
-        //   "🎉🎉 And there are uploaded paragraphs to add",
-        //   paragraphs
-        // );
-
-        paragraphs?.forEach((par, index) => {
-          inputEditorRef.current?.blocks.insert(
-            "paragraph",
-            { text: par.text },
-            null,
-            index
-          );
-        });
-      };
-
-      if (uploadedDocument) {
-        addUploadedBlocks();
-      }
-
-      // Update current shapshot of the editors state
-      // if (inputBlocks) setInputBlocks(inputBlocks);
-      // if (outputBlocks) setOutputBlocks(outputBlocks);
     }
 
-    // TODO: destroy editors before navigating away?
-  }, [document, trackEditorJSEvent, uploadedDocument]);
+    // Update current shapshot of the editors state
+    // if (inputBlocks) setInputBlocks(inputBlocks);
+    // if (outputBlocks) setOutputBlocks(outputBlocks);
 
-  // TODO : highlignt selected block and corresponding translation block
+    // TODO: destroy editors before navigating away?
+  }, [document, trackEditorJSEvent]);
+
+  // TODO: visually highlignt selected block and corresponding translation block
+
+  // Load input text from the uploaded docx file (if any)
+  const [hasLoadedUploadedDocument, setHasLoadedUploadedDocument] =
+    useState(false);
+  useEffect(() => {
+    const addUploadedBlocks = async () => {
+      const paragraphs = uploadedDocument?.paragraphs;
+
+      await inputEditorRef.current?.isReady;
+
+      paragraphs?.forEach((par, index) => {
+        inputEditorRef.current?.blocks.insert(
+          "paragraph",
+          { text: par.text },
+          null,
+          index
+        );
+      });
+    };
+
+    if (
+      !hasLoadedUploadedDocument &&
+      uploadedDocument &&
+      document?.content?.length === 0
+    ) {
+      addUploadedBlocks();
+      setHasLoadedUploadedDocument(true);
+    }
+  }, [document?.content?.length, hasLoadedUploadedDocument, uploadedDocument]);
 
   return (
     <>
