@@ -93,3 +93,4 @@ This will run the frontend (client) part of the application, the backend (api) i
 <a href="https://github.com/annaburd/translator-app-ts-front/issues">Report Bug</a>
 ·
 <a href="https://www.linkedin.com/in/anna-burdanova-b91453218/">Discuss Issues</a>
+
