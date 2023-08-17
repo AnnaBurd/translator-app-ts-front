@@ -1,15 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide default arrows for numeric input */
+@layer base {
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"] {
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield !important;
+  }
+}
+
+/* If the user prefers dark mode, 
+we of course apply color-scheme: dark, as usual
+But not now, because it is not ready yet.  */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light !important;
+  }
+}
+
 :root {
+  --color-primary: #a1aed9;
+  --color-secondary: #eff6ff;
+  --color-dark: #718398;
+  --color-light: #deeeff;
+  --color-white: #ffffff;
+  --color-accent: rgb(236, 99, 87);
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: var(--color-secondary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent scrollbar from repositioning page content */
+html {
+  padding-left: calc(100vw - 100%) !important;
+  overflow-x: hidden !important;
+}
+
+/* Style application scrollbars */
+/* Firefox */
+html {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--color-primary) var(--color-light) !important;
+}
+
+/* Chrome */
+/* Width */
+html::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+/* Track */
+html::-webkit-scrollbar-track {
+  background: var(--color-light);
+  border-radius: 10px;
+}
+/* Handle */
+html::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark);
 }

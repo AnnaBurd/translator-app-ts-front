@@ -1,0 +1,55 @@
+:root {
+  --donut-fill-width: 34px;
+  --donut-base-width: 170px;
+  --donut-fill-percent: 70;
+
+  /* @media (width>=500px) {
+    --donut-fill-width: 20px;
+    --donut-base-width: 130px;
+    --donut-fill-percent: 70;
+  } */
+}
+
+.donut {
+  margin: 0 auto;
+  position: relative;
+  width: var(--donut-base-width);
+  height: calc(var(--donut-base-width) / 2);
+  border-radius: 200px 200px 0 0;
+  overflow: hidden;
+}
+.donut::after {
+  transform: rotate(
+    calc(-180deg + (180deg) * (var(--donut-fill-percent) / 100))
+  ); /*  set rotation degree  */
+  background: linear-gradient(to right, var(--color-dark) 0%, #a5b4fc 100%);
+  transform-origin: center bottom;
+}
+.donut::before {
+  border: var(--donut-fill-width) solid var(--color-light);
+}
+.donut .donut__overlay {
+  top: var(--donut-fill-width); /*  match border width  */
+  left: var(--donut-fill-width); /*  match border width  */
+  width: calc(
+    100% - var(--donut-fill-width) * 2
+  ); /*  match border width times 2  */
+  height: calc(
+    200% - var(--donut-fill-width) * 2
+  ); /*  match border width times 2  */
+  border-radius: 100%;
+  background: var(--color-secondary);
+  z-index: 1; /*  move it on top of the pseudo elements  */
+}
+.donut *,
+.donut::before,
+.donut::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  box-sizing: border-box;
+}

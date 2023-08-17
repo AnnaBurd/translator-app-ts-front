@@ -1,0 +1,4 @@
+{
+  "API_BASE_URL": "https://translator-app-api.azurewebsites.net/api",
+  "STATIC_URL": "https://translator-app-api.azurewebsites.net/"
+}
