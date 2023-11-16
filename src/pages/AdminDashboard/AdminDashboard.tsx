@@ -157,7 +157,11 @@ export default function AdminDashboard() {
   // Render error if could not load data
   if (errorFetchingData || isErrorLoadingUsageStats)
     return (
-      <Navigate to="/error?type=server-error" state={{ from: location }} />
+      <Navigate
+        to="/error?type=server-error"
+        replace
+        state={{ key: "redirected" }}
+      />
     );
 
   return (

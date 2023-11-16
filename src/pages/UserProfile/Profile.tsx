@@ -166,8 +166,9 @@ const Profile = () => {
   if (!signedInUser)
     return (
       <Navigate
-        to="/error?type=document-not-found"
-        state={{ from: location }}
+        to="/error?type=user-not-found"
+        replace
+        state={{ key: "redirected" }}
       />
     );
 
@@ -176,7 +177,11 @@ const Profile = () => {
   // Render error if could not load data
   if (errorLoadingUserProfileDetails)
     return (
-      <Navigate to="/error?type=server-error" state={{ from: location }} />
+      <Navigate
+        to="/error?type=server-error"
+        replace
+        state={{ key: "redirected" }}
+      />
     );
 
   return (
@@ -215,15 +220,11 @@ const Profile = () => {
               registerFormFields={register}
               formErrors={errors}
               uploadedPhotos={imgsToUpload}
-              // onPhotoUpload={(file) => setImgToUpload(file)}
               registeredSince={
                 userProfile?.registrationDate
                   ? new Date(Date.parse(userProfile.registrationDate))
                   : new Date()
               }
-              // onPhotoUpload={function (photo: File): void {
-              //   throw new Error("Function not implemented.");
-              // }}
             />
           </div>
           <div className="relative px-4 pb-12 pt-6 md:px-8 lg:w-2/3 lg:pt-10">

@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import AnimatedPage from "../../components/animations/AnimatedPage";
 
 const ErrorPage = () => {
@@ -6,7 +6,8 @@ const ErrorPage = () => {
 
   const errorType = searchParams.get("type");
 
-  // console.log("ErrorPage: error type", errorType);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   let errorMessage;
   let errorStatus;
@@ -18,6 +19,10 @@ const ErrorPage = () => {
       break;
     case "not-found":
       errorMessage = "We can't find that page.";
+      errorStatus = 404;
+      break;
+    case "user-not-found":
+      errorMessage = "We can't find your profile.";
       errorStatus = 404;
       break;
     case "document-not-found":
@@ -50,13 +55,16 @@ const ErrorPage = () => {
             {errorMessage}
           </p>
 
-          <Link
-            to="/dashboard"
-            replace
-            className="mt-6 inline-block shrink-0 rounded-md border border-indigo-400 bg-indigo-400 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-indigo-400 focus:outline-none focus:ring active:text-indigo-300 disabled:pointer-events-none disabled:border-slate-200 disabled:bg-slate-200"
+          <button
+            onClick={() => {
+              if (location.state?.key === "redirected") navigate(-1);
+
+              navigate("/dashboard");
+            }}
+            className="mt-6 inline-block shrink-0 rounded-md border border-indigo-400 bg-indigo-400 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-indigo-400 focus:outline-none focus:ring active:text-indigo-300  disabled:pointer-events-none disabled:border-slate-200 disabled:bg-slate-200"
           >
-            Go Back To Dashboard
-          </Link>
+            Go Back
+          </button>
         </div>
       </div>
     </AnimatedPage>

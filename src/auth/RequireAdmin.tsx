@@ -11,7 +11,11 @@ const RequireAdmin = () => {
   // TODO: style error pages
   if (!signedInUser || signedInUser.role !== "Admin")
     return (
-      <Navigate to="/error?type=not-authorized" state={{ from: location }} />
+      <Navigate
+        to="/error?type=not-authorized"
+        replace
+        state={{ key: "redirected" }}
+      />
     );
 
   return <Outlet />;

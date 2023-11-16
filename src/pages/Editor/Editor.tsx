@@ -23,7 +23,8 @@ export default function Editor() {
     return (
       <Navigate
         to="/error?type=document-not-found"
-        state={{ from: location }}
+        replace
+        state={{ key: "redirected" }}
       />
     );
 

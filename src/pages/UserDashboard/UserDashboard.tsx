@@ -42,7 +42,11 @@ export default function Dashboard() {
   // Render error if could not load data
   if (error)
     return (
-      <Navigate to="/error?type=server-error" state={{ from: location }} />
+      <Navigate
+        to="/error?type=server-error"
+        replace
+        state={{ key: "redirected" }}
+      />
     );
 
   const navigateToEditorTab = () => {
