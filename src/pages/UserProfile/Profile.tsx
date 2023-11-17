@@ -48,6 +48,7 @@ const Profile = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<FormDataType>({
     resolver: yupResolver(inputValidationSchema),
@@ -147,6 +148,10 @@ const Profile = () => {
       updateUserDetails(responseData.user);
 
       setIsSubmitting(false);
+
+      // Clear form fields
+
+      reset();
     } catch (error) {
       setErrorSubmitting((error as Error).message || "An error occurred");
       setIsSubmitting(false);
