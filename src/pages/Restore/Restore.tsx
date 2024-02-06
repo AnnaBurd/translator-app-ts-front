@@ -94,7 +94,7 @@ export default function Restore() {
         setIsSubmitting(true);
 
         const response = await fetch(
-          `${Config.API_BASE_URL}/users/confirmReset`,
+          `${Config.API_BASE_URL}/users/confirm-reset`,
           {
             method: "POST",
             body: JSON.stringify({ email: emailReset, token: tokenReset }),
@@ -168,7 +168,7 @@ export default function Restore() {
       setIsSubmitting(true);
 
       const response = await fetch(
-        `${Config.API_BASE_URL}/users/confirmReset`,
+        `${Config.API_BASE_URL}/users/confirm-reset`,
         {
           method: "POST",
           body: JSON.stringify({

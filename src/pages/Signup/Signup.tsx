@@ -7,7 +7,7 @@ import Loader from "../../components/Loaders/Loader";
 export default function Signup() {
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log("render");
+  // console.log("render");
 
   return (
     <>
@@ -22,7 +22,7 @@ export default function Signup() {
           <div className=" min-h-screen min-[500px]:grid min-[500px]:grid-cols-1 min-[500px]:grid-rows-[20vh_minmax(70vh,_1fr)] md:grid-rows-[30vh_minmax(70vh,_1fr)] xl:h-screen xl:grid-cols-12 xl:grid-rows-1">
             <Image
               onLoad={() => {
-                console.log("onload");
+                // console.log("onload");
                 setIsLoading(false);
               }}
             />
